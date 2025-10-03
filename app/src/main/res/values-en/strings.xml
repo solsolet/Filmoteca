@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Filmoteca</string>
+    <string name="TextView">Created by: Gemma Sellés</string>
+    <string name="button">Go to website</string>
+    <string name="button2">Obtain support</string>
+    <string name="button3">Back</string>
+</resources>
