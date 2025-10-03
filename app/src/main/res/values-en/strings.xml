@@ -4,4 +4,6 @@
     <string name="button">Go to website</string>
     <string name="button2">Obtain support</string>
     <string name="button3">Back</string>
+    <string name="contentImage">Image of a little monkey</string>
+    <string name="aviso">Functionality without implementation</string>
 </resources>

@@ -12,11 +12,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 enum class Mode {
@@ -25,7 +27,7 @@ enum class Mode {
 }
 
 class AboutActivity : ComponentActivity() {
-    private val mode = Mode.Compose  // O Mode.Layouts, según quieras probar
+    private val mode = Mode.Compose // O Mode.Layouts, según quieras probar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +51,13 @@ class AboutActivity : ComponentActivity() {
         val button3 = findViewById<Button>(R.id.button3)
 
         button1.setOnClickListener {
-            Toast.makeText(this@AboutActivity, "boton 1 pulsado", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
         }
         button2.setOnClickListener {
-            Toast.makeText(this@AboutActivity, "boton 2 pulsado", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
         }
         button3.setOnClickListener {
-            Toast.makeText(this@AboutActivity, "boton 3 pulsado", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
         }
     }
     private fun initCompose() { //no se què fer ací
@@ -76,27 +78,27 @@ class AboutActivity : ComponentActivity() {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Creada por: Gemma Selles", style = MaterialTheme.typography.h2)
+            Text(text = stringResource(R.string.TextView), style = MaterialTheme.typography.h5)
             Spacer(modifier = Modifier.height(16.dp))
             Image(
                 painter = painterResource(id = R.drawable.monito),
-                contentDescription = "Fotillo",
+                contentDescription = stringResource(R.string.contentImage),
                 modifier = Modifier.size(120.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(onClick = {
-                Toast.makeText(context, "Funcionalidad sin implementar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.aviso, Toast.LENGTH_SHORT).show()
             }) {
-                Text("Ir al sitio web")
+                Text(stringResource(R.string.button))
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(onClick = {
-                Toast.makeText(context, "Funcionalidad sin implementar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.aviso, Toast.LENGTH_SHORT).show()
             }) {
-                Text("Obtener soporte")
+                Text(stringResource(R.string.button2))
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -104,7 +106,7 @@ class AboutActivity : ComponentActivity() {
             Button(onClick = {
                 finish()
             }) {
-                Text("Volver")
+                Text(stringResource(R.string.button3))
             }
         }
     }
