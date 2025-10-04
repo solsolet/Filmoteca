@@ -1,7 +1,10 @@
 package eps.ua.es.filmoteca
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 
@@ -12,7 +15,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material3.Text
+//import androidx.compose.material3.Text
+//import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +31,7 @@ enum class Mode {
 }
 
 class AboutActivity : ComponentActivity() {
-    private val mode = Mode.Compose // O Mode.Layouts, según quieras probar
+    private val mode = Mode.Layouts // O Mode.Layouts, según quieras probar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +46,13 @@ class AboutActivity : ComponentActivity() {
     private fun initLayouts() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_about)
-        // Inicializa tus vistas y lógica aquí
-        setContentView(R.layout.activity_about)
+
+//        Log.d("AboutActivity", "initLayouts: layout about assignat")
+        val imageView = findViewById<ImageView>(R.id.imageView2)
+//        Log.d("AboutActivity", "imageView is null? ${imageView == null}")
+//        imageView?.visibility = View.VISIBLE
+
+        imageView?.setImageResource(R.drawable.monito)
 
         //botones
         val button1 = findViewById<Button>(R.id.button)

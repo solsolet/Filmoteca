@@ -7,6 +7,8 @@ Lo aclaro, ya que los nombraré durante la práctica.
 
 Las imágenes de este README están en la carpeta `ìmg-readme` así como el [vídeo](img-readme/Demo-editada.mp4) demostración.
 
+La práctica también se puede descargar en [GitHub](https://github.com/solsolet/Filmoteca.git).
+
 ### Ejercicio 1
 Primero he cambiado todo lo que se llama "_main_" y lo he sustituido por "_about_", p. ej. "`MainActivity.kt` -> `AboutActivity.kt`". Dentro de este archivo, quité también el "ViewCompat". 
 Siguiendo con estos cambios también en el AndroidManifest he tenido cuidado que el archivo aparezca correctamente.
@@ -79,6 +81,24 @@ Al curiosearla y ver _warnings_ no me había preocupado pero, revisando algunos 
 4. R.string.[algo] error _Compose_
 
 Usar el identificador para cadenas de texto no funcionaba bien para los textos dentro de _Compose_. Se solucionó con la función `stringResource()`, que ciertamente no es muy intuitiva dado que en el resto del código lo puedes poner sin la función.
+
+5. Falta de la imagen en el modo _Layout_
+
+En las pruebas que he estado haciendo todos los elementos me salían bien, pero en las útlimas en las que estoy preparando la entrega y haciendo pequeños cambios no estaba comprobando el _Layout_ y para mi sorpresa he visto que la imagen no cargaba.
+Revisando el código estaba todo como antes, así que no sé si es por culpa de alguna librería o línea de código que he cambiado.
+
+Por lo que he estado debuggeando y leyendo, parece ser que al dividir la aplicación según el modo, _Layout_ decide el recurso en tiempo de ejecución que al ver que no està declarada en `AboutActivity.kt` explícitamente (como en los ejercicios sin la partición) no lo encuentra y, por tanto, no lo pinta.
+Esto tambén explica por que en _Compose_ sí que aparece por que usa `painterResource` que lo pinta.
+
+El código para `initLayouts` ha quedado así:
+```kt
+// Log.d("AboutActivity", "initLayouts: layout about assignat")
+val imageView = findViewById<ImageView>(R.id.imageView2)
+// Log.d("AboutActivity", "imageView is null? ${imageView == null}")
+// imageView?.visibility = View.VISIBLE
+imageView?.setImageResource(R.drawable.monito)
+```
+Donde los `Log` han servido para trazar el problema con _Logcat_. 
 
 ### Conclusiones
 He aprendido mucho en esta práctica: todas las nociones de Gradle, consejos y pruebas creo que me dejan más preparada para la siguiente. Son bastantes conceptos nuevos y, con su uso, se me harán más intuitivos.
