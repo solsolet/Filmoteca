@@ -1,5 +1,7 @@
 package es.ua.eps.filmoteca
 
+import android.content.Intent
+//import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -25,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import es.ua.eps.filmoteca.databinding.ActivityAboutBinding
+import androidx.core.net.toUri
 
 class AboutActivity : ComponentActivity() {
     private lateinit var bindings : ActivityAboutBinding
@@ -46,13 +49,18 @@ class AboutActivity : ComponentActivity() {
             setContentView(root)
             bindings.imageView2.setImageResource(R.drawable.monito)
             bindings.button.setOnClickListener {
-                Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+                //Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+                val irWeb = Intent(Intent.ACTION_VIEW, "https://www.ua.es/va/".toUri())
+                startActivity(irWeb)
             }
             bindings.button2.setOnClickListener {
-                Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+                //Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+                val soporte = Intent(Intent.ACTION_SENDTO, "mailto:gsl21@alu.ua.es".toUri())
+                startActivity(soporte)
             }
             bindings.button3.setOnClickListener {
-                Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+                //Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+                finish()
             }
         }
     }
@@ -84,7 +92,9 @@ class AboutActivity : ComponentActivity() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(onClick = {
-                Toast.makeText(context, R.string.aviso, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, R.string.aviso, Toast.LENGTH_SHORT).show()
+                val irWeb = Intent(Intent.ACTION_VIEW, "https://www.ua.es/va/".toUri())
+                startActivity(irWeb)
             }) {
                 Text(stringResource(R.string.button))
             }
@@ -92,7 +102,9 @@ class AboutActivity : ComponentActivity() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(onClick = {
-                Toast.makeText(context, R.string.aviso, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, R.string.aviso, Toast.LENGTH_SHORT).show()
+                val soporte = Intent(Intent.ACTION_SENDTO, "mailto:gsl21@alu.ua.es".toUri())
+                startActivity(soporte)
             }) {
                 Text(stringResource(R.string.button2))
             }
