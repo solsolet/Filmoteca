@@ -6,4 +6,14 @@
     <string name="button3">Volver</string>
     <string name="contentImage">Imagen de un monito</string>
     <string name="aviso">Funcionalidad sin Implementar</string>
+    <string name="verPeliA">Ver pelicula A</string>
+    <string name="verPeliB">Ver pelicula B</string>
+    <string name="acercaDe">Acerca De</string>
+    <string name="datosPeli">Datos de la pelicula</string>
+    <string name="verPeliRel">Ver pelicula relacionada</string>
+    <string name="volverPrincipal">Volver a la Principal</string>
+    <string name="editPeli">Editar pelicula</string>
+    <string name="editandoPeli">Editando pelicula</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

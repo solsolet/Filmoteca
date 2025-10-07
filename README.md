@@ -116,3 +116,35 @@ La mejor opción para trabajar es la **torre**, así que intentaré hacer la may
 
 ### Proyecto base
 Después de que el profe subiese un proyecto base, he adaptado el mío para que se parezca lo máximo posible viendo poco a poco que decisiones de diseño ha tomado, modificar librerías y optimizar el código, sin olvidar por supuesto aprender. La parte que más ha cambiado es el modo _Layouts_ que ha pasado a ser _Bindings_ (y éste usa nuevas funciones para poner lo mismo).
+
+## Navegación entre actividades
+Siguiendo con la segunda pràctica de la sesión, ahora nos centraremos en añadirle contenido a la práctica que ya teníamos.
+
+### Ejercicio 1
+Le añadimos funcionalidad a los botones como se nos indica. Me surge la siguiente inquietud: si estamos usando Bindings y compose para hacer las mismas cosas, quiere decir que duplicaremos el mismo código contantemente si empezamos a añadir funcionalidad. Por tanto, todo aquello que es común (cada intent) lo saco en una función propia fuera de _initLayouts_ o _initCompose_:
+```kt
+private fun goWebsite(){
+        val irWeb = Intent(Intent.ACTION_VIEW, "https://www.ua.es/va/".toUri())
+        startActivity(irWeb)
+    }
+    private fun obtainSupport(){
+        val soporte = Intent(Intent.ACTION_SENDTO, "mailto:gsl21@alu.ua.es".toUri())
+        startActivity(soporte)
+    }
+    fun closeActivity(){ // No private por si la quisieramos usar fuera
+        finish()
+    }
+```
+Y luego en cada _init_ llamo a la función correspondiente:
+|Binding|Compose|
+|-------|-------|
+|`bindings.button.setOnClickListener { goWebsite() }`|`Button(onClick = {  goWebsite() }) { Text(stringResource(R.string.button)) }`|
+#### Ojito
+En el modo _Compose_ he intentado quitar los corchetes del `onclick = {}` para dejar el método suelto, pero me ha dado error. Vista la ayuda de Android Studio veo lo siguiente: 
+![Compose: Button onClick function, parámetro Unit](img-readme/Compose-onClick-Unit.png)
+
+Más adelante podría investigar sobre esto a ver si hay alguna otra manera de ponerlo y ver si es mejor.
+
+### Ejercicio 2
+Creamos las nuevas Actividades y cambiamos de aplicación principal:
+![FilmActivities](img-readme/FilmActivities-Manifest.png)

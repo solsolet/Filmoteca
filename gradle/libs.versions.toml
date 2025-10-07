@@ -9,6 +9,7 @@ coreKtx = "1.17.0"
 kotlin = "2.2.20"
 lifecycleRuntimeKtx = "2.9.4"
 material = "1.13.0"
+activity = "1.11.0"
 
 [libraries]
 #androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
@@ -23,6 +24,7 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

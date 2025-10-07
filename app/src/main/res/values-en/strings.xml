@@ -1,9 +1,18 @@
 <resources>
-    <string name="app_name">Filmoteca</string>
     <string name="TextView">Created by: Gemma Sellés</string>
     <string name="button">Go to website</string>
     <string name="button2">Obtain support</string>
     <string name="button3">Back</string>
     <string name="contentImage">Image of a little monkey</string>
     <string name="aviso">Functionality without implementation</string>
+    <string name="verPeliB">Watch film B</string>
+    <string name="acercaDe">About</string>
+    <string name="verPeliA">Watch film A</string>
+    <string name="datosPeli">Film data</string>
+    <string name="verPeliRel">Watch related film</string>
+    <string name="volverPrincipal">Back to home</string>
+    <string name="editPeli">Edit film</string>
+    <string name="editandoPeli">Editing film</string>
+    <string name="guardar">Save</string>
+    <string name="cancelar">Cancel</string>
 </resources>
