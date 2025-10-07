@@ -1,4 +1,4 @@
-package eps.ua.es.filmoteca
+package es.ua.eps.filmoteca
 
 import org.junit.Test
 

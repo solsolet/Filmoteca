@@ -1,22 +1,22 @@
-package eps.ua.es.filmoteca
+package es.ua.eps.filmoteca
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-//import androidx.compose.material3.Text
-//import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,49 +24,36 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-
-enum class Mode {
-    Layouts,
-    Compose,
-}
+import es.ua.eps.filmoteca.databinding.ActivityAboutBinding
 
 class AboutActivity : ComponentActivity() {
-    private val mode = Mode.Layouts // O Mode.Layouts, según quieras probar
+    private lateinit var bindings : ActivityAboutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         initUI()
     }
     private fun initUI() {
-        when (mode) {
-            Mode.Layouts -> initLayouts()
+        when (Filmoteca.GlobalMode) {
+            Mode.Bindings -> initLayouts()
             Mode.Compose -> initCompose()
         }
     }
     private fun initLayouts() {
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_about)
-
-//        Log.d("AboutActivity", "initLayouts: layout about assignat")
-        val imageView = findViewById<ImageView>(R.id.imageView2)
-//        Log.d("AboutActivity", "imageView is null? ${imageView == null}")
-//        imageView?.visibility = View.VISIBLE
-
-        imageView?.setImageResource(R.drawable.monito)
-
-        //botones
-        val button1 = findViewById<Button>(R.id.button)
-        val button2 = findViewById<Button>(R.id.button2)
-        val button3 = findViewById<Button>(R.id.button3)
-
-        button1.setOnClickListener {
-            Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
-        }
-        button2.setOnClickListener {
-            Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
-        }
-        button3.setOnClickListener {
-            Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+        bindings = ActivityAboutBinding.inflate(layoutInflater)
+        with(bindings) {
+            setContentView(root)
+            bindings.imageView2.setImageResource(R.drawable.monito)
+            bindings.button.setOnClickListener {
+                Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+            }
+            bindings.button2.setOnClickListener {
+                Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+            }
+            bindings.button3.setOnClickListener {
+                Toast.makeText(this@AboutActivity, R.string.aviso, Toast.LENGTH_LONG).show()
+            }
         }
     }
     private fun initCompose() { //no se què fer ací
@@ -77,17 +64,17 @@ class AboutActivity : ComponentActivity() {
         }
     }
     @Composable
-    fun AboutFilmoteca() {
+    private fun AboutFilmoteca() {
         val context = LocalContext.current
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
                 .fillMaxSize()      // separat com posa en els apunts
-                .padding(16.dp),
+                .padding(64.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.TextView), style = MaterialTheme.typography.h5)
+            Text(text = stringResource(R.string.TextView))
             Spacer(modifier = Modifier.height(16.dp))
             Image(
                 painter = painterResource(id = R.drawable.monito),
