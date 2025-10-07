@@ -49,6 +49,7 @@ class FilmDataActivity : AppCompatActivity() {
     }
     private fun volverPrinc(){
         val volver = Intent(this@FilmDataActivity, FilmListActivity::class.java)
+        volver.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(volver)
     }
     private fun initLayouts() {
