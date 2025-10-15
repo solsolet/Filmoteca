@@ -15,4 +15,7 @@
     <string name="editandoPeli">Editing film</string>
     <string name="guardar">Save</string>
     <string name="cancelar">Cancel</string>
+    <string name="tituloPeliDefault">Unknown film</string>
+    <string name="tituloPeliA">Film A</string>
+    <string name="tituloPeliB">Film B</string>
 </resources>

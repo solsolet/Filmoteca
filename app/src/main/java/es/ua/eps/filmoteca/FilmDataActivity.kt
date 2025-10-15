@@ -20,8 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
 
 class FilmDataActivity : AppCompatActivity() {
@@ -39,8 +37,9 @@ class FilmDataActivity : AppCompatActivity() {
         }
     }
     // Centralitzem Intents
-    private fun verPeliRel(){
+    private fun verPeliRel(titol: String){
         val verPeliRel = Intent(this@FilmDataActivity, FilmDataActivity::class.java)
+        verPeliRel.putExtra(FilmDataActivity.Extras.EXTRA_FILM_TITLE, titol)
         startActivity(verPeliRel)
     }
     private fun editPeli(){
@@ -52,24 +51,34 @@ class FilmDataActivity : AppCompatActivity() {
         volver.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(volver)
     }
+    // Companion Object
+    companion object Extras {
+        const val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
+    }
     private fun initLayouts() {
         bindings = ActivityFilmDataBinding.inflate(layoutInflater)
         with(bindings) {
             setContentView(root)
-            bindings.verPeliRel.setOnClickListener { verPeliRel() }
+            //veem parametre
+            val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefault)
+            bindings.textViewTitulo.text = "Datos $peli" //TODO vigilar internacionalitzacio
+
+            bindings.verPeliRel.setOnClickListener { verPeliRel(peli) }
             bindings.editPeli.setOnClickListener { editPeli() }
             bindings.volverPrincipal.setOnClickListener { volverPrinc() }
         }
     }
     private fun initCompose() { //no se què fer ací
+        val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefault)
+
         setContent {
             MaterialTheme {
-                AboutFilmoteca()
+                FilmDataCompose(peli)
             }
         }
     }
     @Composable
-    private fun AboutFilmoteca() {
+    private fun FilmDataCompose(titol: String) {
         val context = LocalContext.current
 
         Column( //equivalent a LinearLayout(vertical)
@@ -79,8 +88,12 @@ class FilmDataActivity : AppCompatActivity() {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(text = "Mostrant: $titol")
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Button(onClick = { //TODO: mirar lo de Unit
-                verPeliRel()
+                verPeliRel(titol)
             }) {
                 Text(stringResource(R.string.verPeliRel))
             }

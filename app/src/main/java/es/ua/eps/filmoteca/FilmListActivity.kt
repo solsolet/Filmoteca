@@ -38,8 +38,9 @@ class FilmListActivity : ComponentActivity() {
         }
     }
     // Centralitzem Intents
-    private fun verPeli(){
+    private fun verPeli(titol: String){
         val verPeli = Intent(this@FilmListActivity, FilmDataActivity::class.java)
+        verPeli.putExtra(FilmDataActivity.Extras.EXTRA_FILM_TITLE, titol)
         startActivity(verPeli)
     }
     private fun acercaDe(){
@@ -50,21 +51,24 @@ class FilmListActivity : ComponentActivity() {
         bindings = ActivityFilmListBinding.inflate(layoutInflater)
         with(bindings) {
             setContentView(root)
-            bindings.verPeliA.setOnClickListener { verPeli() }
-            bindings.verPeliB.setOnClickListener { verPeli() }
+            bindings.verPeliA.setOnClickListener { verPeli(getString(R.string.tituloPeliA)) }
+            bindings.verPeliB.setOnClickListener { verPeli(getString(R.string.tituloPeliB)) }
             bindings.acercaDe.setOnClickListener { acercaDe() }
         }
     }
     private fun initCompose() { //no se què fer ací
         setContent {
             MaterialTheme {
-                AboutFilmoteca()
+                FilmListCompose()
             }
         }
     }
     @Composable
-    private fun AboutFilmoteca() {
+    private fun FilmListCompose() {
         val context = LocalContext.current
+        val tituloA = stringResource(R.string.tituloPeliA)
+        val tituloB = stringResource(R.string.tituloPeliB)
+
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
@@ -74,7 +78,8 @@ class FilmListActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(onClick = { //TODO: mirar lo de Unit
-                verPeli()
+                //val titulo = stringResource(R.string.tituloPeliA)
+                verPeli(tituloA)
             }) {
                 Text(stringResource(R.string.verPeliA))
             }
@@ -82,7 +87,7 @@ class FilmListActivity : ComponentActivity() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(onClick = {
-                verPeli()
+                verPeli(tituloB)
             }) {
                 Text(stringResource(R.string.verPeliB))
             }
