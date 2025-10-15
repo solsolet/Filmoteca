@@ -233,10 +233,13 @@ A su vez tenía un _Warning_ en la cadena que quería mostrar `Peli: $peli` que 
 He seguido buscando y buscando y el error estaba que antes em `FilmList`pasaba el parámetro de título así: `R.string.tituloDefecto.toString()`. Todo este tiempo, por ese mal paso de parámetro me daba el error. Aun me resulta confuso cuando usar una funcion de String y cuando no.
 
 ### Ejercicio 4
-
+<!-- TODO Explicar-ho -->
 #### Errores
 No se veía en la pantalla el "editado" al pulsal guardar en `FilmEdit` por que no había tenido en cuenta el orden en qeu se estaba llamando. Usaba `initLayout` para añadir una cadena de texto que cambiase a lo largo de la aplicación, pero ìnitLayout solo se llama en `onCreate` al principio y nunca más entraba.
 
 Viéndolo con el _debugger_, los valores estaban correctos, pero como no tenía ningún método que lo volviese a poner por pantalla nunca aparecía.
 
 ### Ejercicio 5
+<!-- TODO Explicar-ho -->
+
+<!-- TODO Conclusions + DEMO -->
