@@ -2,6 +2,7 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -31,7 +32,6 @@ class FilmDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         initUI()
-        //prova
     }
     private fun initUI() {
         when (Filmoteca.GlobalMode) {
@@ -39,9 +39,13 @@ class FilmDataActivity : AppCompatActivity() {
             Mode.Compose -> initCompose()
         }
     }
+    companion object {
+        val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
+    }
     // Centralitzem Intents
-    private fun verPeliRel(){
+    private fun verPeliRel(titol: String){
         val verPeliRel = Intent(this@FilmDataActivity, FilmDataActivity::class.java)
+        verPeliRel.putExtra(EXTRA_FILM_TITLE, titol)
         startActivity(verPeliRel)
     }
     private fun editPeli(){
@@ -57,7 +61,12 @@ class FilmDataActivity : AppCompatActivity() {
         bindings = ActivityFilmDataBinding.inflate(layoutInflater)
         with(bindings) {
             setContentView(root)
-            bindings.verPeliRel.setOnClickListener { verPeliRel() }
+
+            //mostrar títol peli
+            val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
+            bindings.textViewTituloPeli.text = peli
+
+            bindings.verPeliRel.setOnClickListener { verPeliRel(peli) }
             bindings.editPeli.setOnClickListener { editPeli() }
             bindings.volverPrincipal.setOnClickListener { volverPrinc() }
         }
@@ -65,13 +74,14 @@ class FilmDataActivity : AppCompatActivity() {
     private fun initCompose() { //no se què fer ací
         setContent {
             MaterialTheme {
-                AboutFilmoteca()
+                ComposeFilmData()
             }
         }
     }
     @Composable
-    private fun AboutFilmoteca() {
+    private fun ComposeFilmData() {
         val context = LocalContext.current
+        val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
@@ -80,8 +90,10 @@ class FilmDataActivity : AppCompatActivity() {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(peli)
+            Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = { //TODO: mirar lo de Unit
-                verPeliRel()
+                verPeliRel(peli)
             }) {
                 Text(stringResource(R.string.verPeliRel))
             }

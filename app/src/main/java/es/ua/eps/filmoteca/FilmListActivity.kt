@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM_TITLE
 import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
 
 class FilmListActivity : ComponentActivity() {
@@ -38,8 +39,9 @@ class FilmListActivity : ComponentActivity() {
         }
     }
     // Centralitzem Intents
-    private fun verPeli(){
+    private fun verPeli(titol: String){
         val verPeli = Intent(this@FilmListActivity, FilmDataActivity::class.java)
+        verPeli.putExtra(EXTRA_FILM_TITLE, titol)
         startActivity(verPeli)
     }
     private fun acercaDe(){
@@ -50,21 +52,23 @@ class FilmListActivity : ComponentActivity() {
         bindings = ActivityFilmListBinding.inflate(layoutInflater)
         with(bindings) {
             setContentView(root)
-            bindings.verPeliA.setOnClickListener { verPeli() }
-            bindings.verPeliB.setOnClickListener { verPeli() }
+            bindings.verPeliA.setOnClickListener { verPeli(getString(R.string.tituloPeliA)) }
+            bindings.verPeliB.setOnClickListener { verPeli(getString(R.string.tituloPeliB)) }
             bindings.acercaDe.setOnClickListener { acercaDe() }
         }
     }
     private fun initCompose() { //no se què fer ací
         setContent {
             MaterialTheme {
-                AboutFilmoteca()
+                ComposableFilmList()
             }
         }
     }
     @Composable
-    private fun AboutFilmoteca() {
+    private fun ComposableFilmList() {
         val context = LocalContext.current
+        val titolPeliA = stringResource(R.string.tituloPeliA)
+        val titolPeliB = stringResource(R.string.tituloPeliB)
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
@@ -74,7 +78,7 @@ class FilmListActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(onClick = { //TODO: mirar lo de Unit
-                verPeli()
+                verPeli(titolPeliA)
             }) {
                 Text(stringResource(R.string.verPeliA))
             }
@@ -82,7 +86,7 @@ class FilmListActivity : ComponentActivity() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(onClick = {
-                verPeli()
+                verPeli(titolPeliB)
             }) {
                 Text(stringResource(R.string.verPeliB))
             }

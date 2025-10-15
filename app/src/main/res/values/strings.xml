@@ -16,4 +16,7 @@
     <string name="editandoPeli">Editando pelicula</string>
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="tituloPeliA">Peli A</string>
+    <string name="tituloPeliB">Peli B</string>
+    <string name="tituloPeliDefecto">Titulo por defecto</string>
 </resources>

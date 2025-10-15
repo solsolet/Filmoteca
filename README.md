@@ -156,4 +156,82 @@ Primero ponemos todos los elementos en cada actividad de manera que resultan as�
 |FilmData|![Pantalla Compose FilmData](img-readme/ComposeFilmData.png)|![Pantalla Binding FilmData](img-readme/BindingFilmData.png)|
 |FilmEdit|![Pantalla Compose FilmEdit](img-readme/ComposeFilmEdit.png)|![Pantalla Binding FilmEdit](img-readme/BindingFilmEdit.png)|
 |About|![Pantalla Compose About](img-readme/ComposeAbout.png)|![Pantalla Binding About](img-readme/BindingAbout.png)|
+
+Luego conectamos los botones con la pantalla correspondiente mediante **intents explícitos**, como por ejemplo:
+```kt
+private fun verPeli(){
+        val verPeli = Intent(this@FilmListActivity, FilmDataActivity::class.java)
+        startActivity(verPeli)
+    }
+    private fun acercaDe(){
+        val acerca = Intent(this@FilmListActivity, AboutActivity::class.java)
+        startActivity(acerca)
+    }
+```
+Veremos que está bien conectado con el vídeo de demo. Para finalizar el ejercicio nos hace falta poner _flags_ para que el botón de atras pueda cerrar la aplicación:
+```kt
+private fun volverPrinc(){
+        val volver = Intent(this@FilmDataActivity, FilmListActivity::class.java)
+        volver.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(volver)
+    }
+```
 ### Ejercicio 3
+Empezamos por pasar primero un parámetro extra desde `FilmListActivity` a `FilmDataActivity` para ello añadimos el siguiente código a las dos clases:
+#### FilmData
+
+Primero declaramos el objeto "estático" para pasar el título como parámetro extra.
+```kt
+companion object {
+    val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
+}
+```
+Esta declaración permitirá llamar a `EXTRA_FILM_TITLE` desde cualquier parte del código. Despúes de declararla, realme te he seguido escribiendo el código en FilmList, pero para no marearnos dejo el código de cada aprte en su apartado. Luego he usado la función `putExtra` para enviar de nuevo el titulo que habíamos enviado de `FilmList`: 
+```kt
+private fun verPeliRel(titol: String){
+        val verPeliRel = Intent(this@FilmDataActivity, FilmDataActivity::class.java)
+        verPeliRel.putExtra(EXTRA_FILM_TITLE, titol)
+        startActivity(verPeliRel)
+}
+```
+Enviar de nuevo el título es para la parte final del enunciado, ya que lo pide.
+Para mostrar el título correspondiente, segun el Modo lo he declarado de la siguiente manera usando de variable `val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)`
+* Binding:
+```kt
+val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
+bindings.textViewTituloPeli.text = peli
+```
+* Compose
+```kt
+@Composable
+private fun ComposeFilmData() {
+    val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
+
+        Column( ...
+        ) {
+            Text(peli)
+            ...
+        }
+```
+#### FilmList
+```kt
+private fun verPeli(titol: String){
+    val verPeli = Intent(this@FilmListActivity, FilmDataActivity::class.java)
+    verPeli.putExtra(EXTRA_FILM_TITLE, titol)
+    startActivity(verPeli)
+}
+```
+En `initLayout()` pasamos el paràmetro al método de `verPeli` para que se lo pase a `FilmData`en el _intent_:
+```kt
+bindings.verPeliA.setOnClickListener { verPeli(getString(R.string.tituloPeliA)) }
+```
+#### Errores
+Me he atascado bastantes veces por problemas con la conversión de 'peli' a texto que se pueda ver bien en la aplicación. Una vez implementé todo el código del parámetro extra al mostrarlo me salía en lugar del String correspondiente (o el de por defecto) un número, el ID que tomaba 'peli'.
+
+A su vez tenía un _Warning_ en la cadena que quería mostrar `Peli: $peli` que tenía que ver con `setText` en el Modo _Binding_. No encontraba el motivo en `Film Data` y eso que no paraba de probar cualquier funcion relacionada con Strings para ver si es que 'peli' realmente contenía un número. Al depurar con _Logcat_ para ver el contenido vi que seguía mostrando el mismo número. ¿Sería el _Warning_ u otra cosa?
+
+He seguido buscando y buscando y el error estaba que antes em `FilmList`pasaba el parámetro de título así: `R.string.tituloDefecto.toString()`. Todo este tiempo, por ese mal paso de parámetro me daba el error. Aun me resulta confuso cuando usar una funcion de String y cuando no.
+
+### Ejercicio 4
+
+### Ejercicio 5
