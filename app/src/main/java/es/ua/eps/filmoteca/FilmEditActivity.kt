@@ -1,5 +1,6 @@
 package es.ua.eps.filmoteca
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -17,9 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM_TITLE
 import es.ua.eps.filmoteca.databinding.ActivityFilmEditBinding
 
 class FilmEditActivity : AppCompatActivity() {
@@ -38,25 +41,32 @@ class FilmEditActivity : AppCompatActivity() {
     }
     // Centralitzem Intents
     private fun cerrar() {
+        setResult(RESULT_CANCELED, null)
+        finish()
+    }
+    private fun guardar() {
+        val resultado = Intent()
+        resultado.putExtra(EXTRA_FILM_TITLE, "editado")
+        setResult(RESULT_OK, resultado)
         finish()
     }
     private fun initLayouts() {
         bindings = ActivityFilmEditBinding.inflate(layoutInflater)
         with(bindings) {
             setContentView(root)
-            bindings.guardar.setOnClickListener { cerrar() }
+            bindings.guardar.setOnClickListener { guardar() }
             bindings.cancelar.setOnClickListener { cerrar() }
         }
     }
     private fun initCompose() { //no se què fer ací
         setContent {
             MaterialTheme {
-                AboutFilmoteca()
+                ComposableFilmEdit()
             }
         }
     }
     @Composable
-    private fun AboutFilmoteca() {
+    private fun ComposableFilmEdit() {
         val context = LocalContext.current
 
         Column( //equivalent a LinearLayout(vertical)
@@ -67,7 +77,7 @@ class FilmEditActivity : AppCompatActivity() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(onClick = { //TODO: mirar lo de Unit
-                cerrar()
+                guardar()
             }) {
                 Text(stringResource(R.string.guardar))
             }

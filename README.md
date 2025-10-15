@@ -234,4 +234,9 @@ He seguido buscando y buscando y el error estaba que antes em `FilmList`pasaba e
 
 ### Ejercicio 4
 
+#### Errores
+No se veía en la pantalla el "editado" al pulsal guardar en `FilmEdit` por que no había tenido en cuenta el orden en qeu se estaba llamando. Usaba `initLayout` para añadir una cadena de texto que cambiase a lo largo de la aplicación, pero ìnitLayout solo se llama en `onCreate` al principio y nunca más entraba.
+
+Viéndolo con el _debugger_, los valores estaban correctos, pero como no tenía ningún método que lo volviese a poner por pantalla nunca aparecía.
+
 ### Ejercicio 5

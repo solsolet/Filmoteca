@@ -1,5 +1,6 @@
 package es.ua.eps.filmoteca
 
+import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
@@ -27,6 +28,7 @@ import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
 
 class FilmDataActivity : AppCompatActivity() {
     private lateinit var bindings : ActivityFilmDataBinding
+    var textEditado = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +50,34 @@ class FilmDataActivity : AppCompatActivity() {
         verPeliRel.putExtra(EXTRA_FILM_TITLE, titol)
         startActivity(verPeliRel)
     }
+    val CODIGO_ACTIVIDAD_EDITAR = 1
     private fun editPeli(){
         val edit = Intent(this@FilmDataActivity, FilmEditActivity::class.java)
-        startActivity(edit)
+        startActivityForResult(edit, CODIGO_ACTIVIDAD_EDITAR)
     }
+    // called when secondary activity finishes
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CODIGO_ACTIVIDAD_EDITAR){
+            if (resultCode == RESULT_OK){
+                textEditado = " editado"
+                when (Filmoteca.GlobalMode) {
+                    Mode.Bindings -> refreshTitleBinding()
+                    Mode.Compose -> refreshCompose()
+                }
+            }
+        }
+    }
+    fun refreshTitleBinding(){
+        val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
+        bindings.textViewTituloPeli.text = peli + textEditado
+    }
+
     private fun volverPrinc(){
         val volver = Intent(this@FilmDataActivity, FilmListActivity::class.java)
         volver.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -59,19 +85,19 @@ class FilmDataActivity : AppCompatActivity() {
     }
     private fun initLayouts() {
         bindings = ActivityFilmDataBinding.inflate(layoutInflater)
-        with(bindings) {
+        with(bindings) { //saves writint "binding." before
             setContentView(root)
 
-            //mostrar títol peli
+            //shows film title
             val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
-            bindings.textViewTituloPeli.text = peli
+            textViewTituloPeli.text = peli
 
-            bindings.verPeliRel.setOnClickListener { verPeliRel(peli) }
-            bindings.editPeli.setOnClickListener { editPeli() }
-            bindings.volverPrincipal.setOnClickListener { volverPrinc() }
+            verPeliRel.setOnClickListener { verPeliRel(peli) }
+            editPeli.setOnClickListener { editPeli() }
+            volverPrincipal.setOnClickListener { volverPrinc() }
         }
     }
-    private fun initCompose() { //no se què fer ací
+    private fun initCompose() {
         setContent {
             MaterialTheme {
                 ComposeFilmData()
@@ -85,19 +111,18 @@ class FilmDataActivity : AppCompatActivity() {
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
-                .fillMaxSize()      // separat com posa en els apunts
+                .fillMaxSize()      // separed, classnotes' style
                 .padding(64.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(peli)
+            Text(peli + textEditado)
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = { //TODO: mirar lo de Unit
                 verPeliRel(peli)
             }) {
                 Text(stringResource(R.string.verPeliRel))
             }
-
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(onClick = {
@@ -105,7 +130,6 @@ class FilmDataActivity : AppCompatActivity() {
             }) {
                 Text(stringResource(R.string.editPeli))
             }
-
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(onClick = {
@@ -114,5 +138,19 @@ class FilmDataActivity : AppCompatActivity() {
                 Text(stringResource(R.string.volverPrincipal))
             }
         }
+    }
+    private fun refreshCompose() {
+        setContent {
+            MaterialTheme {
+                //RefreshTitleCompose()
+                ComposeFilmData()
+            }
+        }
+    }
+    @Composable
+    fun RefreshTitleCompose(){
+        val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
+
+        Text(peli + textEditado)
     }
 }
