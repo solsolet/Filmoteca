@@ -148,3 +148,12 @@ Más adelante podría investigar sobre esto a ver si hay alguna otra manera de p
 ### Ejercicio 2
 Creamos las nuevas Actividades y cambiamos de aplicación principal:
 ![FilmActivities](img-readme/FilmActivities-Manifest.png)
+
+Primero ponemos todos los elementos en cada actividad de manera que resultan así (aunque esten un poco feos):
+|Pantalla|Compose|Binding|
+|--------|-------|-------|
+|FilmList|![Pantalla Compose FilmList](img-readme/ComposeFilmList.png)|![Pantalla Binding FilmList](img-readme/BindingFilmList.png)|
+|FilmData|![Pantalla Compose FilmData](img-readme/ComposeFilmData.png)|![Pantalla Binding FilmData](img-readme/BindingFilmData.png)|
+|FilmEdit|![Pantalla Compose FilmEdit](img-readme/ComposeFilmEdit.png)|![Pantalla Binding FilmEdit](img-readme/BindingFilmEdit.png)|
+|About|![Pantalla Compose About](img-readme/ComposeAbout.png)|![Pantalla Binding About](img-readme/BindingAbout.png)|
+### Ejercicio 3
