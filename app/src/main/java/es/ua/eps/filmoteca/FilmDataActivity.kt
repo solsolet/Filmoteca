@@ -31,6 +31,7 @@ class FilmDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         initUI()
+        //prova
     }
     private fun initUI() {
         when (Filmoteca.GlobalMode) {
