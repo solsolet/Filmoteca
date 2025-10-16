@@ -138,15 +138,8 @@ class FilmDataActivity : AppCompatActivity() {
     private fun refreshCompose() {
         setContent {
             MaterialTheme {
-                //RefreshTitleCompose()
                 ComposeFilmData()
             }
         }
-    }
-    @Composable
-    fun RefreshTitleCompose(){
-        val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
-
-        Text(peli + textEditado)
     }
 }

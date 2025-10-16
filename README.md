@@ -5,7 +5,7 @@ Para el desarrollo de esta práctica estoy utilizando Android Studio en los sigu
 * Un portátil, una torre y el Mac de clase.
 Lo aclaro, ya que los nombraré durante la práctica.
 
-Las imágenes de este README están en la carpeta `ìmg-readme` así como el [vídeo](img-readme/Demo-editada.mp4) demostración.
+Las imágenes de este README están en la carpeta `img-readme` así como el [vídeo](img-readme/Demo-editada.mp4) demostración.
 
 La práctica también se puede descargar en [GitHub](https://github.com/solsolet/Filmoteca.git).
 
@@ -121,7 +121,7 @@ Después de que el profe subiese un proyecto base, he adaptado el mío para que 
 Siguiendo con la segunda pràctica de la sesión, ahora nos centraremos en añadirle contenido a la práctica que ya teníamos.
 
 ### Ejercicio 1
-Le añadimos funcionalidad a los botones como se nos indica. Me surge la siguiente inquietud: si estamos usando Bindings y compose para hacer las mismas cosas, quiere decir que duplicaremos el mismo código contantemente si empezamos a añadir funcionalidad. Por tanto, todo aquello que es común (cada intent) lo saco en una función propia fuera de _initLayouts_ o _initCompose_:
+Le añadimos funcionalidad a los botones como se nos indica. Me surge la siguiente inquietud: si estamos usando _Bindings_ y _Compose_ para hacer las mismas cosas, quiere decir que duplicaremos el mismo código contantemente si empezamos a añadir funcionalidad. Por tanto, todo aquello que es común (cada _intent_) lo saco en una función propia fuera de _initLayouts_ o _initCompose_:
 ```kt
 private fun goWebsite(){
         val irWeb = Intent(Intent.ACTION_VIEW, "https://www.ua.es/va/".toUri())
@@ -178,8 +178,8 @@ private fun volverPrinc(){
 ```
 ### Ejercicio 3
 Empezamos por pasar primero un parámetro extra desde `FilmListActivity` a `FilmDataActivity` para ello añadimos el siguiente código a las dos clases:
-#### FilmData
 
+#### FilmData
 Primero declaramos el objeto "estático" para pasar el título como parámetro extra.
 ```kt
 companion object {
@@ -206,12 +206,11 @@ bindings.textViewTituloPeli.text = peli
 @Composable
 private fun ComposeFilmData() {
     val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
-
-        Column( ...
-        ) {
-            Text(peli)
-            ...
-        }
+    Column( ...
+    ) {
+        Text(peli)
+        ...
+    }
 ```
 #### FilmList
 ```kt
@@ -228,18 +227,82 @@ bindings.verPeliA.setOnClickListener { verPeli(getString(R.string.tituloPeliA)) 
 #### Errores
 Me he atascado bastantes veces por problemas con la conversión de 'peli' a texto que se pueda ver bien en la aplicación. Una vez implementé todo el código del parámetro extra al mostrarlo me salía en lugar del String correspondiente (o el de por defecto) un número, el ID que tomaba 'peli'.
 
-A su vez tenía un _Warning_ en la cadena que quería mostrar `Peli: $peli` que tenía que ver con `setText` en el Modo _Binding_. No encontraba el motivo en `Film Data` y eso que no paraba de probar cualquier funcion relacionada con Strings para ver si es que 'peli' realmente contenía un número. Al depurar con _Logcat_ para ver el contenido vi que seguía mostrando el mismo número. ¿Sería el _Warning_ u otra cosa?
+A su vez tenía un _Warning_ en la cadena que quería mostrar `Peli: $peli` que tenía que ver con `setText` en el Modo _Binding_. No encontraba el motivo en `Film Data` y eso que no paraba de probar cualquier funcion relacionada con _Strings_ para ver si es que 'peli' realmente contenía un número. Al depurar con _Logcat_ para ver el contenido vi que seguía mostrando el mismo número. ¿Sería el _Warning_ u otra cosa?
 
-He seguido buscando y buscando y el error estaba que antes em `FilmList`pasaba el parámetro de título así: `R.string.tituloDefecto.toString()`. Todo este tiempo, por ese mal paso de parámetro me daba el error. Aun me resulta confuso cuando usar una funcion de String y cuando no.
+He seguido buscando y buscando y el error estaba que antes en `FilmList` pasaba el parámetro de título así: `R.string.tituloDefecto.toString()`. Todo este tiempo, por ese mal paso de parámetro me daba el error. Aun me resulta confuso cuando usar una funcion de String y cuando no.
 
 ### Ejercicio 4
-<!-- TODO Explicar-ho -->
+Parecido al ejercicio anterior, en este caso hemos editado la función `editPeli` de `FilmData` para pasar la información necesaria a `FilmEdit`, que este último a su vez, cuando termine su còdigo volverá a `FilmData`para terminar con el código que hemos sobrecargado en la fucnión `onActivityResult`. De manera esquemática la lógica es: ![Esquema funcionamiento edit](img-readme/esquema-edit.png)
+
+Y el código que lo ha hecho posible ha sido para `FilmData`:
+```kt
+val CODIGO_ACTIVIDAD_EDITAR = 1
+private fun editPeli(){
+    val edit = Intent(this@FilmDataActivity, FilmEditActivity::class.java)
+    startActivityForResult(edit, CODIGO_ACTIVIDAD_EDITAR)
+}
+// called when secondary activity finishes
+override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+) {
+    super.onActivityResult(requestCode, resultCode, data)
+
+    if (requestCode == CODIGO_ACTIVIDAD_EDITAR){
+        if (resultCode == RESULT_OK){
+            textEditado = " editado"
+            when (Filmoteca.GlobalMode) {
+                Mode.Bindings -> refreshTitleBinding()
+                Mode.Compose -> refreshCompose()
+            }
+        }
+    }
+}
+fun refreshTitleBinding(){
+    val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
+    bindings.textViewTituloPeli.text = peli + textEditado
+}
+private fun refreshCompose() {
+    setContent {
+        MaterialTheme {
+            ComposeFilmData()
+        }
+    }
+}
+```
+Y para `FilmEdit`:
+```kt
+private fun cerrar() {
+    setResult(RESULT_CANCELED, null)
+    finish()
+}
+private fun guardar() {
+    val resultado = Intent()
+    resultado.putExtra(EXTRA_FILM_TITLE, "editado")
+    setResult(RESULT_OK, resultado)
+    finish()
+}
+```
+
 #### Errores
-No se veía en la pantalla el "editado" al pulsal guardar en `FilmEdit` por que no había tenido en cuenta el orden en qeu se estaba llamando. Usaba `initLayout` para añadir una cadena de texto que cambiase a lo largo de la aplicación, pero ìnitLayout solo se llama en `onCreate` al principio y nunca más entraba.
+No se veía en la pantalla el "editado" al pulsar guardar en `FilmEdit` porque no había tenido en cuenta el orden en que se estaba llamando. Usaba `initLayout` para añadir una cadena de texto que cambiase a lo largo de la aplicación, pero `initLayout` solo se llama en `onCreate` al principio y nunca más entraba.
 
 Viéndolo con el _debugger_, los valores estaban correctos, pero como no tenía ningún método que lo volviese a poner por pantalla nunca aparecía.
 
-### Ejercicio 5
-<!-- TODO Explicar-ho -->
+Por otra parte, en el Modo _Compose_ no he sabido como llamar únicamente al texto que contiene el título de la peli para añadirle el "editado", pero según he estado viendo en la documentación esto no es posible conforme yo me lo imaginaba. Haría falta llamar de nuevo a la función `ComposeFilmData`. Seguramente haya una manera más óptima de hacerlo, pero la iré descubriendo con la práctica.
 
-<!-- TODO Conclusions + DEMO -->
+### Ejercicio 5
+Cualquier comentario sobre el Modo _Compose_ ya se ha hecho en los anteriores apartados. Podemos destacar que como la lógica la tengo separada en las funciones de cada botón, independientemente del Modo simplemente llamo a la misma función. Como particularidad podemos ver como he llamado a los botones de `FilmList` para ver como he pasado el título de la peli:
+```kt
+Button(onClick = { //TODO: mirar lo de Unit
+    verPeli(titolPeliA)
+}) {
+    Text(stringResource(R.string.verPeliA))
+}
+```
+### Resultado
+En este apartado dejaré la comparativa entre el modo _Binding_ y _Compose_ para ver como ha quedado la funcionalidad implementada en todos los ejercicios. Los vídeos se encuentran en la carpeta `img-readme`:
+|Bindings|Compose|
+|--------|-------|
+|![Demo P2 Bindings](img-readme/Demo-P2-Bindings.mp4)|![Demo P2 Compose](img-readme/Demo_P2-Compose.mp4)|
