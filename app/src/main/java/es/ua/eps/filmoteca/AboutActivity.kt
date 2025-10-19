@@ -2,7 +2,6 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
-//import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 
 import androidx.activity.ComponentActivity

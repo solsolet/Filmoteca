@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,37 +12,124 @@
         android:id="@+id/editandoPeli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="112dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
         android:text="@string/editandoPeli"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/guardar"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="125dp"
-        android:text="@string/guardar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editandoPeli" />
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/cancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="125dp"
-        android:text="@string/cancelar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guardar" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="102dp"
+            android:layout_height="115dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/bad_guys2" />
 
-    <androidx.constraintlayout.helper.widget.Flow
-        android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/capFoto"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/captFoto" />
+
+        <Button
+            android:id="@+id/selecImg"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/selectImg" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="@string/tituloPeli"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editDirector"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="@string/directorPeli"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editAny"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="@string/any"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editIMDB"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="@string/enlaceIMDB"
+        android:inputType="text" />
+
+    <Spinner
+        android:id="@+id/spinnerGenero"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:entries="@array/generoPeli"
+        android:prompt="@string/generoPeli" />
+
+    <Spinner
+        android:id="@+id/spinnerFormato"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:entries="@array/formatoPeli"
+        android:prompt="@string/formatoPeli" />
+
+    <EditText
+        android:id="@+id/editNotas"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/cancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@string/cancelar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guardar" />
+
+        <Button
+            android:id="@+id/guardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="@string/guardar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editandoPeli" />
+    </LinearLayout>
+
+
+</LinearLayout>

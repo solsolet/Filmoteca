@@ -16,5 +16,16 @@
     <string name="cancelar">Cancel</string>
     <string name="tituloPeliA">Film A</string>
     <string name="tituloPeliB">Film B</string>
-    <string name="tituloPeliDefecto">Default title</string>
+    <string name="tituloPeli">Film\'s title</string>
+    <string name="txtEditado">" edit"</string>
+    <string name="directorPeli">Film director</string>
+    <string name="anyPeli">Film year</string>
+    <string name="generoPeli">Film gender</string>
+    <string name="formatoPeli">Film format</string>
+    <string name="notasPeli">Film\'s notes</string>
+    <string name="verIMDB">Watch in IMDB</string>
+    <string name="captFoto">Take photo</string>
+    <string name="selectImg">Select image</string>
+    <string name="any">Year</string>
+    <string name="enlaceIMDB">Link to IMDB</string>
 </resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="TextView">Creada per: Gemma Selles</string>
+    <string name="button">Anar a lloc web</string>
+    <string name="button2">Obtienir suport</string>
+    <string name="button3">Tornar</string>
+    <string name="contentImage">Imatge d\'una moneta</string>
+    <string name="verPeliA">Veure pel·licula A</string>
+    <string name="verPeliB">Veure pel·licula B</string>
+    <string name="acercaDe">Sobre</string>
+    <string name="datosPeli">Dades pel·licula</string>
+    <string name="verPeliRel">Veure pel·licula relacionada</string>
+    <string name="volverPrincipal">Tornar a la Principal</string>
+    <string name="editPeli">Editar pel·licula</string>
+    <string name="editandoPeli">Editant pel·licula</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancel·lar</string>
+    <string name="tituloPeliA">Peli A</string>
+    <string name="tituloPeliB">Peli B</string>
+    <string name="tituloPeli">Titol de la pelicula</string>
+    <string name="txtEditado">editat</string>
+    <string name="directorPeli">Director de la peli</string>
+    <string name="anyPeli">Any de la peli</string>
+    <string name="generoPeli">Genere peli</string>
+    <string name="formatoPeli">Format peli</string>
+    <string name="notasPeli">Notes de la peli</string>
+    <string name="verIMDB">Veure en IMDB</string>
+    <string name="captFoto">Captura fotografia</string>
+    <string name="selectImg">Selecciona imatge</string>
+    <string name="any">Any</string>
+    <string name="enlaceIMDB">Enllaç a IMDB</string>
+</resources>

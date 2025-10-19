@@ -17,5 +17,16 @@
     <string name="cancelar">Cancelar</string>
     <string name="tituloPeliA">Peli A</string>
     <string name="tituloPeliB">Peli B</string>
-    <string name="tituloPeliDefecto">Titulo por defecto</string>
+    <string name="tituloPeli">Titulo de la pelicula</string>
+    <string name="txtEditado">editado</string>
+    <string name="directorPeli">Director de la peli</string>
+    <string name="anyPeli">Año de la peli</string>
+    <string name="generoPeli">Genero peli</string>
+    <string name="formatoPeli">Formato Peli</string>
+    <string name="notasPeli">Notas de la peli</string>
+    <string name="verIMDB">Ver en IMDB</string>
+    <string name="captFoto">Captura fotografia</string>
+    <string name="selectImg">Selecciona imagen</string>
+    <string name="any">Año</string>
+    <string name="enlaceIMDB">Enlace a IMDB</string>
 </resources>
