@@ -3,14 +3,14 @@
 
 Para el desarrollo de esta práctica estoy utilizando Android Studio en los siguientes dispositivos:
 * Un portátil, una torre y el Mac de clase.
-Lo aclaro, ya que los nombraré durante la práctica.
+  Lo aclaro, ya que los nombraré durante la práctica.
 
 Las imágenes de este README están en la carpeta `img-readme` así como el [vídeo](img-readme/Demo-editada.mp4) demostración.
 
 La práctica también se puede descargar en [GitHub](https://github.com/solsolet/Filmoteca.git).
 
 ### Ejercicio 1
-Primero he cambiado todo lo que se llama "_main_" y lo he sustituido por "_about_", p. ej. "`MainActivity.kt` -> `AboutActivity.kt`". Dentro de este archivo, quité también el "ViewCompat". 
+Primero he cambiado todo lo que se llama "_main_" y lo he sustituido por "_about_", p. ej. "`MainActivity.kt` -> `AboutActivity.kt`". Dentro de este archivo, quité también el "ViewCompat".
 Siguiendo con estos cambios también en el AndroidManifest he tenido cuidado que el archivo aparezca correctamente.
 
 Por último, con el recurso `about_activity.xml` más de lo mismo.
@@ -59,8 +59,8 @@ El resultado fue una mezcla de librerías que tenía el proyecto de por sí, uni
 Al ver que funcionaban, no podía evitar fijarme en los numerosos _warnings_ que aparecían en algunas. Leyendo un poco, vi que algunas librerías hacían lo mismo que otras, por tanto, existía duplicidad y no se llegaban  a usar, y por eso refactoricé un poco.
 
 ### Errores
-1. Primer día - Error al descargar Device: 
-![error](img-readme/error.png)
+1. Primer día - Error al descargar Device:
+   ![error](img-readme/error.png)
 
 Pudo haber sido por falta de internet o del internet tan lento de la uni. Al cambiarme al Mac de clase con el SSD pude aprovechar el tiempo que quedaba para hacer la actividad en clase. En casa intenté descargarlo a ver si era cosa de la mala conexión.
 
@@ -84,11 +84,11 @@ Usar el identificador para cadenas de texto no funcionaba bien para los textos d
 
 5. Falta de la imagen en el modo _Layout_
 
-En las pruebas que he estado haciendo todos los elementos me salían bien, pero en las útlimas en las que estoy preparando la entrega y haciendo pequeños cambios no estaba comprobando el _Layout_ y para mi sorpresa he visto que la imagen no cargaba.
+En las pruebas que he estado haciendo todos los elementos me salían bien, pero en las últimas en las que estoy preparando la entrega y haciendo pequeños cambios no estaba comprobando el _Layout_ y para mi sorpresa he visto que la imagen no cargaba.
 Revisando el código estaba todo como antes, así que no sé si es por culpa de alguna librería o línea de código que he cambiado.
 
-Por lo que he estado debuggeando y leyendo, parece ser que al dividir la aplicación según el modo, _Layout_ decide el recurso en tiempo de ejecución que al ver que no està declarada en `AboutActivity.kt` explícitamente (como en los ejercicios sin la partición) no lo encuentra y, por tanto, no lo pinta.
-Esto tambén explica por que en _Compose_ sí que aparece por que usa `painterResource` que lo pinta.
+Por lo que he estado debuggeando y leyendo, parece ser que al dividir la aplicación según el modo, _Layout_ decide el recurso en tiempo de ejecución que al ver que no está declarada en `AboutActivity.kt` explícitamente (como en los ejercicios sin la partición) no lo encuentra y, por tanto, no lo pinta.
+Esto también explica por que en _Compose_ sí que aparece por que usa `painterResource` que lo pinta.
 
 El código para `initLayouts` ha quedado así:
 ```kt
@@ -98,7 +98,7 @@ val imageView = findViewById<ImageView>(R.id.imageView2)
 // imageView?.visibility = View.VISIBLE
 imageView?.setImageResource(R.drawable.monito)
 ```
-Donde los `Log` han servido para trazar el problema con _Logcat_. 
+Donde los `Log` han servido para trazar el problema con _Logcat_.
 
 ### Conclusiones
 He aprendido mucho en esta práctica: todas las nociones de Gradle, consejos y pruebas creo que me dejan más preparada para la siguiente. Son bastantes conceptos nuevos y, con su uso, se me harán más intuitivos.
@@ -118,10 +118,10 @@ La mejor opción para trabajar es la **torre**, así que intentaré hacer la may
 Después de que el profe subiese un proyecto base, he adaptado el mío para que se parezca lo máximo posible viendo poco a poco que decisiones de diseño ha tomado, modificar librerías y optimizar el código, sin olvidar por supuesto aprender. La parte que más ha cambiado es el modo _Layouts_ que ha pasado a ser _Bindings_ (y éste usa nuevas funciones para poner lo mismo).
 
 ## Navegación entre actividades
-Siguiendo con la segunda pràctica de la sesión, ahora nos centraremos en añadirle contenido a la práctica que ya teníamos.
+Siguiendo con la segunda práctica de la sesión, ahora nos centraremos en añadirle contenido a la práctica que ya teníamos.
 
 ### Ejercicio 1
-Le añadimos funcionalidad a los botones como se nos indica. Me surge la siguiente inquietud: si estamos usando _Bindings_ y _Compose_ para hacer las mismas cosas, quiere decir que duplicaremos el mismo código contantemente si empezamos a añadir funcionalidad. Por tanto, todo aquello que es común (cada _intent_) lo saco en una función propia fuera de _initLayouts_ o _initCompose_:
+Le añadimos funcionalidad a los botones como se nos indica. Me surge la siguiente inquietud: si estamos usando _Bindings_ y _Compose_ para hacer las mismas cosas, quiere decir que duplicaremos el mismo código constantemente si empezamos a añadir funcionalidad. Por tanto, todo aquello que es común (cada _intent_) lo saco en una función propia fuera de _initLayouts_ o _initCompose_:
 ```kt
 private fun goWebsite(){
         val irWeb = Intent(Intent.ACTION_VIEW, "https://www.ua.es/va/".toUri())
@@ -131,7 +131,7 @@ private fun goWebsite(){
         val soporte = Intent(Intent.ACTION_SENDTO, "mailto:gsl21@alu.ua.es".toUri())
         startActivity(soporte)
     }
-    fun closeActivity(){ // No private por si la quisieramos usar fuera
+    fun closeActivity(){ // No private por si la quisiéramos usar fuera
         finish()
     }
 ```
@@ -140,7 +140,7 @@ Y luego en cada _init_ llamo a la función correspondiente:
 |-------|-------|
 |`bindings.button.setOnClickListener { goWebsite() }`|`Button(onClick = {  goWebsite() }) { Text(stringResource(R.string.button)) }`|
 #### Ojito
-En el modo _Compose_ he intentado quitar los corchetes del `onclick = {}` para dejar el método suelto, pero me ha dado error. Vista la ayuda de Android Studio veo lo siguiente: 
+En el modo _Compose_ he intentado quitar los corchetes del `onclick = {}` para dejar el método suelto, pero me ha dado error. Vista la ayuda de Android Studio veo lo siguiente:
 ![Compose: Button onClick function, parámetro Unit](img-readme/Compose-onClick-Unit.png)
 
 Más adelante podría investigar sobre esto a ver si hay alguna otra manera de ponerlo y ver si es mejor.
@@ -149,7 +149,7 @@ Más adelante podría investigar sobre esto a ver si hay alguna otra manera de p
 Creamos las nuevas Actividades y cambiamos de aplicación principal:
 ![FilmActivities](img-readme/FilmActivities-Manifest.png)
 
-Primero ponemos todos los elementos en cada actividad de manera que resultan así (aunque esten un poco feos):
+Primero ponemos todos los elementos en cada actividad de manera que resultan así (aunque estén un poco feos):
 |Pantalla|Compose|Binding|
 |--------|-------|-------|
 |FilmList|![Pantalla Compose FilmList](img-readme/ComposeFilmList.png)|![Pantalla Binding FilmList](img-readme/BindingFilmList.png)|
@@ -168,7 +168,7 @@ private fun verPeli(){
         startActivity(acerca)
     }
 ```
-Veremos que está bien conectado con el vídeo de demo. Para finalizar el ejercicio nos hace falta poner _flags_ para que el botón de atras pueda cerrar la aplicación:
+Veremos que está bien conectado con el vídeo de demo. Para finalizar el ejercicio nos hace falta poner _flags_ para que el botón de atrás pueda cerrar la aplicación:
 ```kt
 private fun volverPrinc(){
         val volver = Intent(this@FilmDataActivity, FilmListActivity::class.java)
@@ -186,7 +186,7 @@ companion object {
     val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
 }
 ```
-Esta declaración permitirá llamar a `EXTRA_FILM_TITLE` desde cualquier parte del código. Despúes de declararla, realme te he seguido escribiendo el código en FilmList, pero para no marearnos dejo el código de cada aprte en su apartado. Luego he usado la función `putExtra` para enviar de nuevo el titulo que habíamos enviado de `FilmList`: 
+Esta declaración permitirá llamar a `EXTRA_FILM_TITLE` desde cualquier parte del código. Después de declararla, realmente he seguido escribiendo el código en FilmList, pero para no marearnos dejo el código de cada parte en su apartado. Luego he usado la función `putExtra` para enviar de nuevo el titulo que habíamos enviado de `FilmList`:
 ```kt
 private fun verPeliRel(titol: String){
         val verPeliRel = Intent(this@FilmDataActivity, FilmDataActivity::class.java)
@@ -195,7 +195,7 @@ private fun verPeliRel(titol: String){
 }
 ```
 Enviar de nuevo el título es para la parte final del enunciado, ya que lo pide.
-Para mostrar el título correspondiente, segun el Modo lo he declarado de la siguiente manera usando de variable `val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)`
+Para mostrar el título correspondiente, según el Modo lo he declarado de la siguiente manera usando de variable `val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)`
 * Binding:
 ```kt
 val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
@@ -227,12 +227,12 @@ bindings.verPeliA.setOnClickListener { verPeli(getString(R.string.tituloPeliA)) 
 #### Errores
 Me he atascado bastantes veces por problemas con la conversión de 'peli' a texto que se pueda ver bien en la aplicación. Una vez implementé todo el código del parámetro extra al mostrarlo me salía en lugar del String correspondiente (o el de por defecto) un número, el ID que tomaba 'peli'.
 
-A su vez tenía un _Warning_ en la cadena que quería mostrar `Peli: $peli` que tenía que ver con `setText` en el Modo _Binding_. No encontraba el motivo en `Film Data` y eso que no paraba de probar cualquier funcion relacionada con _Strings_ para ver si es que 'peli' realmente contenía un número. Al depurar con _Logcat_ para ver el contenido vi que seguía mostrando el mismo número. ¿Sería el _Warning_ u otra cosa?
+A su vez tenía un _Warning_ en la cadena que quería mostrar `Peli: $peli` que tenía que ver con `setText` en el Modo _Binding_. No encontraba el motivo en `Film Data` y eso que no paraba de probar cualquier función relacionada con _Strings_ para ver si es que 'peli' realmente contenía un número. Al depurar con _Logcat_ para ver el contenido vi que seguía mostrando el mismo número. ¿Sería el _Warning_ u otra cosa?
 
-He seguido buscando y buscando y el error estaba que antes en `FilmList` pasaba el parámetro de título así: `R.string.tituloDefecto.toString()`. Todo este tiempo, por ese mal paso de parámetro me daba el error. Aun me resulta confuso cuando usar una funcion de String y cuando no.
+He seguido buscando y buscando y el error estaba que antes en `FilmList` pasaba el parámetro de título así: `R.string.tituloDefecto.toString()`. Todo este tiempo, por ese mal paso de parámetro me daba el error. Aun me resulta confuso cuando usar una función de String y cuando no.
 
 ### Ejercicio 4
-Parecido al ejercicio anterior, en este caso hemos editado la función `editPeli` de `FilmData` para pasar la información necesaria a `FilmEdit`, que este último a su vez, cuando termine su còdigo volverá a `FilmData`para terminar con el código que hemos sobrecargado en la fucnión `onActivityResult`. De manera esquemática la lógica es: ![Esquema funcionamiento edit](img-readme/esquema-edit.png)
+Parecido al ejercicio anterior, en este caso hemos editado la función `editPeli` de `FilmData` para pasar la información necesaria a `FilmEdit`, que este último a su vez, cuando termine su còdigo volverá a `FilmData`para terminar con el código que hemos sobrecargado en la función `onActivityResult`. De manera esquemática la lógica es: ![Esquema funcionamiento edit](img-readme/esquema-edit.png)
 
 Y el código que lo ha hecho posible ha sido para `FilmData`:
 ```kt
