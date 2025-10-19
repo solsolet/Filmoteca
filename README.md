@@ -124,16 +124,16 @@ Siguiendo con la segunda práctica de la sesión, ahora nos centraremos en añad
 Le añadimos funcionalidad a los botones como se nos indica. Me surge la siguiente inquietud: si estamos usando _Bindings_ y _Compose_ para hacer las mismas cosas, quiere decir que duplicaremos el mismo código constantemente si empezamos a añadir funcionalidad. Por tanto, todo aquello que es común (cada _intent_) lo saco en una función propia fuera de _initLayouts_ o _initCompose_:
 ```kt
 private fun goWebsite(){
-        val irWeb = Intent(Intent.ACTION_VIEW, "https://www.ua.es/va/".toUri())
-        startActivity(irWeb)
-    }
-    private fun obtainSupport(){
-        val soporte = Intent(Intent.ACTION_SENDTO, "mailto:gsl21@alu.ua.es".toUri())
-        startActivity(soporte)
-    }
-    fun closeActivity(){ // No private por si la quisiéramos usar fuera
-        finish()
-    }
+    val irWeb = Intent(Intent.ACTION_VIEW, "https://www.ua.es/va/".toUri())
+    startActivity(irWeb)
+}
+private fun obtainSupport(){
+    val soporte = Intent(Intent.ACTION_SENDTO, "mailto:gsl21@alu.ua.es".toUri())
+    startActivity(soporte)
+}
+fun closeActivity(){ // No private por si la quisiéramos usar fuera
+    finish()
+}
 ```
 Y luego en cada _init_ llamo a la función correspondiente:
 |Binding|Compose|
@@ -160,21 +160,21 @@ Primero ponemos todos los elementos en cada actividad de manera que resultan as�
 Luego conectamos los botones con la pantalla correspondiente mediante **intents explícitos**, como por ejemplo:
 ```kt
 private fun verPeli(){
-        val verPeli = Intent(this@FilmListActivity, FilmDataActivity::class.java)
-        startActivity(verPeli)
-    }
-    private fun acercaDe(){
-        val acerca = Intent(this@FilmListActivity, AboutActivity::class.java)
-        startActivity(acerca)
-    }
+    val verPeli = Intent(this@FilmListActivity, FilmDataActivity::class.java)
+    startActivity(verPeli)
+}
+private fun acercaDe(){
+    val acerca = Intent(this@FilmListActivity, AboutActivity::class.java)
+    startActivity(acerca)
+}
 ```
 Veremos que está bien conectado con el vídeo de demo. Para finalizar el ejercicio nos hace falta poner _flags_ para que el botón de atrás pueda cerrar la aplicación:
 ```kt
 private fun volverPrinc(){
-        val volver = Intent(this@FilmDataActivity, FilmListActivity::class.java)
-        volver.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(volver)
-    }
+    val volver = Intent(this@FilmDataActivity, FilmListActivity::class.java)
+    volver.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+    startActivity(volver)
+}
 ```
 ### Ejercicio 3
 Empezamos por pasar primero un parámetro extra desde `FilmListActivity` a `FilmDataActivity` para ello añadimos el siguiente código a las dos clases:
@@ -189,9 +189,9 @@ companion object {
 Esta declaración permitirá llamar a `EXTRA_FILM_TITLE` desde cualquier parte del código. Después de declararla, realmente he seguido escribiendo el código en FilmList, pero para no marearnos dejo el código de cada parte en su apartado. Luego he usado la función `putExtra` para enviar de nuevo el titulo que habíamos enviado de `FilmList`:
 ```kt
 private fun verPeliRel(titol: String){
-        val verPeliRel = Intent(this@FilmDataActivity, FilmDataActivity::class.java)
-        verPeliRel.putExtra(EXTRA_FILM_TITLE, titol)
-        startActivity(verPeliRel)
+    val verPeliRel = Intent(this@FilmDataActivity, FilmDataActivity::class.java)
+    verPeliRel.putExtra(EXTRA_FILM_TITLE, titol)
+    startActivity(verPeliRel)
 }
 ```
 Enviar de nuevo el título es para la parte final del enunciado, ya que lo pide.
@@ -211,6 +211,7 @@ private fun ComposeFilmData() {
         Text(peli)
         ...
     }
+}
 ```
 #### FilmList
 ```kt
