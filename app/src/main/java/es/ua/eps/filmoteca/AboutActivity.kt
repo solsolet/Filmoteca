@@ -42,16 +42,16 @@ class AboutActivity : ComponentActivity() {
             Mode.Compose -> initCompose()
         }
     }
-    // Centralitzem Intents
+    // centralize Intents
     private fun goWebsite(){
         val irWeb = Intent(Intent.ACTION_VIEW, "https://www.ua.es/va/".toUri())
         startActivity(irWeb)
     }
     private fun obtainSupport(){
-        val soporte = Intent(Intent.ACTION_SENDTO, "mailto:gsl21@alu.ua.es".toUri())
-        startActivity(soporte)
+        val sup = Intent(Intent.ACTION_SENDTO, "mailto:gsl21@alu.ua.es".toUri())
+        startActivity(sup)
     }
-    fun closeActivity(){ // No private per si la volem usar fora
+    fun closeActivity(){ // No private in case we want to use it outside
         finish()
     }
     private fun initLayouts() {
@@ -77,7 +77,7 @@ class AboutActivity : ComponentActivity() {
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
-                .fillMaxSize()      // separat com posa en els apunts
+                .fillMaxSize()      // separate like in class notes
                 .padding(64.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -91,7 +91,7 @@ class AboutActivity : ComponentActivity() {
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(onClick = { //TODO: mirar lo de Unit
+            Button(onClick = { //TODO: check Unit thing
                 goWebsite()
             }) {
                 Text(stringResource(R.string.button))

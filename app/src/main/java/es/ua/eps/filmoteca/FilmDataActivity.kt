@@ -38,9 +38,10 @@ class FilmDataActivity : AppCompatActivity() {
         }
     }
     companion object {
-        val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
+        const val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
     }
-    // Centralitzem Intents
+    //
+    //  Centralize Intents
     private fun verPeliRel(titol: String){
         val verPeliRel = Intent(this@FilmDataActivity, FilmDataActivity::class.java)
         verPeliRel.putExtra(EXTRA_FILM_TITLE, titol)
@@ -70,18 +71,17 @@ class FilmDataActivity : AppCompatActivity() {
         }
     }
     fun refreshTitleBinding(){
-        val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeliDefecto)
-        bindings.textViewTituloPeli.text = peli + textEditado
+        bindings.textViewTituloPeli.append(textEditado)
     }
 
     private fun volverPrinc(){
-        val volver = Intent(this@FilmDataActivity, FilmListActivity::class.java)
-        volver.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(volver)
+        val back = Intent(this@FilmDataActivity, FilmListActivity::class.java)
+        back.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(back)
     }
     private fun initLayouts() {
         bindings = ActivityFilmDataBinding.inflate(layoutInflater)
-        with(bindings) { //saves writint "binding." before
+        with(bindings) { //saves writing "binding." before
             setContentView(root)
 
             //shows film title
@@ -107,14 +107,14 @@ class FilmDataActivity : AppCompatActivity() {
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
-                .fillMaxSize()      // separed, classnotes' style
+                .fillMaxSize()      // separated, class notes' style
                 .padding(64.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(peli + textEditado)
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { //TODO: mirar lo de Unit
+            Button(onClick = { //TODO: check Unit thing
                 verPeliRel(peli)
             }) {
                 Text(stringResource(R.string.verPeliRel))

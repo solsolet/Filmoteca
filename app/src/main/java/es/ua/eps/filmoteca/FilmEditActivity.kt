@@ -1,6 +1,5 @@
 package es.ua.eps.filmoteca
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.node.Ref
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,15 +37,15 @@ class FilmEditActivity : AppCompatActivity() {
             Mode.Compose -> initCompose()
         }
     }
-    // Centralitzem Intents
+    // Centralize Intents
     private fun cerrar() {
         setResult(RESULT_CANCELED, null)
         finish()
     }
     private fun guardar() {
-        val resultado = Intent()
-        resultado.putExtra(EXTRA_FILM_TITLE, "editado")
-        setResult(RESULT_OK, resultado)
+        val res = Intent()
+        res.putExtra(EXTRA_FILM_TITLE, "editado")
+        setResult(RESULT_OK, res)
         finish()
     }
     private fun initLayouts() {
@@ -71,12 +69,12 @@ class FilmEditActivity : AppCompatActivity() {
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
-                .fillMaxSize()      // separat com posa en els apunts
+                .fillMaxSize()      // separated, class notes' style
                 .padding(64.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = { //TODO: mirar lo de Unit
+            Button(onClick = { //TODO: check Unit thing
                 guardar()
             }) {
                 Text(stringResource(R.string.guardar))

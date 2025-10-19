@@ -37,15 +37,15 @@ class FilmListActivity : ComponentActivity() {
             Mode.Compose -> initCompose()
         }
     }
-    // Centralitzem Intents
+    // Centralize Intents
     private fun verPeli(titol: String){
         val verPeli = Intent(this@FilmListActivity, FilmDataActivity::class.java)
         verPeli.putExtra(EXTRA_FILM_TITLE, titol)
         startActivity(verPeli)
     }
     private fun acercaDe(){
-        val acerca = Intent(this@FilmListActivity, AboutActivity::class.java)
-        startActivity(acerca)
+        val about = Intent(this@FilmListActivity, AboutActivity::class.java)
+        startActivity(about)
     }
     private fun initLayouts() {
         bindings = ActivityFilmListBinding.inflate(layoutInflater)
@@ -71,7 +71,7 @@ class FilmListActivity : ComponentActivity() {
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
-                .fillMaxSize()      // separat com posa en els apunts
+                .fillMaxSize()      // separated like class notes' style
                 .padding(64.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
