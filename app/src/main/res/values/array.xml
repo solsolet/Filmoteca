@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="generoPeli"> <!-- TODO posar-ho tipo @string-->
-        <item>Accion</item>
-        <item>Drama</item>
-        <item>Comedia</item>
-        <item>Terror</item>
-        <item>Sci-Fi</item>
+    <string-array name="generoPeli">
+        <item>@string/accion</item>
+        <item>@string/drama</item>
+        <item>@string/comedia</item>
+        <item>@string/terror</item>
+        <item>@string/scifi</item>
     </string-array>
     <string-array name="formatoPeli">
-        <item>DVD</item>
-        <item>Blue-Ray</item>
-        <item>Online</item>
+        <item>@string/dvd</item>
+        <item>@string/blueRay</item>
+        <item>@string/online</item>
     </string-array>
 </resources>

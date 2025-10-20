@@ -10,7 +10,7 @@
     <string name="acercaDe">Sobre</string>
     <string name="datosPeli">Dades pel·licula</string>
     <string name="verPeliRel">Veure pel·licula relacionada</string>
-    <string name="volverPrincipal">Tornar a la Principal</string>
+    <string name="volverPrincipal">Tornar a principal</string>
     <string name="editPeli">Editar pel·licula</string>
     <string name="editandoPeli">Editant pel·licula</string>
     <string name="guardar">Guardar</string>
@@ -29,4 +29,8 @@
     <string name="selectImg">Selecciona imatge</string>
     <string name="any">Any</string>
     <string name="enlaceIMDB">Enllaç a IMDB</string>
+    <string name="comentarios">Comentaris</string>
+    <string name="accion">Accio</string>
+    <string name="comedia">Comedia</string>
+    <string name="online">En linia</string>
 </resources>

@@ -9,7 +9,7 @@
     <string name="verPeliA">Watch film A</string>
     <string name="datosPeli">Film data</string>
     <string name="verPeliRel">Watch related film</string>
-    <string name="volverPrincipal">Back to home</string>
+    <string name="volverPrincipal">Back home</string>
     <string name="editPeli">Edit film</string>
     <string name="editandoPeli">Editing film</string>
     <string name="guardar">Save</string>
@@ -28,4 +28,8 @@
     <string name="selectImg">Select image</string>
     <string name="any">Year</string>
     <string name="enlaceIMDB">Link to IMDB</string>
+    <string name="comentarios">Comments</string>
+    <string name="accion">Action</string>
+    <string name="comedia">Comedy</string>
+    <string name="online">Online</string>
 </resources>

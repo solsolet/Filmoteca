@@ -10,7 +10,7 @@
     <string name="acercaDe">Acerca De</string>
     <string name="datosPeli">Datos de la pelicula</string>
     <string name="verPeliRel">Ver pelicula relacionada</string>
-    <string name="volverPrincipal">Volver a la Principal</string>
+    <string name="volverPrincipal">Volver a principal</string>
     <string name="editPeli">Editar pelicula</string>
     <string name="editandoPeli">Editando pelicula</string>
     <string name="guardar">Guardar</string>
@@ -29,4 +29,13 @@
     <string name="selectImg">Selecciona imagen</string>
     <string name="any">Año</string>
     <string name="enlaceIMDB">Enlace a IMDB</string>
+    <string name="comentarios">Comentarios</string>
+    <string name="accion">Accion</string>
+    <string name="drama" translatable="false">Drama</string>
+    <string name="comedia">Comedia</string>
+    <string name="terror" translatable="false">Terror</string>
+    <string name="scifi" translatable="false">Sci-Fi</string>
+    <string name="dvd" translatable="false">DVD</string>
+    <string name="blueRay" translatable="false">Blue-Ray</string>
+    <string name="online">En linea</string>
 </resources>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageViewPeli"
+        android:layout_width="196dp"
+        android:layout_height="227dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="56dp"
+        android:contentDescription="@string/contentImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/lalaland" />
+
+    <Button
+        android:id="@+id/verPeliIMDB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="42dp"
+        android:layout_marginBottom="56dp"
+        android:text="@string/verIMDB"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/volverPrincipal"
+        app:layout_constraintTop_toBottomOf="@+id/textViewGeneroPeli"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textViewTituloPeli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="56dp"
+        android:text="@string/tituloPeli"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageViewPeli"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewFormatoPeli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="44dp"
+        android:text="@string/formatoPeli"
+        app:layout_constraintStart_toEndOf="@+id/textViewDirectorPeli"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTituloPeli" />
+
+    <TextView
+        android:id="@+id/textViewAnyPeli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:text="@string/anyPeli"
+        app:layout_constraintStart_toStartOf="@+id/textViewGeneroPeli"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDirectorPeli" />
+
+    <TextView
+        android:id="@+id/textViewDirectorPeli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:text="@string/directorPeli"
+        app:layout_constraintStart_toStartOf="@+id/textViewAnyPeli"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTituloPeli" />
+
+    <TextView
+        android:id="@+id/textViewGeneroPeli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:text="@string/generoPeli"
+        app:layout_constraintStart_toStartOf="@+id/verPeliIMDB"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAnyPeli" />
+
+    <TextView
+        android:id="@+id/textViewNotas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/notasPeli"
+        app:layout_constraintStart_toStartOf="@+id/textViewFormatoPeli"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFormatoPeli" />
+
+    <Button
+        android:id="@+id/volverPrincipal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:text="@string/volverPrincipal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewPeli"
+        app:layout_constraintStart_toStartOf="@+id/imageViewPeli" />
+
+    <Button
+        android:id="@+id/editPeli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="56dp"
+        android:text="@string/editPeli"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
