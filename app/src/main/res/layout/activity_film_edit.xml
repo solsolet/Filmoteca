@@ -35,7 +35,7 @@
             android:layout_width="65dp"
             android:layout_height="70dp"
             android:layout_weight="1"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/contentImage"
             app:srcCompat="@drawable/bad_guys2" />
 
         <Button
