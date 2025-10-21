@@ -24,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
 
@@ -117,7 +119,13 @@ class FilmDataActivity : AppCompatActivity() {
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(peli + textEditado)
+            Text(
+                text = peli + textEditado,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(top = 50.dp)
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Row (
                 modifier = Modifier.fillMaxWidth(),
@@ -131,7 +139,10 @@ class FilmDataActivity : AppCompatActivity() {
                         .width(165.dp)
                         .height(222.dp)
                 )
-                Column {
+                Column (
+                    verticalArrangement = Arrangement.spacedBy(30.dp),
+                    horizontalAlignment = Alignment.Start
+                ){
                     Text(stringResource(R.string.directorPeli)) //Director
                     Text(stringResource(R.string.anyPeli)) //Year
                     Text(stringResource(R.string.generoPeli)) //Genre
@@ -143,20 +154,20 @@ class FilmDataActivity : AppCompatActivity() {
             }) {
                 Text(stringResource(R.string.verIMDB))
             }
-            Spacer(modifier = Modifier.height(8.dp))
 
             Text(stringResource(R.string.notasPeli)) //Notes
 
             Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ){
                 Button(onClick = {
                     editPeli()
                 }) {
                     Text(stringResource(R.string.editPeli))
                 }
-                //Spacer(modifier = Modifier.height(8.dp))
 
                 Button(onClick = {
                     volverPrinc()
