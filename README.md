@@ -313,7 +313,7 @@ En este apartado dejaré la comparativa entre el modo _Binding_ y _Compose_ para
 He seguido las indicaciones y me ha quedado una pantalla así: 
 |Con los `Constraints`|Resultado|
 |---------------------|---------|
-|![FilmData-ContraintLayout2](img-readme/FilmData-Constraint2.png)|![FilmData-ContraintLayout](img-readme/FilmData-ContraintLayout.png)|
+|![FilmData-ContraintLayout2](img-readme/FilmData-Constraint2.png)|![FilmData-ContraintLayout](img-readme/FilmData-ConstraintLayout.png)|
 
 Lo más complicado ha sido colocar los elementos de manera que si alguno se desplaza todos se desplacen correctamente y no se posicionen inesperadamente. P. ej.: _Los datos de la peli al lado del póster se han alineado a la izquerda y distribuido verticalmente_.
 
