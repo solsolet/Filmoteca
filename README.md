@@ -307,3 +307,182 @@ En este apartado dejaré la comparativa entre el modo _Binding_ y _Compose_ para
 |Bindings|Compose|
 |--------|-------|
 |![Demo P2 Bindings](img-readme/Demo-P2-Bindings.mp4)|![Demo P2 Compose](img-readme/Demo_P2-Compose.mp4)|
+
+## Vistas
+### Ejercicio 1
+He seguido las indicaciones y me ha quedado una pantall así: 
+|Con los `Constraints`|Resultado|
+|---------------------|---------|
+|![FilmData-ContraintLayout2](img-readme/FilmData-Constraint2.png)|![FilmData-ContraintLayout](img-readme/FilmData-ContraintLayout.png)|
+
+Lo más complicado ha sido colocar los elementos de manera que si alguno se desplaza todos se desplacen correctamente y no se posicionen inesperadamente. P. ej.: _Los datos de la peli al lado del póster se han alineado a la izquerda y distribuido verticalmente_.
+
+### Ejercicio 2
+Para este tipo de layout he usado la siguiente estructura:
+![FilmEdit - Component Tree](img-readme/FilmEdit-ComponentTree.png)
+Donde en las filas se puede apreverciar que he empleado un `<LinearLayout  android:orientation="horizontal">`
+|_BluePrint_|Resultado|
+|---------------------|---------|
+|![FilmEdit-Blueprint](img-readme/FilmEdit-Blueprint.png)|![FilmEdit-LinearLayout](img-readme/FilmEdit-LinearLayout.png)|
+
+También como apreciación he creado un nuevo documento xml en `res/values` llamado [abrev.xml](app/src/main/res/values/abrev.xml) donde he puesto algunas variables que se repetian como `marginTop`de los elementos dispuestos en vertical o el tamaño de los `EditText` llamando a `@dimen`.
+```xml
+<EditText
+    android:id="@+id/editTitulo"
+    android:layout_width="@dimen/editEditItemWidth"
+    android:layout_height="@dimen/editEditItemHeight"
+    android:layout_gravity="center"
+    android:layout_marginTop="@dimen/editMarginTop"
+    android:autofillHints=""
+    android:ems="10"
+    android:hint="@string/tituloPeli"
+    android:inputType="text" />
+```
+
+Otro archivo que he creado es [array.xml](app/src/main/res/values/array.xml) para los elementos de los `Spinner` que està parametrizado con `@strings` para la internacionalización.
+
+Para terminar este ejercicio, destacar otras propiedades que he usado como:
+* `layout_gravity`: para centrar los elementos.
+* `autofillHints`: para sugerir un texto al usuario en el campo en el que estén.
+* `hint`: para indicar qué campo se pide.
+* `inputType`: para indicar si un campo necesita un imput especial como el año de la peli (en este caso `number`).
+* `layout_weight`: para indicar el peso del elemento en los grupos horizontales.
+
+### Ejercicio 3
+He creado el archivo alternativo `activity_film_data.xml (land)` y se encuentra en la carpeta `activity_film_data` junto a su versión original en vertical.
+
+Para hacerlo simplemente ha sido poner los mismos elementos y asignarles el mismo id que tienen en vertical.
+
+El diseño me ha costado un poco decidirlo por que la disposición de los botones no quedaba bien en los diferentes sitios donde he probado. Podemos ver como ha resultado:
+|_BluePrint_|Resultado|
+|---------------------|---------|
+|![FilmData (land) - Blueprint](img-readme/FilmDataLand-Blueprint.png)|![FilmDataLand-Result](img-readme/FilmDataLand-Result.png)|
+![alt text](image.png)
+
+### Ejercicio 4
+La transformación de las interfaces a _Compose_ ha consistido en buscar el elemento equivalente para este modo así como las disposiciones de `Row` o `Column`.
+`FilmData` ha quedado así:
+```kotlin
+@Composable
+private fun ComposeFilmData() {
+    val context = LocalContext.current
+    val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeli)
+
+    Column( //= LinearLayout(vertical)
+        modifier = Modifier
+            .fillMaxSize()      // separated, class notes' style
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = peli + textEditado,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .padding(top = 50.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.Top
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.lalaland),
+                contentDescription = stringResource(R.string.contentImage),
+                modifier = Modifier
+                    .width(165.dp)
+                    .height(222.dp)
+            )
+            Column (
+                verticalArrangement = Arrangement.spacedBy(30.dp),
+                horizontalAlignment = Alignment.Start
+            ){
+                Text(stringResource(R.string.directorPeli)) //Director
+                Text(stringResource(R.string.anyPeli)) //Year
+                Text(stringResource(R.string.generoPeli)) //Genre
+                Text(stringResource(R.string.formatoPeli)) //Format
+            }
+        }
+        Button(onClick = {
+            verPeliIMDB()
+        }) {
+            Text(stringResource(R.string.verIMDB))
+        }
+
+        Text(stringResource(R.string.notasPeli)) //Notes
+
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ){
+            Button(onClick = {
+                editPeli()
+            }) {
+                Text(stringResource(R.string.editPeli))
+            }
+
+            Button(onClick = {
+                volverPrinc()
+            }) {
+                Text(stringResource(R.string.volverPrincipal))
+            }
+        }
+    }
+}
+```
+Y `FilmEdit` más de lo mismo. Destaco el "equivalente" al elemento _Spinner_ que he usado, `ExposedDropdownMenu` y todos sus relacionados:
+```kotlin
+//Spinner more or less
+var genPeli = stringResource(R.string.generoPeli)
+var generoExpanded by remember { mutableStateOf(false) }
+var selectedGenero by remember { mutableStateOf(genPeli) }
+
+val generos = listOf("Drama", "Comedia", "Acción", "Romance", "Sci-Fi") // you can load from R.array.generoPeli
+
+ExposedDropdownMenuBox(
+    expanded = generoExpanded,
+    onExpandedChange = { generoExpanded = !generoExpanded }
+
+) {
+    TextField(
+        value = selectedGenero,
+        onValueChange = {},
+        label = { Text(stringResource(R.string.generoPeli)) },
+        readOnly = true,
+        modifier = Modifier
+            .fillMaxWidth()
+            .menuAnchor(),
+        trailingIcon = {
+            ExposedDropdownMenuDefaults.TrailingIcon(expanded = formatoExpanded)
+        }
+    )
+    ExposedDropdownMenu(
+        expanded = generoExpanded,
+        onDismissRequest = { generoExpanded = false }
+    ) {
+        generos.forEach { genero ->
+            DropdownMenuItem(
+                text = { Text(genero) },
+                onClick = {
+                    selectedGenero = genero
+                    generoExpanded = false
+                }
+            )
+        }
+    }
+}
+```
+En este ejemplo solo he mostrado el campo de `Género` de la película, pero `Formato` es igual con sus variables.
+
+Antes de `ExposedDropdownMenu` había intentado usar el elemento `DropdownMenu`, pero como no me salía el resutado (no sé si por falta d eotros elementos o alguna variable) he usado este que si que me ha dado el resultado que buscaba.
+### Resultado
+En este apartado dejaré la comparativa entre el modo _Binding_ y _Compose_ para ver como ha quedado la funcionalidad implementada en todos los ejercicios. Los vídeos se encuentran en la carpeta `img-readme`:
+|Bindings|Compose|
+|--------|-------|
+|![Demo P3 Bindings](img-readme/Demo-P3-Bindings.mp4)|![Demo P3 Compose](img-readme/Demo_P3-Compose.mp4)|
+
+Como observación en el vídeo no se ve como funciona el botón de `ver in IMDB` ya que Android Studio daba error al guardar la grabación.

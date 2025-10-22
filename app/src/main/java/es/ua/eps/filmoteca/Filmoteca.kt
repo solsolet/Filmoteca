@@ -11,7 +11,7 @@ class Filmoteca : Application() {
         val context: Context?
             get() = mContext
 
-        val GlobalMode = Mode.Compose
+        val GlobalMode = Mode.Bindings
     }
 
     override fun onCreate() {
