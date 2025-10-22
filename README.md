@@ -310,7 +310,7 @@ En este apartado dejaré la comparativa entre el modo _Binding_ y _Compose_ para
 
 ## Vistas
 ### Ejercicio 1
-He seguido las indicaciones y me ha quedado una pantall así: 
+He seguido las indicaciones y me ha quedado una pantalla así: 
 |Con los `Constraints`|Resultado|
 |---------------------|---------|
 |![FilmData-ContraintLayout2](img-readme/FilmData-Constraint2.png)|![FilmData-ContraintLayout](img-readme/FilmData-ContraintLayout.png)|
@@ -318,14 +318,14 @@ He seguido las indicaciones y me ha quedado una pantall así:
 Lo más complicado ha sido colocar los elementos de manera que si alguno se desplaza todos se desplacen correctamente y no se posicionen inesperadamente. P. ej.: _Los datos de la peli al lado del póster se han alineado a la izquerda y distribuido verticalmente_.
 
 ### Ejercicio 2
-Para este tipo de layout he usado la siguiente estructura:
+Para este tipo de _layout_ he usado la siguiente estructura:
 ![FilmEdit - Component Tree](img-readme/FilmEdit-ComponentTree.png)
-Donde en las filas se puede apreverciar que he empleado un `<LinearLayout  android:orientation="horizontal">`
+Donde en las filas se puede apreciar que he empleado un `<LinearLayout  android:orientation="horizontal">`
 |_BluePrint_|Resultado|
 |---------------------|---------|
 |![FilmEdit-Blueprint](img-readme/FilmEdit-Blueprint.png)|![FilmEdit-LinearLayout](img-readme/FilmEdit-LinearLayout.png)|
 
-También como apreciación he creado un nuevo documento xml en `res/values` llamado [abrev.xml](app/src/main/res/values/abrev.xml) donde he puesto algunas variables que se repetian como `marginTop`de los elementos dispuestos en vertical o el tamaño de los `EditText` llamando a `@dimen`.
+También como apreciación he creado un nuevo documento _xml_ en `res/values` llamado [abrev.xml](app/src/main/res/values/abrev.xml) donde he puesto algunas variables que se repetían como `marginTop` de los elementos dispuestos en vertical o el tamaño de los `EditText` llamando a `@dimen`.
 ```xml
 <EditText
     android:id="@+id/editTitulo"
@@ -339,7 +339,7 @@ También como apreciación he creado un nuevo documento xml en `res/values` llam
     android:inputType="text" />
 ```
 
-Otro archivo que he creado es [array.xml](app/src/main/res/values/array.xml) para los elementos de los `Spinner` que està parametrizado con `@strings` para la internacionalización.
+Otro archivo que he creado es [array.xml](app/src/main/res/values/array.xml) para los elementos de los `Spinner` que está parametrizado con `@strings` para la internacionalización.
 
 Para terminar este ejercicio, destacar otras propiedades que he usado como:
 * `layout_gravity`: para centrar los elementos.
@@ -357,7 +357,6 @@ El diseño me ha costado un poco decidirlo por que la disposición de los botone
 |_BluePrint_|Resultado|
 |---------------------|---------|
 |![FilmData (land) - Blueprint](img-readme/FilmDataLand-Blueprint.png)|![FilmDataLand-Result](img-readme/FilmDataLand-Result.png)|
-![alt text](image.png)
 
 ### Ejercicio 4
 La transformación de las interfaces a _Compose_ ha consistido en buscar el elemento equivalente para este modo así como las disposiciones de `Row` o `Column`.
@@ -478,7 +477,7 @@ ExposedDropdownMenuBox(
 ```
 En este ejemplo solo he mostrado el campo de `Género` de la película, pero `Formato` es igual con sus variables.
 
-Antes de `ExposedDropdownMenu` había intentado usar el elemento `DropdownMenu`, pero como no me salía el resutado (no sé si por falta d eotros elementos o alguna variable) he usado este que si que me ha dado el resultado que buscaba.
+Antes de `ExposedDropdownMenu` había intentado usar el elemento `DropdownMenu`, pero como no me salía el resultado (no sé si por falta de otros elementos o alguna variable) he usado este que sí me ha dado el resultado que buscaba.
 ### Resultado
 En este apartado dejaré la comparativa entre el modo _Binding_ y _Compose_ para ver como ha quedado la funcionalidad implementada en todos los ejercicios. Los vídeos se encuentran en la carpeta `img-readme`:
 |Bindings|Compose|
