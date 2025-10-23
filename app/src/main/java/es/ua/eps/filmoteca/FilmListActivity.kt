@@ -2,6 +2,7 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -49,11 +50,22 @@ class FilmListActivity : ComponentActivity() {
     }
     private fun initLayouts() {
         bindings = ActivityFilmListBinding.inflate(layoutInflater)
+
+        val valores = FilmDataSource.films
+
+        val adaptador = FilmsArrayAdapter(
+            this,
+            R.layout.item_peli, valores
+        )
+
         with(bindings) {
             setContentView(root)
-            bindings.verPeliA.setOnClickListener { verPeli(getString(R.string.tituloPeliA)) }
-            bindings.verPeliB.setOnClickListener { verPeli(getString(R.string.tituloPeliB)) }
-            bindings.acercaDe.setOnClickListener { acercaDe() }
+
+            verPeliA.setOnClickListener { verPeli(getString(R.string.tituloPeliA)) }
+            verPeliB.setOnClickListener { verPeli(getString(R.string.tituloPeliB)) }
+            acercaDe.setOnClickListener { acercaDe() }
+
+            pelisList.adapter = adaptador
         }
     }
     private fun initCompose() { //no se què fer ací
