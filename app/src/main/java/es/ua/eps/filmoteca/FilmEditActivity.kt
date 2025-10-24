@@ -72,20 +72,28 @@ class FilmEditActivity : AppCompatActivity() {
     private fun guardar(peliInt: Int) {
         val peli = FilmDataSource.films[peliInt]
 
-        //Update film
-        peli.title = bindings.editTitulo.text.toString()
+        bindings = ActivityFilmEditBinding.inflate(layoutInflater)
+        with(bindings) {
+            // Update film
+//            if (TextUtils.isEmpty(editTitulo.getText())){
+//                Toast.makeText(this@FilmEditActivity, "You did not enter a username", Toast.LENGTH_SHORT).show();
+//            } else {
+                peli.title = editTitulo.text.toString() // OG que sí que va soles
+//            }
+
+//            val titulo = editTitulo.text.toString().trim()
+//            val director = editDirector.text.toString().trim()
+//            val any = editAny.text.toString().trim()
+//            val comentarios = editNotas.text.toString().trim()
+//
+//            // Solo actualizamos los campos que NO estén vacíos
+//            if (titulo.isNotEmpty()) peli.title = titulo
+//            if (director.isNotEmpty()) peli.director = director
+//            if (any.isNotEmpty()) peli.year = any.toIntOrNull() ?: peli.year
+//            if (comentarios.isNotEmpty()) peli.comments = comentarios
+        }
 
         //TODO POSAR BE
-//        val titulo = editTitulo.text.toString().trim()
-//        val director = editDirector.text.toString().trim()
-//        val any = editAny.text.toString().trim()
-//        val comentarios = editNotas.text.toString().trim()
-//
-//        // Solo actualizamos los campos que NO estén vacíos
-//        if (titulo.isNotEmpty()) peli.title = titulo
-//        if (director.isNotEmpty()) peli.director = director
-//        if (any.isNotEmpty()) peli.year = any.toIntOrNull() ?: peli.year
-//        if (comentarios.isNotEmpty()) peli.comments = comentarios
 
         val res = Intent()
         //res.putExtra(EXTRA_FILM_TITLE, "editado")
@@ -107,12 +115,12 @@ class FilmEditActivity : AppCompatActivity() {
 //            }
 
             guardar.setOnClickListener {
-//                if (TextUtils.isEmpty(editTitulo.getText())){
-//                    Toast.makeText(this@FilmEditActivity, "You did not enter a username", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    guardar(peliInt)
-//                }
-                guardar(peliInt)
+                if (TextUtils.isEmpty(editTitulo.getText())){
+                    Toast.makeText(this@FilmEditActivity, "You did not enter a username", Toast.LENGTH_SHORT).show();
+                } else {
+                    guardar(peliInt)
+                }
+                //guardar(peliInt)
 
             }
             cancelar.setOnClickListener { cerrar() }
