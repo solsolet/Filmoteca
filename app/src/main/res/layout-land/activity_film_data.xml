@@ -49,7 +49,7 @@
         android:layout_marginStart="130dp"
         android:layout_marginTop="44dp"
         android:text="@string/formatoPeli"
-        app:layout_constraintStart_toEndOf="@+id/textViewDirectorPeli"
+        app:layout_constraintStart_toEndOf="@+id/textViewDirector"
         app:layout_constraintTop_toBottomOf="@+id/textViewTituloPeli" />
 
     <TextView
@@ -59,10 +59,10 @@
         android:layout_marginTop="46dp"
         android:text="@string/anyPeli"
         app:layout_constraintStart_toStartOf="@+id/textViewGeneroPeli"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDirectorPeli" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewDirector" />
 
     <TextView
-        android:id="@+id/textViewDirectorPeli"
+        android:id="@+id/textViewDirector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="46dp"

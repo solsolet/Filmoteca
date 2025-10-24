@@ -2,7 +2,9 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
+import android.view.View
+import android.widget.AdapterView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -22,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM_TITLE
+import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM
 import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
 
 class FilmListActivity : ComponentActivity() {
@@ -39,15 +42,15 @@ class FilmListActivity : ComponentActivity() {
         }
     }
     // Centralize Intents
-    private fun verPeli(titol: String){
+    private fun verPeli(peli: Int){
         val verPeli = Intent(this@FilmListActivity, FilmDataActivity::class.java)
-        verPeli.putExtra(EXTRA_FILM_TITLE, titol)
+        verPeli.putExtra(EXTRA_FILM, peli)
         startActivity(verPeli)
     }
-    private fun acercaDe(){
-        val about = Intent(this@FilmListActivity, AboutActivity::class.java)
-        startActivity(about)
-    }
+//    private fun acercaDe(){
+//        val about = Intent(this@FilmListActivity, AboutActivity::class.java)
+//        startActivity(about)
+//    }
     private fun initLayouts() {
         bindings = ActivityFilmListBinding.inflate(layoutInflater)
 
@@ -60,10 +63,16 @@ class FilmListActivity : ComponentActivity() {
 
         with(bindings) {
             setContentView(root)
+            //acercaDe.setOnClickListener { acercaDe() }
 
-            verPeliA.setOnClickListener { verPeli(getString(R.string.tituloPeliA)) }
-            verPeliB.setOnClickListener { verPeli(getString(R.string.tituloPeliB)) }
-            acercaDe.setOnClickListener { acercaDe() }
+            pelisList.setOnItemClickListener({ parent: AdapterView<*>, view: View, position: Int, id: Long ->
+                val elemento = adaptador.getItem(position)
+//                Toast.makeText(
+//                    this@FilmListActivity,
+//                    "$elemento seleccionado: id $id, position $position", Toast.LENGTH_LONG
+//                ).show()
+                verPeli(position) //Intent
+            })
 
             pelisList.adapter = adaptador
         }
@@ -78,8 +87,6 @@ class FilmListActivity : ComponentActivity() {
     @Composable
     private fun ComposableFilmList() {
         val context = LocalContext.current
-        val titolPeliA = stringResource(R.string.tituloPeliA)
-        val titolPeliB = stringResource(R.string.tituloPeliB)
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
@@ -88,27 +95,17 @@ class FilmListActivity : ComponentActivity() {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = { //TODO: mirar lo de Unit
-                verPeli(titolPeliA)
-            }) {
-                Text(stringResource(R.string.verPeliA))
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(onClick = {
-                verPeli(titolPeliB)
-            }) {
-                Text(stringResource(R.string.verPeliB))
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(onClick = {
-                acercaDe()
-            }) {
-                Text(stringResource(R.string.acercaDe))
-            }
+//            Button(onClick = { //TODO: mirar lo de Unit
+//                //verPeli(titolPeliA)
+//            }) {
+//                Text(stringResource(R.string.verPeliA))
+//            }
+//            Spacer(modifier = Modifier.height(8.dp))
+//            Button(onClick = {
+//                acercaDe()
+//            }) {
+//                Text(stringResource(R.string.acercaDe))
+//            }
         }
     }
 }

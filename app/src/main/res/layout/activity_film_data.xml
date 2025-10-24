@@ -33,12 +33,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewNotas" />
 
     <TextView
-        android:id="@+id/textViewDirectorPeli"
+        android:id="@+id/textViewDirector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="40dp"
-        android:text="@string/directorPeli"
+        android:text="@string/director"
+        android:textStyle="italic"
         app:layout_constraintStart_toEndOf="@+id/imageViewPeli"
         app:layout_constraintTop_toBottomOf="@+id/textViewTituloPeli" />
 
@@ -46,7 +47,7 @@
         android:id="@+id/textViewFormatoPeli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="17dp"
         android:text="@string/formatoPeli"
         app:layout_constraintStart_toStartOf="@+id/textViewGeneroPeli"
         app:layout_constraintTop_toBottomOf="@+id/textViewGeneroPeli" />
@@ -55,7 +56,7 @@
         android:id="@+id/verPeliIMDB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="12dp"
         android:text="@string/verIMDB"
         app:layout_constraintStart_toStartOf="@+id/textViewFormatoPeli"
         app:layout_constraintTop_toBottomOf="@+id/textViewFormatoPeli" />
@@ -64,7 +65,7 @@
         android:id="@+id/textViewGeneroPeli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="17dp"
         android:text="@string/generoPeli"
         app:layout_constraintStart_toStartOf="@+id/textViewAnyPeli"
         app:layout_constraintTop_toBottomOf="@+id/textViewAnyPeli" />
@@ -73,10 +74,10 @@
         android:id="@+id/textViewAnyPeli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="1dp"
         android:text="@string/anyPeli"
-        app:layout_constraintStart_toStartOf="@+id/textViewDirectorPeli"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDirectorPeli" />
+        app:layout_constraintStart_toStartOf="@+id/textViewAny"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAny" />
 
     <TextView
         android:id="@+id/textViewNotas"
@@ -109,5 +110,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTituloPeli"
         app:srcCompat="@drawable/lalaland" />
+
+    <TextView
+        android:id="@+id/textViewDirectorPeli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/directorPeli"
+        app:layout_constraintStart_toStartOf="@+id/textViewDirector"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDirector" />
+
+    <TextView
+        android:id="@+id/textViewAny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/any"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/textViewDirectorPeli"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDirectorPeli" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

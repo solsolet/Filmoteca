@@ -485,3 +485,52 @@ En este apartado dejaré la comparativa entre el modo _Binding_ y _Compose_ para
 |![Demo P3 Bindings](img-readme/Demo-P3-Bindings.mp4)|![Demo P3 Compose](img-readme/Demo_P3-Compose.mp4)|
 
 Como observación en el vídeo no se ve como funciona el botón de `ver in IMDB` ya que Android Studio daba error al guardar la grabación.
+
+## Listas
+### Ejercicio 1
+He creado las clases pertinentes a este ejercicio:
+- `Film`: que encapsula los datos de las películas.
+- `FilmDataSource`: inicializa las pelis de prueba.
+Y he modificado la clase `FilmListAvtivity` así como su layout. En esta le he añadido código a la función `initLayouts()` para ponerle el `ArrayAdapter` y que se mostraran las películas en la lista.
+#### Errores
+Al crear FilmDataSource no copié y pegué directamente el código que ponía el enunciado cosa que hizo que en lugar de escribir al principio `object`pusiese `class`. Esto provocó que en `FilmListActivity` no reconociese la propiedad `FilmDataSource.films`y me diese error en la compilación. Se resolvió al mirar y remirar el código poco a poco, pero es de estas tonterías que te vuelven loca por que no ves el fallo.
+
+Otro fallo que me pasó fue a la hora de mostrar las diferentes películas en la lista. Me salía solamente la última añadida, así que lo más probable era que o no se estaban escribiendo bien las demás o se sobreescribían y por tanto solo persistía la última. Una vez más, fue por no fijarme a la hora de copiar y pegar, se me olvidó añadir la línea de `f = Film()`.
+### Ejercicio 2
+Continuando con los ejercicios, ahora me ha tocado crear nuevas clases o sobrecargas para mostrar los ítems en la lista más completos:
+- `FilmsArrayAdapter.kt`: _adapter_ propio para mostrar más campos del ítem.
+- `item_peli.xml`: aspecto del ítem en la lista (con imagen del poster y el nombre del director). Este _layout_ no tiene mucho misterio, he usado un `LineaLayout` horizontal para el ítem en general y para diponer el título y el director uno vertical.
+
+`FilmsArrayAdapter`ha quedado de la siguiente manera:
+```kotlin
+class FilmsArrayAdapter(
+    context: Context?, resource: Int,
+    objects: List<Film>?
+) : ArrayAdapter<Film>(context!!, resource, objects!!) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var view: View = convertView?: LayoutInflater.from(this.context)
+            .inflate(R.layout.item_peli, parent, false)
+
+        val peliTitulo   = view.findViewById(R.id.titulo) as TextView
+        val peliDirector = view.findViewById(R.id.director) as TextView
+        val peliImg      = view.findViewById(R.id.poster) as ImageView
+
+        getItem(position)?.let {
+            peliTitulo.text = it.title
+            peliDirector.text = it.director
+            peliImg.setImageResource(it.imageResId)
+        }
+
+        return view
+    }
+}
+```
+
+Como comentario sobre este ejercicio, he tenido un problema de entendimiento de la sobrecarga de la función `getView` al principio. Sin leer documentación ni nada, he intentado hacerla en lugar de con `View` con `Bindings` y claro, esto me ha acarreado mucho errores por que de por sí la función espera parámetros tipo _view_. Dejando la cabezonería a un lado, me he dado cuenta que mi idea estaba equivocada y que si hubiese alguna manera de conseguirlo, ahora no era el momento de ponerme a experimentar teniendo el resto de la práctica por hacer y lo he hecho con _view_ (y no complicarme la vida).
+
+### Ejercicio 3
+
+### Ejercicio 4
+
+### Ejercicio 5

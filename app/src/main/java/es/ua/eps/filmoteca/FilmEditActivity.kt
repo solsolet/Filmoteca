@@ -3,8 +3,10 @@ package es.ua.eps.filmoteca
 import android.R.attr.enabled
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -44,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM
 import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM_TITLE
 import es.ua.eps.filmoteca.databinding.ActivityFilmEditBinding
 
@@ -66,9 +69,27 @@ class FilmEditActivity : AppCompatActivity() {
         setResult(RESULT_CANCELED, null)
         finish()
     }
-    private fun guardar() {
+    private fun guardar(peliInt: Int) {
+        val peli = FilmDataSource.films[peliInt]
+
+        //Update film
+        peli.title = bindings.editTitulo.text.toString()
+
+        //TODO POSAR BE
+//        val titulo = editTitulo.text.toString().trim()
+//        val director = editDirector.text.toString().trim()
+//        val any = editAny.text.toString().trim()
+//        val comentarios = editNotas.text.toString().trim()
+//
+//        // Solo actualizamos los campos que NO estén vacíos
+//        if (titulo.isNotEmpty()) peli.title = titulo
+//        if (director.isNotEmpty()) peli.director = director
+//        if (any.isNotEmpty()) peli.year = any.toIntOrNull() ?: peli.year
+//        if (comentarios.isNotEmpty()) peli.comments = comentarios
+
         val res = Intent()
-        res.putExtra(EXTRA_FILM_TITLE, "editado")
+        //res.putExtra(EXTRA_FILM_TITLE, "editado")
+        res.putExtra(EXTRA_FILM, peliInt)
         setResult(RESULT_OK, res)
         finish()
     }
@@ -76,8 +97,25 @@ class FilmEditActivity : AppCompatActivity() {
         bindings = ActivityFilmEditBinding.inflate(layoutInflater)
         with(bindings) {
             setContentView(root)
-            bindings.guardar.setOnClickListener { guardar() }
-            bindings.cancelar.setOnClickListener { cerrar() }
+
+            val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
+            val peli = FilmDataSource.films[peliInt]
+
+            val tituloEdit =  editTitulo.getText().toString()
+//            if (tituloEdit.trim().equals("")){
+//                Toast.makeText(this@FilmEditActivity, "You did not enter a username", Toast.LENGTH_SHORT).show();
+//            }
+
+            guardar.setOnClickListener {
+//                if (TextUtils.isEmpty(editTitulo.getText())){
+//                    Toast.makeText(this@FilmEditActivity, "You did not enter a username", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    guardar(peliInt)
+//                }
+                guardar(peliInt)
+
+            }
+            cancelar.setOnClickListener { cerrar() }
         }
     }
     private fun initCompose() { //no se què fer ací
@@ -157,8 +195,8 @@ class FilmEditActivity : AppCompatActivity() {
             var formatoExpanded by remember { mutableStateOf(false) }
             var selectedFormato by remember { mutableStateOf(forPeli) }
 
-            val generos = listOf("Drama", "Comedia", "Acción", "Romance", "Sci-Fi") // you can load from R.array.generoPeli
-            val formatos = listOf("DVD", "Blu-ray", "Online") // you can load from R.array.formatoPeli
+            val generos = listOf(R.array.generoPeli)
+            val formatos = listOf(R.array.formatoPeli)
 
             ExposedDropdownMenuBox(
                 expanded = generoExpanded,
@@ -183,9 +221,9 @@ class FilmEditActivity : AppCompatActivity() {
                 ) {
                     generos.forEach { genero ->
                         DropdownMenuItem(
-                            text = { Text(genero) },
+                            text = { Text(genero.toString()) },
                             onClick = {
-                                selectedGenero = genero
+                                selectedGenero = genero.toString()
                                 generoExpanded = false
                             }
                         )
@@ -215,9 +253,9 @@ class FilmEditActivity : AppCompatActivity() {
                 ) {
                     formatos.forEach { formato ->
                         DropdownMenuItem(
-                            text = { Text(formato) },
+                            text = { Text(formato.toString()) },
                             onClick = {
-                                selectedFormato = formato
+                                selectedFormato = formato.toString()
                                 formatoExpanded = false
                             }
                         )
@@ -236,7 +274,7 @@ class FilmEditActivity : AppCompatActivity() {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
                 Button(onClick = { //TODO: check Unit thing
-                    guardar()
+                    guardar(0)
                 }) {
                     Text(stringResource(R.string.guardar))
                 }

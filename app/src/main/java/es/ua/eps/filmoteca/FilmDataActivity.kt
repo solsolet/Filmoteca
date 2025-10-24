@@ -46,17 +46,18 @@ class FilmDataActivity : AppCompatActivity() {
         }
     }
     companion object {
+        const val EXTRA_FILM = "EXTRA_FILM" //ID
         const val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
     }
-    //
     //  Centralize Intents
-    private fun verPeliIMDB(){
-        val peliIMDB = Intent(Intent.ACTION_VIEW, "https://www.imdb.com/title/tt3783958/?ref_=ext_shr_lnk".toUri())
+    private fun verPeliIMDB(link: String?){
+        val peliIMDB = Intent(Intent.ACTION_VIEW, link?.toUri())
         startActivity(peliIMDB)
     }
     val CODIGO_ACTIVIDAD_EDITAR = 1
-    private fun editPeli(){
+    private fun editPeli(peli: Int){
         val edit = Intent(this@FilmDataActivity, FilmEditActivity::class.java)
+        edit.putExtra(EXTRA_FILM, peli)
         startActivityForResult(edit, CODIGO_ACTIVIDAD_EDITAR)
     }
     // called when secondary activity finishes
@@ -71,14 +72,20 @@ class FilmDataActivity : AppCompatActivity() {
             if (resultCode == RESULT_OK){
                 textEditado = getString(R.string.txtEditado)
                 when (Filmoteca.GlobalMode) {
-                    Mode.Bindings -> refreshTitleBinding()
+                    Mode.Bindings -> refreshBinding()
                     Mode.Compose -> refreshCompose()
                 }
             }
         }
     }
-    fun refreshTitleBinding(){
-        bindings.textViewTituloPeli.append(textEditado)
+    fun refreshBinding(){
+        val peliInt = intent.getIntExtra(EXTRA_FILM, 0)
+        val peli = FilmDataSource.films[peliInt]
+
+        bindings.textViewTituloPeli.text = peli.title
+        bindings.textViewDirectorPeli?.text = peli.director
+        bindings.textViewAnyPeli.text = peli.year.toString()
+        bindings.textViewNotas.text = peli.comments
     }
 
     private fun volverPrinc(){
@@ -91,12 +98,20 @@ class FilmDataActivity : AppCompatActivity() {
         with(bindings) { //saves writing "binding." before
             setContentView(root)
 
-            //shows film title
-            val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeli)
-            textViewTituloPeli.text = peli
+            val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
+            val peli = FilmDataSource.films[peliInt]
 
-            verPeliIMDB.setOnClickListener { verPeliIMDB() }
-            editPeli.setOnClickListener { editPeli() }
+            //Film data
+            textViewTituloPeli.text = peli.title
+            imageViewPeli.setImageResource(peli.imageResId)
+            textViewDirectorPeli?.text = peli.director
+            textViewAnyPeli.text = peli.year.toString()
+            textViewGeneroPeli.append(": " + peli.genre) //TODO: show text properly
+            textViewFormatoPeli.append(": "+peli.format)
+            textViewNotas.append(": "+peli.comments)
+
+            verPeliIMDB.setOnClickListener { verPeliIMDB(peli.imdbUrl) }
+            editPeli.setOnClickListener { editPeli(peliInt) }
             volverPrincipal.setOnClickListener { volverPrinc() }
         }
     }
@@ -150,7 +165,7 @@ class FilmDataActivity : AppCompatActivity() {
                 }
             }
             Button(onClick = { //TODO: check Unit thing
-                verPeliIMDB()
+                verPeliIMDB("http://www.imdb.com/title/tt0088763")
             }) {
                 Text(stringResource(R.string.verIMDB))
             }
@@ -164,7 +179,7 @@ class FilmDataActivity : AppCompatActivity() {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
                 Button(onClick = {
-                    editPeli()
+                    editPeli(0) //TODO Ex5: Putting the right variable film from the getExtra
                 }) {
                     Text(stringResource(R.string.editPeli))
                 }

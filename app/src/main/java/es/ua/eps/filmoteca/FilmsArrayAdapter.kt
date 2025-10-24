@@ -7,14 +7,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
+
 
 class FilmsArrayAdapter(
     context: Context?, resource: Int,
     objects: List<Film>?
 ) : ArrayAdapter<Film>(context!!, resource, objects!!) {
-
-    private lateinit var bindings : ActivityFilmListBinding
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view: View = convertView?: LayoutInflater.from(this.context)
