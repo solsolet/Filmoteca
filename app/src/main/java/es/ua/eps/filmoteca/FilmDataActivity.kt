@@ -82,10 +82,15 @@ class FilmDataActivity : AppCompatActivity() {
         val peliInt = intent.getIntExtra(EXTRA_FILM, 0)
         val peli = FilmDataSource.films[peliInt]
 
+        val generos = resources.getStringArray(R.array.generoPeli)
+        val formatos = resources.getStringArray(R.array.formatoPeli)
+
         bindings.textViewTituloPeli.text = peli.title
         bindings.textViewDirectorPeli?.text = peli.director
         bindings.textViewAnyPeli.text = peli.year.toString()
         bindings.textViewNotas.text = peli.comments
+        bindings.textViewGeneroPeli.text = "${generos[peli.genre]}"
+        bindings.textViewFormatoPeli.text = "${formatos[peli.format]}"
     }
 
     private fun volverPrinc(){
@@ -101,13 +106,16 @@ class FilmDataActivity : AppCompatActivity() {
             val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
             val peli = FilmDataSource.films[peliInt]
 
+            val generos = resources.getStringArray(R.array.generoPeli)
+            val formatos = resources.getStringArray(R.array.formatoPeli)
+
             //Film data
             textViewTituloPeli.text = peli.title
             imageViewPeli.setImageResource(peli.imageResId)
             textViewDirectorPeli?.text = peli.director
             textViewAnyPeli.text = peli.year.toString()
-            textViewGeneroPeli.append(": " + peli.genre) //TODO: show text properly
-            textViewFormatoPeli.append(": "+peli.format)
+            textViewGeneroPeli.text = "${generos[peli.genre]}"
+            textViewFormatoPeli.text = "${formatos[peli.format]}"
             textViewNotas.append(": "+peli.comments)
 
             verPeliIMDB.setOnClickListener { verPeliIMDB(peli.imdbUrl) }

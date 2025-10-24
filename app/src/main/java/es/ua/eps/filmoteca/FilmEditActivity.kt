@@ -105,6 +105,10 @@ class FilmEditActivity : AppCompatActivity() {
             val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
             val peli = FilmDataSource.films[peliInt]
 
+            imageViewPosterEditar.setImageResource(peli.imageResId)
+            spinnerGenero.setSelection(peli.genre)
+            spinnerFormato.setSelection(peli.format)
+
             guardar.setOnClickListener {
                 //guardar() //TODO esbrinar perque no va
                 val titulo = editTitulo.text.toString().trim()
@@ -112,13 +116,16 @@ class FilmEditActivity : AppCompatActivity() {
                 val any = editAny.text.toString().trim()
                 val comentarios = editNotas.text.toString().trim()
 
-                // Solo actualizamos los campos que NO estén vacíos
+                // Only update fields NO empty
                 if (titulo.isNotEmpty()) peli.title = titulo
                 if (director.isNotEmpty()) peli.director = director
                 if (any.isNotEmpty()) peli.year = any.toIntOrNull() ?: peli.year
                 if (comentarios.isNotEmpty()) peli.comments = comentarios
 
-                // Devolvemos el resultado OK
+                peli.genre = spinnerGenero.selectedItemPosition
+                peli.format = spinnerFormato.selectedItemPosition
+
+                // Return res OK
                 val res = Intent()
                 res.putExtra(EXTRA_FILM, peliInt)
                 setResult(RESULT_OK, res)

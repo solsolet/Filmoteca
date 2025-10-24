@@ -8,19 +8,28 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM_TITLE
@@ -63,8 +72,6 @@ class FilmListActivity : ComponentActivity() {
 
         with(bindings) {
             setContentView(root)
-            //acercaDe.setOnClickListener { acercaDe() }
-
             pelisList.setOnItemClickListener({ parent: AdapterView<*>, view: View, position: Int, id: Long ->
                 val elemento = adaptador.getItem(position)
 //                Toast.makeText(
@@ -73,7 +80,6 @@ class FilmListActivity : ComponentActivity() {
 //                ).show()
                 verPeli(position) //Intent
             })
-
             pelisList.adapter = adaptador
         }
     }
@@ -87,6 +93,7 @@ class FilmListActivity : ComponentActivity() {
     @Composable
     private fun ComposableFilmList() {
         val context = LocalContext.current
+        val films = FilmDataSource.films
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
@@ -95,17 +102,13 @@ class FilmListActivity : ComponentActivity() {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-//            Button(onClick = { //TODO: mirar lo de Unit
-//                //verPeli(titolPeliA)
-//            }) {
-//                Text(stringResource(R.string.verPeliA))
-//            }
-//            Spacer(modifier = Modifier.height(8.dp))
-//            Button(onClick = {
-//                acercaDe()
-//            }) {
-//                Text(stringResource(R.string.acercaDe))
-//            }
+        LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            ) {
+
+            }
         }
     }
 }

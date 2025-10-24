@@ -487,6 +487,7 @@ En este apartado dejaré la comparativa entre el modo _Binding_ y _Compose_ para
 Como observación en el vídeo no se ve como funciona el botón de `ver in IMDB` ya que Android Studio daba error al guardar la grabación.
 
 ## Listas
+Se puede ver el funcinamiento de las listas en el vídeo [Demo_P4](img-readme/Demo_P4.mp4)
 ### Ejercicio 1
 He creado las clases pertinentes a este ejercicio:
 - `Film`: que encapsula los datos de las películas.
@@ -530,7 +531,85 @@ class FilmsArrayAdapter(
 Como comentario sobre este ejercicio, he tenido un problema de entendimiento de la sobrecarga de la función `getView` al principio. Sin leer documentación ni nada, he intentado hacerla en lugar de con `View` con `Bindings` y claro, esto me ha acarreado mucho errores por que de por sí la función espera parámetros tipo _view_. Dejando la cabezonería a un lado, me he dado cuenta que mi idea estaba equivocada y que si hubiese alguna manera de conseguirlo, ahora no era el momento de ponerme a experimentar teniendo el resto de la práctica por hacer y lo he hecho con _view_ (y no complicarme la vida).
 
 ### Ejercicio 3
+En `FilmListActivity` le he añadido el parámetro peli a la función `verPeli(position)` para saber que peli hemos pulsado y pasarsela a `FilmData`.
+He adaptado `FilmDataActivity` para que al pulsar un elemento de `FilmListActivity` muestre la película adecuada y si se actualiza que se muestre bien:
+```kotlin
+fun refreshBinding(){
+    val peliInt = intent.getIntExtra(EXTRA_FILM, 0)
+    val peli = FilmDataSource.films[peliInt]
+
+    val generos = resources.getStringArray(R.array.generoPeli)
+    val formatos = resources.getStringArray(R.array.formatoPeli)
+
+    bindings.textViewTituloPeli.text = peli.title
+    bindings.textViewDirectorPeli?.text = peli.director
+    bindings.textViewAnyPeli.text = peli.year.toString()
+    bindings.textViewNotas.text = peli.comments
+    bindings.textViewGeneroPeli.text = "${generos[peli.genre]}"
+    bindings.textViewFormatoPeli.text = "${formatos[peli.format]}"
+}
+
+private fun initLayouts() {
+    bindings = ActivityFilmDataBinding.inflate(layoutInflater)
+    with(bindings) { //saves writing "binding." before
+        setContentView(root)
+
+        val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
+        val peli = FilmDataSource.films[peliInt]
+
+        val generos = resources.getStringArray(R.array.generoPeli)
+        val formatos = resources.getStringArray(R.array.formatoPeli)
+
+        //Film data
+        textViewTituloPeli.text = peli.title
+        imageViewPeli.setImageResource(peli.imageResId)
+        textViewDirectorPeli?.text = peli.director
+        textViewAnyPeli.text = peli.year.toString()
+        textViewGeneroPeli.text = "${generos[peli.genre]}"
+        textViewFormatoPeli.text = "${formatos[peli.format]}"
+        textViewNotas.append(": "+peli.comments)
+
+        verPeliIMDB.setOnClickListener { verPeliIMDB(peli.imdbUrl) }
+        editPeli.setOnClickListener { editPeli(peliInt) }
+        volverPrincipal.setOnClickListener { volverPrinc() }
+    }
+}
+```
+Para guardar los datos editados en `FilmEditActivity`:
+```kotlin
+guardar.setOnClickListener {
+    val titulo = editTitulo.text.toString().trim()
+    val director = editDirector.text.toString().trim()
+    val any = editAny.text.toString().trim()
+    val comentarios = editNotas.text.toString().trim()
+
+    // Solo actualizamos los campos que NO estén vacíos
+    if (titulo.isNotEmpty()) peli.title = titulo
+    if (director.isNotEmpty()) peli.director = director
+    if (any.isNotEmpty()) peli.year = any.toIntOrNull() ?: peli.year
+    if (comentarios.isNotEmpty()) peli.comments = comentarios
+
+    // Devolvemos el resultado OK
+    val res = Intent()
+    res.putExtra(EXTRA_FILM, peliInt)
+    setResult(RESULT_OK, res)
+    finish()
+}
+``` 
+#### Problemas
+Me ha costado averiguar cual es laforma de saber cuando un `EditText` está vacío. Algunas de las pruebas las hice con _toast_ a ver si entraba en la condición:
+```kotlin
+if (TextUtils.isEmpty(editTitulo.getText())){
+    Toast.makeText(this@FilmEditActivity, "You did not enter a username", Toast.LENGTH_SHORT).show();
+} else {
+    guardar(peliInt)
+}
+```
+Algunas fueron y otras no.
+
+Otro problema es que sabiendo como debía hacer el código no me hacía nada al guardar. En el momento que estoy haciendo esta actividad no entiendo el motivo pero si pongo el código que guarda la peli correctamente dentro del listener del botón 'Guardar' funciona perfectamente, pero si 'Guardar' llama a una fucnión con ese mismo código no funciona. Ha sido desesperante por que he probado muchas combinaciones, he usado el debugger y no caigo en que se me escapa. El resultado, como se ha visto anteriormente, es que ha ganado la practicidad al código limpio por falta de tiempo. En terminar la entrega si tengo tiempo corregiré detalls como estos de cara a las siguientes.
 
 ### Ejercicio 4
+
 
 ### Ejercicio 5
