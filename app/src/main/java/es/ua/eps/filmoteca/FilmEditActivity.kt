@@ -69,18 +69,17 @@ class FilmEditActivity : AppCompatActivity() {
         setResult(RESULT_CANCELED, null)
         finish()
     }
-    private fun guardar(peliInt: Int) {
+    private fun guardar() {
+        val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
         val peli = FilmDataSource.films[peliInt]
 
         bindings = ActivityFilmEditBinding.inflate(layoutInflater)
         with(bindings) {
+            //setContentView(root) // i si falla per no posar-ho??
             // Update film
-//            if (TextUtils.isEmpty(editTitulo.getText())){
-//                Toast.makeText(this@FilmEditActivity, "You did not enter a username", Toast.LENGTH_SHORT).show();
-//            } else {
-                peli.title = editTitulo.text.toString() // OG que sí que va soles
-//            }
+                //peli.title = editTitulo.text.toString() // OG que sí que va soles
 
+            //////////////NO VA SI ESTE CODI ESTA ACI
 //            val titulo = editTitulo.text.toString().trim()
 //            val director = editDirector.text.toString().trim()
 //            val any = editAny.text.toString().trim()
@@ -93,10 +92,7 @@ class FilmEditActivity : AppCompatActivity() {
 //            if (comentarios.isNotEmpty()) peli.comments = comentarios
         }
 
-        //TODO POSAR BE
-
         val res = Intent()
-        //res.putExtra(EXTRA_FILM_TITLE, "editado")
         res.putExtra(EXTRA_FILM, peliInt)
         setResult(RESULT_OK, res)
         finish()
@@ -109,19 +105,24 @@ class FilmEditActivity : AppCompatActivity() {
             val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
             val peli = FilmDataSource.films[peliInt]
 
-            val tituloEdit =  editTitulo.getText().toString()
-//            if (tituloEdit.trim().equals("")){
-//                Toast.makeText(this@FilmEditActivity, "You did not enter a username", Toast.LENGTH_SHORT).show();
-//            }
-
             guardar.setOnClickListener {
-                if (TextUtils.isEmpty(editTitulo.getText())){
-                    Toast.makeText(this@FilmEditActivity, "You did not enter a username", Toast.LENGTH_SHORT).show();
-                } else {
-                    guardar(peliInt)
-                }
-                //guardar(peliInt)
+                //guardar() //TODO esbrinar perque no va
+                val titulo = editTitulo.text.toString().trim()
+                val director = editDirector.text.toString().trim()
+                val any = editAny.text.toString().trim()
+                val comentarios = editNotas.text.toString().trim()
 
+                // Solo actualizamos los campos que NO estén vacíos
+                if (titulo.isNotEmpty()) peli.title = titulo
+                if (director.isNotEmpty()) peli.director = director
+                if (any.isNotEmpty()) peli.year = any.toIntOrNull() ?: peli.year
+                if (comentarios.isNotEmpty()) peli.comments = comentarios
+
+                // Devolvemos el resultado OK
+                val res = Intent()
+                res.putExtra(EXTRA_FILM, peliInt)
+                setResult(RESULT_OK, res)
+                finish()
             }
             cancelar.setOnClickListener { cerrar() }
         }
@@ -282,7 +283,7 @@ class FilmEditActivity : AppCompatActivity() {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
                 Button(onClick = { //TODO: check Unit thing
-                    guardar(0)
+                    guardar()
                 }) {
                     Text(stringResource(R.string.guardar))
                 }
