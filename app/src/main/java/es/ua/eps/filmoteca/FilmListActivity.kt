@@ -32,6 +32,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM_TITLE
 import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM
 import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
@@ -56,34 +58,34 @@ class FilmListActivity : ComponentActivity() {
         verPeli.putExtra(EXTRA_FILM, peli)
         startActivity(verPeli)
     }
-//    private fun acercaDe(){
-//        val about = Intent(this@FilmListActivity, AboutActivity::class.java)
-//        startActivity(about)
-//    }
     private fun initLayouts() {
         bindings = ActivityFilmListBinding.inflate(layoutInflater)
 
         val valores = FilmDataSource.films
 
-        val adaptador = FilmsArrayAdapter(
-            this,
-            R.layout.item_peli, valores
-        )
-
         with(bindings) {
             setContentView(root)
-            pelisList.setOnItemClickListener({ parent: AdapterView<*>, view: View, position: Int, id: Long ->
-                val elemento = adaptador.getItem(position)
-//                Toast.makeText(
-//                    this@FilmListActivity,
-//                    "$elemento seleccionado: id $id, position $position", Toast.LENGTH_LONG
-//                ).show()
-                verPeli(position) //Intent
-            })
-            pelisList.adapter = adaptador
+            // ListView
+//            val adaptador = FilmsArrayAdapter(
+//                this,
+//                R.layout.item_peli, valores
+//            )
+//            pelisList.setOnItemClickListener({ parent: AdapterView<*>, view: View, position: Int, id: Long ->
+//                verPeli(position) //Intent
+//            })
+//            pelisList.adapter = adaptador
+
+            // RecyclerView
+            val adaptador = FilmsAdapter(valores) {
+                position -> verPeli(position)
+            }
+            val recyclerView: RecyclerView = findViewById(R.id.recyclerviewPelis)
+            recyclerView.layoutManager = LinearLayoutManager(this@FilmListActivity)
+
+            recyclerView.adapter = adaptador
         }
     }
-    private fun initCompose() { //no se què fer ací
+    private fun initCompose() {
         setContent {
             MaterialTheme {
                 ComposableFilmList()

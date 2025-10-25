@@ -58,6 +58,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.activity)
 
+    implementation(libs.androidx.recyclerview)
+
     // Dependencies de Debug (Ferramentes i Previews)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
