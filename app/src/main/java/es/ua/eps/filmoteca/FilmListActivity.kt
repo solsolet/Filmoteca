@@ -2,39 +2,33 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM_TITLE
 import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM
 import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
 
@@ -61,14 +55,14 @@ class FilmListActivity : ComponentActivity() {
     private fun initLayouts() {
         bindings = ActivityFilmListBinding.inflate(layoutInflater)
 
-        val valores = FilmDataSource.films
+        val filmList = FilmDataSource.films
 
         with(bindings) {
             setContentView(root)
             // ListView
 //            val adaptador = FilmsArrayAdapter(
 //                this,
-//                R.layout.item_peli, valores
+//                R.layout.item_peli, filmList
 //            )
 //            pelisList.setOnItemClickListener({ parent: AdapterView<*>, view: View, position: Int, id: Long ->
 //                verPeli(position) //Intent
@@ -76,7 +70,7 @@ class FilmListActivity : ComponentActivity() {
 //            pelisList.adapter = adaptador
 
             // RecyclerView
-            val adaptador = FilmsAdapter(valores) {
+            val adaptador = FilmsAdapter(filmList) { //TODO(canviar pulsar, mirar apunts listas final)
                 position -> verPeli(position)
             }
             val recyclerView: RecyclerView = findViewById(R.id.recyclerviewPelis)
@@ -88,7 +82,11 @@ class FilmListActivity : ComponentActivity() {
     private fun initCompose() {
         setContent {
             MaterialTheme {
-                ComposableFilmList()
+                ComposableFilmList(
+//                    onFilmClick = { peliIndex ->
+//                        verPeli(peliIndex)
+//                    }
+                )
             }
         }
     }
@@ -97,19 +95,46 @@ class FilmListActivity : ComponentActivity() {
         val context = LocalContext.current
         val films = FilmDataSource.films
 
-        Column( //equivalent a LinearLayout(vertical)
+        LazyColumn (
             modifier = Modifier
-                .fillMaxSize()      // separated like class notes' style
-                .padding(64.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(15.dp)
+        ){
+//            items(films, key = {it.hashCode()}) { peli ->
+//                FilmItem(peli)
+//            }
+            itemsIndexed(films){ index, peli ->
+                FilmItem(
+                    f = peli
+                )
+            }
+        }
+    }
+    @Composable
+    fun FilmItem(f: Film) {
+        // == layout XML + bind ViewHolder
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable{ verPeli(0)}
+                .padding(8.dp)
         ) {
-        LazyColumn(
+            val imageId = if (f.imageResId != 0) f.imageResId else R.drawable.default_movie
+            Image(
+                painter = painterResource(id = imageId),
+                contentDescription = f.title,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-            ) {
-
+                    .size(50.dp)
+                    .padding(end = 12.dp)
+            )
+            Column {
+                f.title?.let { Text(
+                    text = it,
+                    fontSize = 20.sp
+                ) }
+                f.director?.let { Text(
+                    text = it,
+                    fontStyle = FontStyle.Italic
+                ) }
             }
         }
     }

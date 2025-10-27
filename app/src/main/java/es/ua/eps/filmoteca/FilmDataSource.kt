@@ -7,7 +7,7 @@ object FilmDataSource {
         var f = Film()
         f.title = "Regreso al futuro"
         f.director = "Robert Zemeckis"
-        f.imageResId = R.mipmap.ic_launcher
+        f.imageResId = R.drawable.back_future
         f.comments = ""
         f.format = Film.Companion.FORMAT_DIGITAL
         f.genre = Film.Companion.GENRE_SCIFI

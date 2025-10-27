@@ -35,11 +35,19 @@ class FilmsAdapter(
         private var poster: ImageView = v.findViewById(R.id.poster)
 
         init {
+            initOnClickListener(v)
+        }
+
+        fun initOnClickListener(v: View) {
             v.setOnClickListener {
                 val position = adapterPosition
-                if(position != RecyclerView.NO_POSITION){
-                    onPeliClick(position)
-                }
+//                if(position != RecyclerView.NO_POSITION){ //guards
+//                    onPeliClick(position)
+//                }
+                val isNoPosition = position == RecyclerView.NO_POSITION
+                if(isNoPosition) return@setOnClickListener
+
+                onPeliClick(position)
             }
         }
 
