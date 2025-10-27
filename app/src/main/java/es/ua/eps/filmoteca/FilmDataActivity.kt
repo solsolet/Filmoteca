@@ -133,7 +133,8 @@ class FilmDataActivity : AppCompatActivity() {
     @Composable
     private fun ComposeFilmData() {
         val context = LocalContext.current
-        val peli = intent.getStringExtra(EXTRA_FILM_TITLE) ?: getString(R.string.tituloPeli)
+        val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
+        val peli = FilmDataSource.films[peliInt]
 
         Column( //= LinearLayout(vertical)
             modifier = Modifier
@@ -142,13 +143,15 @@ class FilmDataActivity : AppCompatActivity() {
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = peli + textEditado,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(top = 50.dp)
-            )
+            peli.title?.let {
+                Text(
+                    text = it,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(top = 50.dp)
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Row (
                 modifier = Modifier.fillMaxWidth(),
@@ -156,7 +159,7 @@ class FilmDataActivity : AppCompatActivity() {
                 verticalAlignment = Alignment.Top
             ){
                 Image(
-                    painter = painterResource(id = R.drawable.lalaland),
+                    painter = painterResource(id = peli.imageResId),
                     contentDescription = stringResource(R.string.contentImage),
                     modifier = Modifier
                         .width(165.dp)
@@ -166,19 +169,21 @@ class FilmDataActivity : AppCompatActivity() {
                     verticalArrangement = Arrangement.spacedBy(30.dp),
                     horizontalAlignment = Alignment.Start
                 ){
-                    Text(stringResource(R.string.directorPeli)) //Director
-                    Text(stringResource(R.string.anyPeli)) //Year
-                    Text(stringResource(R.string.generoPeli)) //Genre
-                    Text(stringResource(R.string.formatoPeli)) //Format
+                    peli.director?.let { Text(text = it) } //Director
+                    Text(text = peli.year.toString()) //Year
+
+                    val generos = resources.getStringArray(R.array.generoPeli)
+                    val formatos = resources.getStringArray(R.array.formatoPeli)
+                    Text(text = "${generos[peli.genre]}") //Genre
+                    Text(text = "${formatos[peli.format]}") //Format
                 }
             }
             Button(onClick = { //TODO: check Unit thing
-                verPeliIMDB("http://www.imdb.com/title/tt0088763")
+                verPeliIMDB(peli.imdbUrl)
             }) {
                 Text(stringResource(R.string.verIMDB))
             }
-
-            Text(stringResource(R.string.notasPeli)) //Notes
+            peli.comments?.let { Text(text = it) } //Notes
 
             Row (
                 modifier = Modifier
@@ -187,11 +192,10 @@ class FilmDataActivity : AppCompatActivity() {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
                 Button(onClick = {
-                    editPeli(0) //TODO Ex5: Putting the right variable film from the getExtra
+                    editPeli(peliInt) //TODO Ex5: Putting the right variable film from the getExtra
                 }) {
                     Text(stringResource(R.string.editPeli))
                 }
-
                 Button(onClick = {
                     volverPrinc()
                 }) {

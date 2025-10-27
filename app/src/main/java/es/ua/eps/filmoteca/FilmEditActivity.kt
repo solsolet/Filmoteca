@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,33 +54,42 @@ class FilmEditActivity : AppCompatActivity() {
             Mode.Compose -> initCompose()
         }
     }
+    private fun updateFilm(
+        peliInt: Int,
+        titulo: String?,
+        director: String?,
+        any: String?,
+        imdb: String?,
+        generoIndex: Int?,
+        formatoIndex: Int?,
+        comentarios: String?
+    ){
+        val peli = FilmDataSource.films[peliInt]
+
+        if (!titulo.isNullOrBlank()) peli.title = titulo
+        if (!director.isNullOrBlank()) peli.director = director
+        if (!any.isNullOrBlank()) peli.year = any.toIntOrNull() ?: peli.year
+        if (!imdb.isNullOrBlank()) peli.imdbUrl = imdb
+        if (generoIndex != null) peli.genre = generoIndex
+        if (formatoIndex != null) peli.format = formatoIndex
+        if (!comentarios.isNullOrBlank()) peli.comments = comentarios
+    }
     // Centralize Intents
     private fun cerrar() {
         setResult(RESULT_CANCELED, null)
         finish()
     }
-    private fun guardar() {
+    private fun guardar(
+        titulo: String?,
+        director: String?,
+        any: String?,
+        imdb: String?,
+        generoIndex: Int?,
+        formatoIndex: Int?,
+        comentarios: String?
+    ) {
         val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
-        val peli = FilmDataSource.films[peliInt]
-
-        bindings = ActivityFilmEditBinding.inflate(layoutInflater)
-        with(bindings) {
-            //setContentView(root) // i si falla per no posar-ho??
-            // Update film
-                //peli.title = editTitulo.text.toString() // OG que sí que va soles
-
-            //////////////NO VA SI ESTE CODI ESTA ACI
-//            val titulo = editTitulo.text.toString().trim()
-//            val director = editDirector.text.toString().trim()
-//            val any = editAny.text.toString().trim()
-//            val comentarios = editNotas.text.toString().trim()
-//
-//            // Solo actualizamos los campos que NO estén vacíos
-//            if (titulo.isNotEmpty()) peli.title = titulo
-//            if (director.isNotEmpty()) peli.director = director
-//            if (any.isNotEmpty()) peli.year = any.toIntOrNull() ?: peli.year
-//            if (comentarios.isNotEmpty()) peli.comments = comentarios
-        }
+        updateFilm(peliInt, titulo, director, any, imdb, generoIndex, formatoIndex, comentarios)
 
         val res = Intent()
         res.putExtra(EXTRA_FILM, peliInt)
@@ -99,31 +109,20 @@ class FilmEditActivity : AppCompatActivity() {
             spinnerFormato.setSelection(peli.format)
 
             guardar.setOnClickListener {
-                //guardar() //TODO esbrinar perque no va
                 val titulo = editTitulo.text.toString().trim()
                 val director = editDirector.text.toString().trim()
                 val any = editAny.text.toString().trim()
+                val imdb = editIMDB.text.toString().trim()
                 val comentarios = editNotas.text.toString().trim()
+                val generoIndex = spinnerGenero.selectedItemPosition
+                val formatoIndex = spinnerFormato.selectedItemPosition
 
-                // Only update fields NO empty
-                if (titulo.isNotEmpty()) peli.title = titulo
-                if (director.isNotEmpty()) peli.director = director
-                if (any.isNotEmpty()) peli.year = any.toIntOrNull() ?: peli.year
-                if (comentarios.isNotEmpty()) peli.comments = comentarios
-
-                peli.genre = spinnerGenero.selectedItemPosition
-                peli.format = spinnerFormato.selectedItemPosition
-
-                // Return res OK
-                val res = Intent()
-                res.putExtra(EXTRA_FILM, peliInt)
-                setResult(RESULT_OK, res)
-                finish()
+                guardar(titulo, director, any, imdb, generoIndex, formatoIndex, comentarios)
             }
             cancelar.setOnClickListener { cerrar() }
         }
     }
-    private fun initCompose() { //no se què fer ací
+    private fun initCompose() {
         setContent {
             MaterialTheme {
                 ComposableFilmEdit()
@@ -134,6 +133,29 @@ class FilmEditActivity : AppCompatActivity() {
     @Composable
     private fun ComposableFilmEdit() {
         val context = LocalContext.current
+        val peliInt = intent.getIntExtra(EXTRA_FILM, 0)
+        val peli = FilmDataSource.films[peliInt]
+
+        var titulo by remember { mutableStateOf(peli.title ?: "") }
+        var director by remember { mutableStateOf(peli.director ?: "") }
+        var any by remember { mutableStateOf(peli.year.toString()) }
+        var imdb by remember { mutableStateOf(peli.imdbUrl ?: "") }
+        var comentarios by remember { mutableStateOf(peli.comments ?: "") }
+        var generoIndex by remember { mutableIntStateOf(peli.genre) }
+        var formatoIndex by remember { mutableIntStateOf(peli.format) }
+
+        // "Spinners"
+        val genPeli = stringResource(R.string.generoPeli)
+        var generoExpanded by remember { mutableStateOf(false) }
+        var selectedGenero by remember { mutableStateOf(genPeli) }
+
+        val forPeli = stringResource(R.string.formatoPeli)
+        var formatoExpanded by remember { mutableStateOf(false) }
+        var selectedFormato by remember { mutableStateOf(forPeli) }
+
+        val generos = context.resources.getStringArray(R.array.generoPeli).toList()
+        val formatos = context.resources.getStringArray(R.array.formatoPeli).toList()
+
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier
@@ -149,8 +171,8 @@ class FilmEditActivity : AppCompatActivity() {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
                 Image(
-                    painter = painterResource(R.drawable.lalaland),
-                    contentDescription = stringResource(R.string.contentImage),
+                    painter = painterResource(peli.imageResId),
+                    contentDescription = peli.title,
                     modifier = Modifier
                         .width(65.dp)
                         .height(70.dp)
@@ -167,49 +189,42 @@ class FilmEditActivity : AppCompatActivity() {
                 }
             }
             TextField(
-                state = rememberTextFieldState(),
+                value = titulo,
+                onValueChange = { titulo = it },
+                //state = rememberTextFieldState(),
                 label = { Text(stringResource(R.string.tituloPeli)) },
                 modifier = Modifier
                     .fillMaxWidth()
             )
             TextField(
-                state = rememberTextFieldState(),
+                value = director,
+                onValueChange = { director = it },
                 label = { Text(stringResource(R.string.directorPeli)) },
                 modifier = Modifier
                     .fillMaxWidth()
             )
             TextField(
-                state = rememberTextFieldState(),
+                value = any,
+                onValueChange = { any = it },
                 label = { Text(stringResource(R.string.anyPeli)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .fillMaxWidth()
             )
             TextField(
-                state = rememberTextFieldState(),
+                value = imdb,
+                onValueChange = { imdb = it },
                 label = { Text(stringResource(R.string.enlaceIMDB)) },
                 modifier = Modifier
                     .fillMaxWidth()
             )
-            //Spinner more or less
-            var genPeli = stringResource(R.string.generoPeli)
-            var generoExpanded by remember { mutableStateOf(false) }
-            var selectedGenero by remember { mutableStateOf(genPeli) }
-
-            var forPeli = stringResource(R.string.formatoPeli)
-            var formatoExpanded by remember { mutableStateOf(false) }
-            var selectedFormato by remember { mutableStateOf(forPeli) }
-
-            val generos = listOf(R.array.generoPeli)
-            val formatos = listOf(R.array.formatoPeli)
-
+            //"Spinner" Genero/Formato
             ExposedDropdownMenuBox(
                 expanded = generoExpanded,
                 onExpandedChange = { generoExpanded = !generoExpanded }
-
             ) {
                 TextField(
-                    value = selectedGenero,
+                    value = generos[generoIndex],
                     onValueChange = {},
                     label = { Text(stringResource(R.string.generoPeli)) },
                     readOnly = true,
@@ -217,18 +232,18 @@ class FilmEditActivity : AppCompatActivity() {
                         .fillMaxWidth()
                         .menuAnchor(),
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = formatoExpanded)
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = generoExpanded)
                     }
                 )
                 ExposedDropdownMenu(
                     expanded = generoExpanded,
                     onDismissRequest = { generoExpanded = false }
                 ) {
-                    generos.forEach { genero ->
+                    generos.forEachIndexed { index, genero ->
                         DropdownMenuItem(
-                            text = { Text(genero.toString()) },
+                            text = { Text(genero) },
                             onClick = {
-                                selectedGenero = genero.toString()
+                                generoIndex = index
                                 generoExpanded = false
                             }
                         )
@@ -241,7 +256,7 @@ class FilmEditActivity : AppCompatActivity() {
                 onExpandedChange = { formatoExpanded = !formatoExpanded }
             ) {
                 TextField(
-                    value = selectedFormato,
+                    value = formatos[formatoIndex],
                     onValueChange = {},
                     label = { Text(stringResource(R.string.formatoPeli)) },
                     readOnly = true,
@@ -256,11 +271,11 @@ class FilmEditActivity : AppCompatActivity() {
                     expanded = formatoExpanded,
                     onDismissRequest = { formatoExpanded = false }
                 ) {
-                    formatos.forEach { formato ->
+                    formatos.forEachIndexed { index, formato ->
                         DropdownMenuItem(
-                            text = { Text(formato.toString()) },
+                            text = { Text(formato) },
                             onClick = {
-                                selectedFormato = formato.toString()
+                                formatoIndex = index
                                 formatoExpanded = false
                             }
                         )
@@ -268,7 +283,8 @@ class FilmEditActivity : AppCompatActivity() {
                 }
             }
             TextField(
-                state = rememberTextFieldState(),
+                value = comentarios,
+                onValueChange = { comentarios = it },
                 label = { Text(stringResource(R.string.notasPeli)) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -278,8 +294,8 @@ class FilmEditActivity : AppCompatActivity() {
                     .padding(top = 16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                Button(onClick = { //TODO: check Unit thing
-                    guardar()
+                Button(onClick = {
+                    guardar(titulo, director, any, imdb, generoIndex, formatoIndex, comentarios)
                 }) {
                     Text(stringResource(R.string.guardar))
                 }

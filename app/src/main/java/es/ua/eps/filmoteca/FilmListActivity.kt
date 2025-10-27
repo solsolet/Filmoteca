@@ -97,25 +97,23 @@ class FilmListActivity : ComponentActivity() {
 
         LazyColumn (
             modifier = Modifier
-                .padding(15.dp)
+                .padding(15.dp, top = 50.dp)
         ){
-//            items(films, key = {it.hashCode()}) { peli ->
-//                FilmItem(peli)
-//            }
             itemsIndexed(films){ index, peli ->
                 FilmItem(
-                    f = peli
+                    f = peli,
+                    i = index
                 )
             }
         }
     }
     @Composable
-    fun FilmItem(f: Film) {
+    fun FilmItem(f: Film, i: Int) {
         // == layout XML + bind ViewHolder
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable{ verPeli(0)}
+                .clickable{ verPeli(i)}
                 .padding(8.dp)
         ) {
             val imageId = if (f.imageResId != 0) f.imageResId else R.drawable.default_movie
