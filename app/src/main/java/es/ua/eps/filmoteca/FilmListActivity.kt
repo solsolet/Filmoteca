@@ -2,9 +2,11 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,12 +20,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -32,8 +31,10 @@ import androidx.recyclerview.widget.RecyclerView
 import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM
 import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
 
-class FilmListActivity : ComponentActivity() {
+class FilmListActivity : AppCompatActivity() {
     private lateinit var bindings : ActivityFilmListBinding
+    private val filmList = FilmDataSource.films
+    private lateinit var adapt : FilmsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,13 +53,42 @@ class FilmListActivity : ComponentActivity() {
         verPeli.putExtra(EXTRA_FILM, peli)
         startActivity(verPeli)
     }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.film_list_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.miNewFilm -> {
+                newFilm(adapt)
+                return true
+            }
+            R.id.miShowAbout -> {
+                openAbout()
+                return true
+            }
+        }
+        return false
+    }
+    private fun openAbout() {
+        val openA = Intent(this@FilmListActivity, AboutActivity::class.java)
+        startActivity(openA)
+    }
+    private fun newFilm(adapter: FilmsAdapter) {
+        val f = Film()
+        f.title = "<New film>"
+        f.imageResId = R.mipmap.ic_launcher
+        FilmDataSource.films.add(f)
+        adapter.notifyItemInserted(FilmDataSource.films.size - 1)
+    }
     private fun initLayouts() {
         bindings = ActivityFilmListBinding.inflate(layoutInflater)
 
-        val filmList = FilmDataSource.films
-
         with(bindings) {
             setContentView(root)
+            setSupportActionBar(findViewById(R.id.mtMenu)) // Adds app bar
             // ListView
 //            val adaptador = FilmsArrayAdapter(
 //                this,
@@ -73,6 +103,7 @@ class FilmListActivity : ComponentActivity() {
             val adaptador = FilmsAdapter(filmList) { //TODO(canviar pulsar, mirar apunts listas final)
                 position -> verPeli(position)
             }
+            adapt = adaptador//TODO cutre assignacio global del adaptador
             val recyclerView: RecyclerView = findViewById(R.id.recyclerviewPelis)
             recyclerView.layoutManager = LinearLayoutManager(this@FilmListActivity)
 
@@ -82,24 +113,19 @@ class FilmListActivity : ComponentActivity() {
     private fun initCompose() {
         setContent {
             MaterialTheme {
-                ComposableFilmList(
-//                    onFilmClick = { peliIndex ->
-//                        verPeli(peliIndex)
-//                    }
-                )
+                ComposableFilmList()
             }
         }
     }
     @Composable
     private fun ComposableFilmList() {
         val context = LocalContext.current
-        val films = FilmDataSource.films
 
         LazyColumn (
             modifier = Modifier
                 .padding(15.dp, top = 50.dp)
         ){
-            itemsIndexed(films){ index, peli ->
+            itemsIndexed(filmList){ index, peli ->
                 FilmItem(
                     f = peli,
                     i = index
@@ -113,7 +139,7 @@ class FilmListActivity : ComponentActivity() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable{ verPeli(i)}
+                .clickable { verPeli(i) }
                 .padding(8.dp)
         ) {
             val imageId = if (f.imageResId != 0) f.imageResId else R.drawable.default_movie

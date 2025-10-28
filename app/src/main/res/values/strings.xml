@@ -39,4 +39,5 @@
     <string name="blueRay" translatable="false">Blue-Ray</string>
     <string name="online">En linea</string>
     <string name="director" translatable="false">Director</string>
+    <string name="anyadirPeli">Añadir Peli</string>
 </resources>

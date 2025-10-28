@@ -2,6 +2,7 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -47,7 +48,7 @@ class FilmDataActivity : AppCompatActivity() {
     }
     companion object {
         const val EXTRA_FILM = "EXTRA_FILM" //ID
-        const val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
+        val ID_MENU = Menu.FIRST
     }
     //  Centralize Intents
     private fun verPeliIMDB(link: String?){
