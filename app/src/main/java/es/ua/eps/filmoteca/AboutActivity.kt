@@ -2,9 +2,10 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,22 +24,35 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NavUtils
 import es.ua.eps.filmoteca.databinding.ActivityAboutBinding
 import androidx.core.net.toUri
 
-class AboutActivity : ComponentActivity() {
+class AboutActivity : AppCompatActivity() {
     private lateinit var bindings : ActivityAboutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         initUI()
+        //App bar
+        setSupportActionBar(findViewById(R.id.mtHomeMenu))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
     private fun initUI() {
         when (Filmoteca.GlobalMode) {
             Mode.Bindings -> initLayouts()
             Mode.Compose -> initCompose()
         }
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id: Int = item.itemId
+        if (id == android.R.id.home) { // ID special for "home"
+            NavUtils.navigateUpTo(this@AboutActivity,
+                Intent(this@AboutActivity, FilmListActivity::class.java))
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
     // centralize Intents
     private fun goWebsite(){

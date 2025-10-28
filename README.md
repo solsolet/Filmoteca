@@ -613,3 +613,65 @@ Otro problema es que sabiendo como debía hacer el código no me hacía nada al 
 
 
 ### Ejercicio 5
+
+## Menús
+### Ejercicio 1
+Para hacer esta actividad he creado el menú `film_list_menu` dentro de `res/menu`:
+```kotlin
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/miNewFilm"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/anyadirPeli"
+        app:showAsAction="always" />
+    <item android:title="@string/acercaDe"
+        android:id="@+id/miShowAbout"
+        android:icon="@android:drawable/ic_dialog_info"
+        app:showAsAction="ifRoom" />
+</menu>
+```
+He usado los iconos por defecto que vienen en Android Studio, pero sería conveniente substituirlos en el futuro por algunos del mismo estilo ('añadirpeli' es feo y no pega con el otro).
+
+Este menú se ha añadido gracias a que en el _layout_ `activity_film_list.xml` le he puesto un elemento _Toolbar_ y por código en `FilmListActivity` se ha usado `setSupportActionBar(findViewById(R.id.mtMenu))`.
+
+La funcionalidad de los botones del menú la cubren a sobre carga de los métodos `onCreateOptionsMenu` y `onOptionsItemSelected` junto a las funciones `openAbout` y `newFilm`:
+```kotlin
+override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    super.onCreateOptionsMenu(menu)
+    menuInflater.inflate(R.menu.film_list_menu, menu)
+    return true
+}
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    super.onOptionsItemSelected(item)
+    when (item.itemId) {
+        R.id.miNewFilm -> {
+            newFilm(adapt)
+            return true
+        }
+        R.id.miShowAbout -> {
+            openAbout()
+            return true
+        }
+    }
+    return false
+}
+private fun openAbout() {
+    val openA = Intent(this@FilmListActivity, AboutActivity::class.java)
+    startActivity(openA)
+}
+private fun newFilm(adapter: FilmsAdapter) {
+    val f = Film()
+    f.title = "<New film>"
+    f.imageResId = R.mipmap.ic_launcher
+    FilmDataSource.films.add(f)
+    adapter.notifyItemInserted(FilmDataSource.films.size - 1)
+}
+``` 
+Todo esto nos deja un _FilmList_ con este aspecto: ![Pantalla Film List](img-readme/Menu-FilmList.png)
+![alt text](image.png)
+
+### Ejercicio 2
+
+### Ejercicio 3
