@@ -1,6 +1,5 @@
 package es.ua.eps.filmoteca
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,9 @@ import android.widget.TextView
 
 
 class FilmsArrayAdapter(
-    context: Context?, resource: Int,
+    context: FilmListActivity, resource: Int,
     objects: List<Film>?
-) : ArrayAdapter<Film>(context!!, resource, objects!!) {
+) : ArrayAdapter<Film>(context, resource, objects!!) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view: View = convertView?: LayoutInflater.from(this.context)

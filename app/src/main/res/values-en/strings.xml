@@ -33,4 +33,7 @@
     <string name="comedia">Comedy</string>
     <string name="online">Online</string>
     <string name="anyadirPeli">Add Film</string>
+    <string name="home">Home</string>
+    <string name="borrarPeli">Delete film</string>
+    <string name="multipleMenuCountSelected">selected</string>
 </resources>

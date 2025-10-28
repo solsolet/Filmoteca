@@ -34,4 +34,7 @@
     <string name="comedia">Comedia</string>
     <string name="online">En linia</string>
     <string name="anyadirPeli">Afegir Peli</string>
+    <string name="home">Principal</string>
+    <string name="borrarPeli">Borrar peli</string>
+    <string name="multipleMenuCountSelected">seleccionades</string>
 </resources>

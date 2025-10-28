@@ -2,8 +2,13 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AbsListView.MultiChoiceModeListener
+import android.widget.AdapterView
+import android.widget.ListView
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -25,16 +30,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM
 import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
 
 class FilmListActivity : AppCompatActivity() {
     private lateinit var bindings : ActivityFilmListBinding
     private val filmList = FilmDataSource.films
-    private lateinit var adapt : FilmsAdapter
+    private lateinit var adaptador : FilmsArrayAdapter // ListView
+    //private lateinit var adaptador : FilmsAdapter // RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +65,7 @@ class FilmListActivity : AppCompatActivity() {
         super.onOptionsItemSelected(item)
         when (item.itemId) {
             R.id.miNewFilm -> {
-                newFilm(adapt)
+                newFilm()
                 return true
             }
             R.id.miShowAbout -> {
@@ -76,12 +79,57 @@ class FilmListActivity : AppCompatActivity() {
         val openA = Intent(this@FilmListActivity, AboutActivity::class.java)
         startActivity(openA)
     }
-    private fun newFilm(adapter: FilmsAdapter) {
+    private fun newFilm() {
         val f = Film()
         f.title = "<New film>"
         f.imageResId = R.mipmap.ic_launcher
         FilmDataSource.films.add(f)
-        adapter.notifyItemInserted(FilmDataSource.films.size - 1)
+        adaptador.notifyDataSetChanged()
+    }
+    private fun deleteSelectedFilm() {
+        bindings.pelisList.let {
+            val indices = it.checkedItemPositions
+            val toDelete: MutableList<Film> = ArrayList()
+            for (i in 0 until indices.size()) {
+                if (indices.valueAt(i)) {
+                    toDelete.add(filmList[indices.keyAt(i)])
+                }
+            }
+            filmList.removeAll(toDelete)
+            adaptador.notifyDataSetChanged()
+        }
+        //bindings.pelisList.clearChoices()
+    }
+    private fun selectMultipleFilm(){
+        bindings.pelisList.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+        bindings.pelisList.setMultiChoiceModeListener(
+            object : MultiChoiceModeListener {
+                override fun onCreateActionMode( mode: ActionMode, menu: Menu
+                ) : Boolean {
+                    val inflater = mode.menuInflater
+                    inflater.inflate(R.menu.film_list_contextual_menu, menu)
+                    return true
+                }
+                override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+                    return false
+                }
+                override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+                    return when (item.itemId) {
+                        R.id.miDelete -> {
+                            deleteSelectedFilm()
+                            mode.finish()
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                override fun onDestroyActionMode(mode: ActionMode) {}
+                override fun onItemCheckedStateChanged(
+                    mode: ActionMode, position: Int, id: Long, checked: Boolean) {
+                    val count = bindings.pelisList.checkedItemCount
+                    mode.title = "$count ${getString(R.string.multipleMenuCountSelected)}"
+                }
+            })
     }
     private fun initLayouts() {
         bindings = ActivityFilmListBinding.inflate(layoutInflater)
@@ -90,24 +138,25 @@ class FilmListActivity : AppCompatActivity() {
             setContentView(root)
             setSupportActionBar(findViewById(R.id.mtMenu)) // Adds app bar
             // ListView
-//            val adaptador = FilmsArrayAdapter(
-//                this,
-//                R.layout.item_peli, filmList
-//            )
-//            pelisList.setOnItemClickListener({ parent: AdapterView<*>, view: View, position: Int, id: Long ->
-//                verPeli(position) //Intent
-//            })
-//            pelisList.adapter = adaptador
+            adaptador = FilmsArrayAdapter(
+                this@FilmListActivity,
+                R.layout.item_peli, filmList
+            )
+            pelisList.setOnItemClickListener({ parent: AdapterView<*>, view: View, position: Int, id: Long ->
+                verPeli(position) //Intent
+            })
+            pelisList.adapter = adaptador
+
+            selectMultipleFilm()
 
             // RecyclerView
-            val adaptador = FilmsAdapter(filmList) { //TODO(canviar pulsar, mirar apunts listas final)
-                position -> verPeli(position)
-            }
-            adapt = adaptador//TODO cutre assignacio global del adaptador
-            val recyclerView: RecyclerView = findViewById(R.id.recyclerviewPelis)
-            recyclerView.layoutManager = LinearLayoutManager(this@FilmListActivity)
-
-            recyclerView.adapter = adaptador
+//            adaptador = FilmsAdapter(filmList) { //TODO(canviar pulsar, mirar apunts listas final)
+//                position -> verPeli(position)
+//            }
+//            val recyclerView: RecyclerView = findViewById(R.id.recyclerviewPelis)
+//            recyclerView.layoutManager = LinearLayoutManager(this@FilmListActivity)
+//
+//            recyclerView.adapter = adaptador
         }
     }
     private fun initCompose() {

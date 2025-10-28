@@ -6,12 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/textViewTituloPeli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/tituloPeli"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageViewPeli"
+        app:layout_constraintTop_toBottomOf="@+id/mtHomeMenu" />
+
     <ImageView
         android:id="@+id/imageViewPeli"
         android:layout_width="196dp"
         android:layout_height="227dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="80dp"
         android:contentDescription="@string/contentImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,42 +33,18 @@
         android:id="@+id/verPeliIMDB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="20dp"
         android:text="@string/verIMDB"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/volverPrincipal"
-        app:layout_constraintTop_toBottomOf="@+id/textViewGeneroPeli"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/textViewTituloPeli"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="56dp"
-        android:text="@string/tituloPeli"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imageViewPeli"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewFormatoPeli"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="130dp"
-        android:layout_marginTop="44dp"
-        android:text="@string/formatoPeli"
-        app:layout_constraintStart_toEndOf="@+id/textViewDirector"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTituloPeli" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewGeneroPeli" />
 
     <TextView
         android:id="@+id/textViewAnyPeli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="48dp"
         android:text="@string/anyPeli"
         app:layout_constraintStart_toStartOf="@+id/textViewGeneroPeli"
         app:layout_constraintTop_toBottomOf="@+id/textViewDirector" />
@@ -65,7 +53,8 @@
         android:id="@+id/textViewDirector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="48dp"
         android:text="@string/directorPeli"
         app:layout_constraintStart_toStartOf="@+id/textViewAnyPeli"
         app:layout_constraintTop_toBottomOf="@+id/textViewTituloPeli" />
@@ -74,7 +63,8 @@
         android:id="@+id/textViewGeneroPeli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
         android:text="@string/generoPeli"
         app:layout_constraintStart_toStartOf="@+id/verPeliIMDB"
         app:layout_constraintTop_toBottomOf="@+id/textViewAnyPeli" />
@@ -83,7 +73,8 @@
         android:id="@+id/textViewNotas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
         android:text="@string/notasPeli"
         app:layout_constraintStart_toStartOf="@+id/textViewFormatoPeli"
         app:layout_constraintTop_toBottomOf="@+id/textViewFormatoPeli" />
@@ -92,19 +83,44 @@
         android:id="@+id/volverPrincipal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="28dp"
         android:text="@string/volverPrincipal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageViewPeli"
+        app:layout_constraintHorizontal_bias="0.315"
         app:layout_constraintStart_toStartOf="@+id/imageViewPeli" />
 
     <Button
         android:id="@+id/editPeli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="28dp"
         android:text="@string/editPeli"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewFormatoPeli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/formatoPeli"
+        app:layout_constraintStart_toEndOf="@+id/textViewDirector"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTituloPeli" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/mtHomeMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/datosPeli" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

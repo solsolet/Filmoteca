@@ -40,4 +40,7 @@
     <string name="online">En linea</string>
     <string name="director" translatable="false">Director</string>
     <string name="anyadirPeli">Añadir Peli</string>
+    <string name="home">Principal</string>
+    <string name="borrarPeli">Borrar peli</string>
+    <string name="multipleMenuCountSelected">seleccionadas</string>
 </resources>

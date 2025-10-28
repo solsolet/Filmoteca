@@ -2,7 +2,7 @@ package es.ua.eps.filmoteca
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -28,10 +28,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NavUtils
 import androidx.core.net.toUri
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
 
 class FilmDataActivity : AppCompatActivity() {
+    companion object {
+        const val EXTRA_FILM = "EXTRA_FILM" //ID
+    }
     private lateinit var bindings : ActivityFilmDataBinding
     var textEditado = ""
 
@@ -39,6 +43,9 @@ class FilmDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         initUI()
+        //App bar
+        setSupportActionBar(findViewById(R.id.mtHomeMenu))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
     private fun initUI() {
         when (Filmoteca.GlobalMode) {
@@ -46,10 +53,16 @@ class FilmDataActivity : AppCompatActivity() {
             Mode.Compose -> initCompose()
         }
     }
-    companion object {
-        const val EXTRA_FILM = "EXTRA_FILM" //ID
-        val ID_MENU = Menu.FIRST
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id: Int = item.itemId
+        if (id == android.R.id.home) { // ID special for "home"
+            NavUtils.navigateUpTo(this@FilmDataActivity,
+                Intent(this@FilmDataActivity, FilmListActivity::class.java))
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
+
     //  Centralize Intents
     private fun verPeliIMDB(link: String?){
         val peliIMDB = Intent(Intent.ACTION_VIEW, link?.toUri())

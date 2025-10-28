@@ -613,3 +613,174 @@ Otro problema es que sabiendo como debía hacer el código no me hacía nada al 
 
 
 ### Ejercicio 5
+
+## Menús
+Como observación para esta práctica, se llegó a implementar todo aquello que faltaba de la anterior para partir de esa base.
+### Ejercicio 1
+Para hacer esta actividad he creado el menú `film_list_menu` dentro de `res/menu`:
+```kotlin
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/miNewFilm"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/anyadirPeli"
+        app:showAsAction="always" />
+    <item android:title="@string/acercaDe"
+        android:id="@+id/miShowAbout"
+        android:icon="@android:drawable/ic_dialog_info"
+        app:showAsAction="ifRoom" />
+</menu>
+```
+He usado los iconos por defecto que vienen en Android Studio, pero sería conveniente substituirlos en el futuro por algunos del mismo estilo ('añadirpeli' es feo y no pega con el otro).
+
+Este menú se ha añadido gracias a que en el _layout_ `activity_film_list.xml` le he puesto un elemento _Toolbar_ y por código en `FilmListActivity` se ha usado `setSupportActionBar(findViewById(R.id.mtMenu))`.
+
+La funcionalidad de los botones del menú la cubren a sobre carga de los métodos `onCreateOptionsMenu` y `onOptionsItemSelected` junto a las funciones `openAbout` y `newFilm`:
+```kotlin
+override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    super.onCreateOptionsMenu(menu)
+    menuInflater.inflate(R.menu.film_list_menu, menu)
+    return true
+}
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    super.onOptionsItemSelected(item)
+    when (item.itemId) {
+        R.id.miNewFilm -> {
+            newFilm(adapt)
+            return true
+        }
+        R.id.miShowAbout -> {
+            openAbout()
+            return true
+        }
+    }
+    return false
+}
+private fun openAbout() {
+    val openA = Intent(this@FilmListActivity, AboutActivity::class.java)
+    startActivity(openA)
+}
+private fun newFilm(adapter: FilmsAdapter) {
+    val f = Film()
+    f.title = "<New film>"
+    f.imageResId = R.mipmap.ic_launcher
+    FilmDataSource.films.add(f)
+    adapter.notifyItemInserted(FilmDataSource.films.size - 1)
+}
+``` 
+Todo esto nos deja un _FilmList_ con este aspecto: ![Pantalla Film List](img-readme/Menu-FilmList.png)
+
+### Ejercicio 2
+En este ejercicio se ha implementado el menú de manera similar con la diferencia de no declarar nuestro propio xml, todas las funciones de _home_ se pueden declarar por defecto. Para ello he usado este código en cada actividad que necesitase el botón de _home_:
+```kotlin
+setSupportActionBar(findViewById(R.id.mtHomeMenu))
+supportActionBar?.setDisplayHomeAsUpEnabled(true)
+```
+```kotlin
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    val id: Int = item.itemId
+    if (id == android.R.id.home) { // ID special for "home"
+        NavUtils.navigateUpTo(this@FilmDataActivity,
+            Intent(this@FilmDataActivity, FilmListActivity::class.java))
+        return true
+    }
+    return super.onOptionsItemSelected(item)
+}
+```
+#### Problemas
+No estaba usando `supportActionBar` sino `actionBar` a secas y eso causaba que no fuese el botón a pesar de tenerlo todo bien. Con un par de búsquedas en la página oficial y ejemplos ha bastado para probarlo y darme cuenta.
+
+Otro pequeño percance es que no tenía todas las clases heredando de _AppCompatActivity_ y por ello alguna daba error al principio, eso no me pasa por no seguir leyendo de los apuntes cuando encuentro la respuesta que busco.
+
+### Ejercicio 3
+Este ejercicio ha sido un poco lioso por que tenía la implementación con _RecyclerView_ y en los apuntes aparecía con _ListView_. He intentado implementarlo primero con _Recycler_, pero como no paraban de salirme problemas y errores al final me he decantado por lo "sencillo" que tiene _ListView_ de tener funciones que ayudan a los menús contextuales. De todos modos, con una implementación u otra, a fin de cuentas lo que iba a ser era similar:
+1. Implementación de un modo u otro (_RecyclerView_/_ListView_).
+2. Llamar a alguna función que habilite la selección múltiple, `selectMultipleFilm`.
+3. Crear un menú contextual con botón para borrar.
+4. Si el usuario pulsa ese botón con alguna película seleccionada, llama a una función de borrado, `deleteSelectedFilm`.
+
+El código que he escrito y me ha funcionado es el siguiente:
+```kotlin
+private fun newFilm() {
+    val f = Film()
+    f.title = "<New film>"
+    f.imageResId = R.mipmap.ic_launcher
+    FilmDataSource.films.add(f)
+    adaptador.notifyDataSetChanged()
+}
+private fun deleteSelectedFilm() {
+    bindings.pelisList.let {
+        val indices = it.checkedItemPositions
+        val toDelete: MutableList<Film> = ArrayList()
+        for (i in 0 until indices.size()) {
+            if (indices.valueAt(i)) {
+                toDelete.add(filmList[indices.keyAt(i)])
+            }
+        }
+        filmList.removeAll(toDelete)
+        adaptador.notifyDataSetChanged()
+    }
+    //bindings.pelisList.clearChoices()
+}
+private fun selectMultipleFilm(){
+    bindings.pelisList.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+    bindings.pelisList.setMultiChoiceModeListener(
+        object : MultiChoiceModeListener {
+            override fun onCreateActionMode( mode: ActionMode, menu: Menu
+            ) : Boolean {
+                val inflater = mode.menuInflater
+                inflater.inflate(R.menu.film_list_contextual_menu, menu)
+                return true
+            }
+            override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+                return false
+            }
+            override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+                return when (item.itemId) {
+                    R.id.miDelete -> {
+                        deleteSelectedFilm()
+                        mode.finish()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            override fun onDestroyActionMode(mode: ActionMode) {}
+            override fun onItemCheckedStateChanged(
+                mode: ActionMode, position: Int, id: Long, checked: Boolean) {
+                val count = bindings.pelisList.checkedItemCount
+                mode.title = "$count ${getString(R.string.multipleMenuCountSelected)}"
+            }
+        })
+}
+```
+Y para refrescar como era `initLayouts()` en FilmList (teniendo en cuenta que 'adaptador' ha sido declarado al principio con `private lateinit var adaptador : FilmsArrayAdapter`):
+```kotlin
+    private fun initLayouts() {
+        bindings = ActivityFilmListBinding.inflate(layoutInflater)
+
+        with(bindings) {
+            setContentView(root)
+            setSupportActionBar(findViewById(R.id.mtMenu)) // Adds app bar
+            // ListView
+            adaptador = FilmsArrayAdapter(
+                this@FilmListActivity,
+                R.layout.item_peli, filmList
+            )
+            pelisList.setOnItemClickListener({ parent: AdapterView<*>, view: View, position: Int, id: Long ->
+                verPeli(position) //Intent
+            })
+            pelisList.adapter = adaptador
+
+            selectMultipleFilm()
+        }
+    }
+```
+
+#### Problemas
+A parte de los ya mencionados con el tipo de implementación, me ha pasado también que al tener ya todas las funciones implementadas y a priori funcionales, al eliminar una o varias películas se cerraba la aplicación. No tenía ningún error de compilación así que en la ejecución estaba pasando algo raro. Después de mirar y remirar el código con el depurador, me doy cuenta que por intentar simplificarme la vida y sacar el adaptador como variable que pueda usar FilmList sin tener que pasarlo cada vez que llamo a una función, al haberlo declarado fuera e inicializarlo únicamente en `initLayout()` no me di cuenta que estaba mal inicializado. Le había puesto que debe ser un FilmsAdapter en lugar de un FilmsArrayAdapter, que son el adaptador de _RecyclerView_ y el de _ListView_ respectivamente. Con ese cambio de tipo se arregló todo.
+
+### Demo
+Podemos ver el funcionamiento de los menús y la barra contextual en la ![demo](img-readme/Demo_P5-Menus.mp4) en la carpeta `img-readme`.
