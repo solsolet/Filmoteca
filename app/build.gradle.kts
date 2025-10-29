@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.activity)
 
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.fragment)
 
     // Dependencies de Debug (Ferramentes i Previews)
     debugImplementation(libs.androidx.compose.ui.tooling)

@@ -784,3 +784,6 @@ A parte de los ya mencionados con el tipo de implementación, me ha pasado tambi
 
 ### Demo
 Podemos ver el funcionamiento de los menús y la barra contextual en la ![demo](img-readme/Demo_P5-Menus.mp4) en la carpeta `img-readme`.
+
+## Fragment
+No me ha dado tiempo a poder implementar correctamente el codigo y hacer que sea funcional antes de la fecha limite de la entrega.

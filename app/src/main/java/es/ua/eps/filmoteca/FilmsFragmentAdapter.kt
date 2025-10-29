@@ -8,13 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 
 
-class FilmsArrayAdapter(
+class FilmsFragmentAdapter(
     context: FilmListActivity, resource: Int,
     objects: List<Film>?
 ) : ArrayAdapter<Film>(context, resource, objects!!) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var view: View = convertView?: LayoutInflater.from(this.context)
+        val view: View = convertView?: LayoutInflater.from(this.context)
             .inflate(R.layout.item_peli, parent, false)
 
         val peliTitulo: TextView = view.findViewById(R.id.titulo)
