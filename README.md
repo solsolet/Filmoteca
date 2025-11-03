@@ -786,4 +786,7 @@ A parte de los ya mencionados con el tipo de implementación, me ha pasado tambi
 Podemos ver el funcionamiento de los menús y la barra contextual en la ![demo](img-readme/Demo_P5-Menus.mp4) en la carpeta `img-readme`.
 
 ## Fragment
-No me ha dado tiempo a poder implementar correctamente el codigo y hacer que sea funcional antes de la fecha limite de la entrega.
+
+### Demo
+Podemos ver el funcionamiento de la implementación con fragments e la siguiente ![demo](img-readme/Demo_P6-Fragment.mp4).
+![Aspecto Fragments en una tablet](img-readme/FragmentTablet.png)

@@ -27,20 +27,16 @@ class MainActivity : AppCompatActivity(), FilmListFragment.OnItemSelectedListene
 //                .add(R.id.fragment_container, ppalFragment)
 //                .commit()
 //        }
-        // Comprueba si estamos usando el layout dinámico
         if (findViewById<View?>(R.id.fragment_container) != null) {
-            // Si se está restaurando, no hace falta cargar el fragmento
+
             if (savedInstanceState != null) return
 
-            // Creamos el fragmento
             val ppalFragment = FilmListFragment()
 
-            // Pasamos los extras del intent al fragmento
             ppalFragment.arguments = intent.extras
 
-            // Añadimos el fragmento al contenedor
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, ppalFragment)
+            supportFragmentManager.beginTransaction()   // add fragment to container
+                //.add(R.id.fragment_container, ppalFragment)
                 .commit()
         }
     }
@@ -48,11 +44,9 @@ class MainActivity : AppCompatActivity(), FilmListFragment.OnItemSelectedListene
     override fun onItemSelected(position: Int) {
         var detalleFragment = supportFragmentManager.findFragmentById(R.id.detalle_fragment) as FilmDataFragment?
         if (detalleFragment != null) {
-            // Tipo estático: actualizamos directamente el fragmento
-            detalleFragment.setFilm(position)
+            detalleFragment.setFilm(position)   // static: update fragment
         } else {
-            // Tipo dinámico: hacemos transición al nuevo fragmento
-            detalleFragment = FilmDataFragment()
+            detalleFragment = FilmDataFragment()// dinamic: transition to new fragment
             val args = Bundle()
             args.putInt(FilmDataFragment.Companion.EXTRA_FILM_INDEX, position)
             detalleFragment.arguments = args

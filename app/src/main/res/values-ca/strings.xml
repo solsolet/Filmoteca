@@ -37,4 +37,5 @@
     <string name="home">Principal</string>
     <string name="borrarPeli">Borrar peli</string>
     <string name="multipleMenuCountSelected">seleccionades</string>
+    <string name="hello_blank_fragment">Hola fragmet en blanc</string>
 </resources>
