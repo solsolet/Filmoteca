@@ -15,6 +15,18 @@ class MainActivity : AppCompatActivity(), FilmListFragment.OnItemSelectedListene
         setContentView(R.layout.activity_main)
         //setContentView(bindings.root)
 
+//        if (findViewById<View?>(R.id.isLargeLayout) != null) {
+//            // Ja hi ha fragments estàtics al XML, no fem res
+//            return
+//        }
+//        if (savedInstanceState == null) {
+//            val ppalFragment = FilmListFragment()
+//            ppalFragment.arguments = intent.extras
+//
+//            supportFragmentManager.beginTransaction()
+//                .add(R.id.fragment_container, ppalFragment)
+//                .commit()
+//        }
         // Comprueba si estamos usando el layout dinámico
         if (findViewById<View?>(R.id.fragment_container) != null) {
             // Si se está restaurando, no hace falta cargar el fragmento
@@ -28,7 +40,8 @@ class MainActivity : AppCompatActivity(), FilmListFragment.OnItemSelectedListene
 
             // Añadimos el fragmento al contenedor
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, ppalFragment).commit()
+                .add(R.id.fragment_container, ppalFragment)
+                .commit()
         }
     }
 

@@ -6,21 +6,19 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AbsListView.MultiChoiceModeListener
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 
 class FilmListFragment : ListFragment() {
     var callback: OnItemSelectedListener? = null
 
-    // Interfaz que debe implementar la actividad contenedora
     interface OnItemSelectedListener {
         fun onItemSelected(position: Int)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val adapter: ArrayAdapter<Film> = FilmsFragmentAdapter(activity as FilmListActivity, R.layout.item_peli, FilmDataSource.films)
+        val adapter = FilmsFragmentAdapter(requireContext(), R.layout.item_peli, FilmDataSource.films)
         listAdapter = adapter
 
         setHasOptionsMenu(true)

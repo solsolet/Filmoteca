@@ -7,7 +7,6 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 
-
 class FilmsArrayAdapter(
     context: FilmListActivity, resource: Int,
     objects: List<Film>?

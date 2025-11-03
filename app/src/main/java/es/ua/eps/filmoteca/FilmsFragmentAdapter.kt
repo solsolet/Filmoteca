@@ -1,5 +1,6 @@
 package es.ua.eps.filmoteca
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,9 +8,8 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 
-
 class FilmsFragmentAdapter(
-    context: FilmListActivity, resource: Int,
+    context: Context, resource: Int,
     objects: List<Film>?
 ) : ArrayAdapter<Film>(context, resource, objects!!) {
 
