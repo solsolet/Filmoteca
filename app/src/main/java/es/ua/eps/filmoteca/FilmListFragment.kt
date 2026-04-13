@@ -8,6 +8,7 @@ import android.widget.AbsListView.MultiChoiceModeListener
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
+import androidx.core.util.size
 
 class FilmListFragment : ListFragment() {
     var callback: OnItemSelectedListener? = null
@@ -72,7 +73,7 @@ class FilmListFragment : ListFragment() {
     private fun borrarItemsSeleccionados() {
         val indices = listView.checkedItemPositions
         val toDelete =  mutableListOf<Film>()
-        for (i in 0 until indices.size()) {
+        for (i in 0 until indices.size) {
             if (indices.valueAt(i)) {
                 toDelete.add(FilmDataSource.films[indices.keyAt(i)])
             }
