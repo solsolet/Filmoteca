@@ -52,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
             .setFilterByAuthorizedAccounts(false)
             // This tells Google which project/app is requesting sign-in.
             .setServerClientId(WEB_CLIENT_ID)
+            .setAutoSelectEnabled(false)
             // Requests a nonce for extra security (best practice).
             // In production you'd generate this server-side; here we skip it.
             .build()
