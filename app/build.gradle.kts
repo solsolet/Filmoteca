@@ -63,4 +63,14 @@ dependencies {
 
     // Dependencies de Debug (Ferramentes i Previews)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Credential MAnager
+    implementation(libs.androidx.credentials)
+    // For devices running Android 13 (API 33) and below.
+    implementation(libs.androidx.credentials.play.services.auth)
+    // Google Id SDK
+    implementation(libs.googleid)
+
+    // Per a que vaja el botó Sign In de Google
+    implementation(libs.play.services.auth)
 }

@@ -3,12 +3,16 @@ package es.ua.eps.filmoteca
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.AbsListView.MultiChoiceModeListener
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 import androidx.core.util.size
+import androidx.credentials.CredentialManager
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class FilmListFragment : ListFragment() {
     var callback: OnItemSelectedListener? = null
@@ -98,6 +102,14 @@ class FilmListFragment : ListFragment() {
                 abrirAcercaDe()
                 return true
             }
+            R.id.miCloseSession -> {
+                signOut()
+                return true
+            }
+            R.id.miDisconnect -> {
+                disconnect()
+                return true
+            }
         }
         return false
     }
@@ -111,5 +123,43 @@ class FilmListFragment : ListFragment() {
         val f = Film()
         FilmDataSource.films.add(f)
         (listAdapter as FilmsFragmentAdapter).notifyDataSetChanged()
+    }
+
+    /**
+     * Sign out: clears the local session.
+     * The user can sign back in next time with the same or different account.
+     */
+    private fun signOut() {
+        UserData.clear()
+        // Go back to login screen
+        val intent = Intent(requireActivity(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+    /**
+     * Disconnect: clears session AND tells Credential Manager to forget this app
+     * so the user will be prompted to choose an account again next time.
+     */
+    private fun disconnect() {
+        val credentialManager = CredentialManager.create(requireContext())
+        // ClearCredentialStateRequest tells the system to revoke the stored session
+        lifecycleScope.launch {
+            try {
+                credentialManager.clearCredentialState(
+                    androidx.credentials.ClearCredentialStateRequest()
+                )
+            } catch (e: Exception) {
+                Log.e("FilmListFragment", "Error disconnecting: ${e.message}")
+            } finally {
+                // Always clear local data and go to login, even if the remote call failed
+                UserData.clear()
+                val intent = Intent(requireActivity(), LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                requireActivity().finish()
+            }
+        }
     }
 }

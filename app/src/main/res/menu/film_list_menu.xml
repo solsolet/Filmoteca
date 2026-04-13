@@ -11,4 +11,11 @@
         android:id="@+id/miShowAbout"
         android:icon="@android:drawable/ic_dialog_info"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/miCloseSession"
+        android:title="Close session" />
+    <item
+        android:id="@+id/miDisconnect"
+        android:title="Disconnect account" />
 </menu>

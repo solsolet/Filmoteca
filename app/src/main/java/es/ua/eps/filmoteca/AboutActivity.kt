@@ -74,6 +74,13 @@ class AboutActivity : AppCompatActivity() {
             bindings.button.setOnClickListener  { goWebsite() }
             bindings.button2.setOnClickListener { obtainSupport() }
             bindings.button3.setOnClickListener { closeActivity() }
+
+            // Show the logged-in user's name if available
+            if (UserData.isSignedIn) {
+                // Find the TextView where you want to show the name.
+                // Adapt the view ID to whatever you have in activity_about.xml
+                tvUserName.text = UserData.displayName ?: "Unknown user"
+            }
         }
     }
     private fun initCompose() { //no se què fer ací
