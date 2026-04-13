@@ -3,40 +3,23 @@ package es.ua.eps.filmoteca
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
-import es.ua.eps.filmoteca.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), FilmListFragment.OnItemSelectedListener {
-
-    private lateinit var bindings : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //setContentView(bindings.root)
 
-//        if (findViewById<View?>(R.id.isLargeLayout) != null) {
-//            // Ja hi ha fragments estàtics al XML, no fem res
-//            return
-//        }
-//        if (savedInstanceState == null) {
-//            val ppalFragment = FilmListFragment()
-//            ppalFragment.arguments = intent.extras
-//
-//            supportFragmentManager.beginTransaction()
-//                .add(R.id.fragment_container, ppalFragment)
-//                .commit()
-//        }
-        if (findViewById<View?>(R.id.fragment_container) != null) {
-
-            if (savedInstanceState != null) return
-
+        if (findViewById<View?>(R.id.isLargeLayout) != null) {
+            // Ja hi ha fragments estàtics al XML, no fem res
+            return
+        }
+        if (savedInstanceState == null) {
             val ppalFragment = FilmListFragment()
-
             ppalFragment.arguments = intent.extras
 
-            supportFragmentManager.beginTransaction()   // add fragment to container
-                //.add(R.id.fragment_container, ppalFragment)
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, ppalFragment)
                 .commit()
         }
     }
