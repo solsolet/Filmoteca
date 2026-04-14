@@ -13,6 +13,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import es.ua.eps.filmoteca.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,6 +38,10 @@ class LoginActivity : AppCompatActivity() {
         // Set up the sign-in button click listener
         binding.btnSignIn.setOnClickListener {
             launchGoogleSignIn()
+        }
+
+        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+            Log.d("FCM_TOKEN", token)
         }
     }
 
