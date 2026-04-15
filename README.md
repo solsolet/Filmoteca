@@ -2,7 +2,7 @@
 Aplicación de consulta de pelis de un catálogo virtual donde se puede pulsar para ver el detalle de la película, actualizarla, añadir más o eliminarlas.
 
 ## Demo
-Se puede ver la demo del proyecto en [demo_Filmoteca_CredentialFirebase.mp4](). Cualquier problema con la versión entregada por Moodle (tanto del proyecto como del README) se puede usar el repositorio donde se encuentra alojada la práctica: [https://github.com/solsolet/Filmoteca.git](https://github.com/solsolet/Filmoteca.git)
+Se puede ver la demo del proyecto en [demo_Filmoteca_CredentialFirebase.mp4](img-readme/demo_Filmoteca_CredentialFirebase.mp4). Cualquier problema con la versión entregada por Moodle (tanto del proyecto como del README) se puede usar el repositorio donde se encuentra alojada la práctica: [https://github.com/solsolet/Filmoteca.git](https://github.com/solsolet/Filmoteca.git)
 
 Para probar la aplicación directamente en un dispositivo Android (SDK <= 26) se puede instalar la APK: Filmoteca.apk o descargándola de [GitHub]().
 
@@ -146,3 +146,4 @@ A diferencia de los *notification messages* (que el sistema muestra automáticam
 
 ## Anotaciones
 La aplicación funciona para dispositivos físicos. No se ha logrado que funcionase con el emulador (ver Problema 5).
+Las pausas que se ven en la demo de la aplicación es por que se está lanzando una nueva campaña para mostrar la notificación.
