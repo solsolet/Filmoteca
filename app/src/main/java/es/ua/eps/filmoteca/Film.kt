@@ -1,14 +1,23 @@
 package es.ua.eps.filmoteca
 
 class Film {
-    var imageResId = 0 // Propiedades de la clase
     var title: String? = null
     var director: String? = null
-    var year = 0
-    var genre = 0
-    var format = 0
+    var year: Int = 0
+    var genre: Int = 0
+    var format: Int = 0
     var imdbUrl: String? = null
+    var imageResId: Int = 0 // Propiedades de la clase
     var comments: String? = null
+
+    var latitude: Double = 0.0 // Coordinates of the filming location
+    var longitude: Double = 0.0
+
+    var hasGeofence: Boolean = false // Whether a geofence is currently registered for this film
+
+    val hasLocation: Boolean // Helper to know if a valid location has been set
+        get() = latitude != 0.0 || longitude != 0.0
+
 
     override fun toString(): String {
         return title?:"<Sin titulo>" // Al convertir a cadena mostramos su título

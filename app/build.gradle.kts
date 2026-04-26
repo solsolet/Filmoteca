@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,6 +20,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Read MAPS_API_KEY directly from local.properties by parsing lines
+        val mapsApiKey = rootProject.file("local.properties")
+            .takeIf { it.exists() }
+            ?.readLines()
+            ?.firstOrNull { it.startsWith("MAPS_API_KEY=") }
+            ?.substringAfter("=")
+            ?.trim()
+            ?: ""
+
+        manifestPlaceholders["mapsApiKey"] = mapsApiKey
     }
 
     buildTypes {
@@ -65,7 +78,7 @@ dependencies {
     // Dependencies de Debug (Ferramentes i Previews)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    // Credential MAnager
+    // Credential Manager
     implementation(libs.androidx.credentials)
     // For devices running Android 13 (API 33) and below.
     implementation(libs.androidx.credentials.play.services.auth)
@@ -74,6 +87,8 @@ dependencies {
 
     // Per a que vaja el botó Sign In de Google
     implementation(libs.play.services.auth)
+    // Per als mapes
+    implementation(libs.play.services.maps)
 
     // Import the Firebase BoM
     implementation(platform(libs.firebase.bom))
