@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -51,28 +52,45 @@ import es.ua.eps.filmoteca.databinding.ActivityFilmEditBinding
 class FilmEditActivity : AppCompatActivity() {
     private lateinit var bindings : ActivityFilmEditBinding
 
-    /**
-     * Permission launcher for location permissions.
-     * Must be a property (not inside a function) — see the explanation
-     * in MainActivity where we did the same for notifications.
-     */
-    private val locationPermissionLauncher = registerForActivityResult(
+    // MARK: LAUNCHERS + PERMISSIONS
+    private val fineLocationLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val fineGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true
-        val backgroundGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            permissions[Manifest.permission.ACCESS_BACKGROUND_LOCATION] == true
-        } else true // Background location permission didn't exist before Android 10
-
-        if (fineGranted && backgroundGranted) {
-            // Permissions granted — proceed with adding the geofence
-            addGeofenceForCurrentFilm()
+        if (fineGranted) {
+            // Fine location granted — now ask for background separately (Android 10+ only)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                backgroundLocationLauncher.launch(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            } else {
+                // Android < 10: background location doesn't exist, proceed directly
+                addGeofenceForCurrentFilm()
+            }
         } else {
             Toast.makeText(
                 this,
-                "Location permission is required to set geofences",
+                "Fine location permission is required to set geofences",
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    private val backgroundLocationLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { backgroundGranted ->
+        if (backgroundGranted) {
+            addGeofenceForCurrentFilm()
+        } else {
+            // Background location denied — on Android 11+ the user has to go to Settings
+            // to grant "Allow all the time". We show a helpful message.
+            Toast.makeText(
+                this,
+                "Please allow location 'All the time' in Settings for geofences to work in background",
+                Toast.LENGTH_LONG
+            ).show()
+            // We still try to add the geofence — it will work when app is in foreground at least
+            addGeofenceForCurrentFilm()
         }
     }
 
@@ -221,32 +239,33 @@ class FilmEditActivity : AppCompatActivity() {
      * both dialogs at the same time. So we request fine location first; if it's
      * already granted we request background location as a second step.
      */
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun requestLocationPermissionsAndAddGeofence() {
-        val fineLocationGranted = ContextCompat.checkSelfPermission(
-            this@FilmEditActivity, Manifest.permission.ACCESS_FINE_LOCATION
+        val fineGranted = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
-        if (!fineLocationGranted) {
-            // Request fine (and coarse) location first
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                locationPermissionLauncher.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                    )
+        val backgroundGranted =
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+
+        when {
+            // Everything already granted — go directly
+            fineGranted && backgroundGranted -> addGeofenceForCurrentFilm()
+
+            // Fine not granted yet — start the two-step flow
+            !fineGranted -> fineLocationLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
                 )
-            } else {
-                locationPermissionLauncher.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                )
-            }
-        } else {
-            // Fine location already granted — proceed directly
-            addGeofenceForCurrentFilm()
+            )
+
+            // Fine granted but background not yet — ask for background
+            else -> backgroundLocationLauncher.launch(
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
         }
     }
 
