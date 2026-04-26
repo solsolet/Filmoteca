@@ -40,8 +40,8 @@ object FilmDataSource {
         f.genre = Film.Companion.GENRE_COMEDY
         f.imdbUrl = "https://www.imdb.com/title/tt30017619/"
         f.year = 2025
-        f.latitude = 38.345
-        f.longitude = -0.481
+        f.latitude = 38.50345
+        f.longitude = -0.237535
         films.add(f)
 
         f = Film()
