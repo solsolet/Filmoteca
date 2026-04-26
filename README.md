@@ -2,11 +2,12 @@
 Aplicación de consulta de pelis de un catálogo virtual donde se puede pulsar para ver el detalle de la película, actualizarla, añadir más o eliminarlas.
 
 ## Demo
-Se puede ver la demo del proyecto en [demo_Filmoteca_CredentialFirebase.mp4](img-readme/demo_Filmoteca_CredentialFirebase.mp4). Cualquier problema con la versión entregada por Moodle (tanto del proyecto como del README) se puede usar el repositorio donde se encuentra alojada la práctica: [https://github.com/solsolet/Filmoteca.git](https://github.com/solsolet/Filmoteca.git)
+Se puede ver la demo del proyecto en [demo_Filmoteca_CredentialFirebase.mp4](img-readme/demo_Filmoteca_Maps.mp4). Cualquier problema con la versión entregada por Moodle (tanto del proyecto como del README) se puede usar el repositorio donde se encuentra alojada la práctica: [https://github.com/solsolet/Filmoteca.git](https://github.com/solsolet/Filmoteca.git)
 
 Para probar la aplicación directamente en un dispositivo Android (SDK <= 26) se puede instalar la APK: Filmoteca.apk o descargándola de [GitHub](https://github.com/solsolet/Filmoteca/releases/tag/Servicios).
 
 ## 📋 Resumen de la arquitectura
+<!--TODO: añadir las clases que faltan y explicar resumidamente qué hacen-->
 ```bash
 app/src/main/
 ├── java/es/ua/eps/filmoteca/
@@ -14,7 +15,7 @@ app/src/main/
 │   ├── Mode.kt                       # Enum: Bindings | Compose — controla qué sistema de IU está activo
 │   ├── UserData.kt                   # Singleton. Almacena la sesión del usuario que ha iniciado (name, email, token)
 │   │
-│   ├── Film.kt                       # Data class que representa a una película (title, director, year, genre, etc.)
+│   ├── Film.kt                       # Data class que representa a una película (title, director, year, genre... latitude, longitude, hasGeofence and hasLocation)
 │   ├── FilmDataSource.kt             # Lista en memoria de películas compartidas por toda la aplicación
 │   │
 │   ├── LoginActivity.kt              # Entry point. Controla Google Sign-In via Credential Manager
@@ -23,23 +24,29 @@ app/src/main/
 │   ├── FilmDataFragment.kt           # Fragmento que muestra el detalle de la película seleccionada
 │   │
 │   ├── FilmDataActivity.kt           # Standalone activity para mostrar la película seleccionada (fuera de flow del fragmento)
-│   ├── FilmEditActivity.kt           # Actividad para editar los datos de la película
+│   ├── FilmEditActivity.kt           # Actividad para editar los datos de la película (ahora con botones para añadir/eliminar geocerca y pide permisos de ubicación)
 │   ├── AboutActivity.kt              # "About" screen — también muestra el nombre del usuario que ha iniciado la sesión
 │   │
 │   ├── FilmsArrayAdapter.kt          # ArrayAdapter para la ListView en FilmListActivity
 │   ├── FilmsFragmentAdapter.kt       # Variante de ArrayAdapter usado en FilmListFragment
 │   ├── FilmsAdapter.kt               # RecyclerView adapter
 │   │
-│   └── MyFirebaseMessagingService.kt # Servicio FCM. Recibe data messages y añade/actualiza/elimina películas
+│   ├── MapsActivity.kt               # Activity que muestra un GoogleMap con la localización de la película seleccionada
+│   ├── GeofenceManager.kt            # Clase que registra / elimina geocercas (500 m) para películas con ubicación
+│   ├── GeofenceBroadcastReceiver.kt  # Receptor de transiciones de geocerca que genera notificaciones
+│   │
+│   └── MyFirebaseMessagingService.kt # Servicio FCM. Recibe data messages y añade/actualiza/elimina películas. Actualizado para parsear latitude/longitude
 │
 ├── res/
 │   ├── layout/
 │   │   ├── activity_main.xml         # FrameLayout + MaterialToolbar — contenedor para los fragmentos en el móvil
 │   │   ├── activity_login.xml        # Login screen con botón Google Sign-In
 │   │   ├── activity_film_list.xml    # Standalone film list (usado en FilmListActivity)
-│   │   ├── activity_film_data.xml    # Detalle de la película
+│   │   ├── activity_film_data.xml    # Detalle de la película. Ahora con botón "Show on map" que se muestra si la película tiene ubicación
 │   │   ├── activity_film_edit.xml    # Formulario para editar la película
 │   │   ├── activity_about.xml        # About screen
+│   │   │
+│   │   ├── activity_maps.xml         # SupportMapFragment a pantalla completa
 │   │   └── item_peli.xml             # Fila única de película para la lista de pelis
 │   │
 │   ├── layout-large/                 # Tablet layouts
@@ -100,6 +107,41 @@ A diferencia de los *notification messages* (que el sistema muestra automáticam
 - En ambos casos muestra una notificación del sistema con el título de la operación y el nombre de la película.
 **Archivos clave:** `MyFirebaseMessagingService.kt`, `AndroidManifest.xml`, `google-services.json` (no versionado)
 
+- `MyFirebaseMessagingService` se ha adaptado para leer `latitude` y `longitude` del payload de datos y asignarlas a la película recibida.
+- Las películas creadas/actualizadas desde FCM comienzan con `hasGeofence = false` para que la geocerca solo se active manualmente desde la pantalla de edición.
+
+### Maps
+<!--TODO: explicar qué hace Maps activity, funciones más importantes brevemente, parovechar los conocimientos de los comentarios-->
+Se ha incorporado el servicio de Google Maps para mostrar el lugar de rodaje de una película.
+
+- Se han añadido los campos `latitude`, `longitude` y `hasLocation` al `data class Film`.
+- En `activity_film_data.xml` se añadió un botón `btnShowMap` que solo se hace visible si `film.hasLocation == true`.
+- `FilmDataActivity` y `FilmDataFragment` inician `MapsActivity` pasando el índice de la película.
+- `MapsActivity` utiliza un `SupportMapFragment` y `OnMapReadyCallback`.
+- Cuando el mapa está listo, se crea un marcador (`MarkerOptions`) en las coordenadas de la película. El marcador muestra:
+  - título: nombre de la película
+  - snippet: director + año
+- `activity_maps.xml` es un layout simple que contiene únicamente el `SupportMapFragment` a `match_parent`.
+- El API key de Maps se inyecta desde `local.properties` y se declara en el `AndroidManifest.xml` mediante `<meta-data>`.
+
+Esta parte permite al usuario ver la ubicación de rodaje en un mapa interactivo, sin tener que salir de la app.
+
+### Location
+<!--TODO: explicar qué hace GeofenceMAnager y GeofenceBroadcasttReceiver, funciones más importantes brevemente, parovechar los conocimientos de los comentarios-->
+### Location
+Se ha añadido soporte de localización con geocercas para avisar cuando el usuario se acerca al lugar de rodaje.
+
+- `Film.kt` ahora incluye `hasGeofence` para saber si la película tiene una geocerca activa.
+- En `activity_film_edit.xml` se incluyeron botones para:
+  - añadir geocerca
+  - eliminar geocerca
+- `FilmEditActivity` gestiona la petición de permisos de ubicación y llama a `GeofenceManager` para crear o borrar la geocerca.
+- `GeofenceManager` registra geocercas con radio de 500 metros y transiciones de entrada/salida según la práctica.
+- `GeofenceBroadcastReceiver` recibe las transiciones de geofencing y muestra una notificación cuando el usuario entra en el perímetro.
+- El estado se guarda en el modelo de película para que la UI pueda saber si la geocerca está activa.
+
+Con esto, la app puede alertar al usuario al aproximarse al lugar de grabación de una película.
+
 ## Problemas encontrados
 ### 1. Contenido bajo la cámara/notch (edge-to-edge)
 **Problema:** En dispositivos con notch, la lista de películas aparecía por debajo de la cámara sin respetar el padding superior.
@@ -143,6 +185,12 @@ A diferencia de los *notification messages* (que el sistema muestra automáticam
 **Causa:** Credential Manager requiere simultáneamente: un emulador con Google Play Store (no solo Google APIs), una cuenta de Google añadida en Ajustes → Cuentas, y Google Play Services actualizado. En el emulador de API 36 estas condiciones no se cumplían.
  
 **Solución:** La funcionalidad se verificó en un dispositivo físico, donde el flujo completo funcionó correctamente. Como anotación general, para que Credential Manager funcione en emulador hay que asegurarse de usar una imagen con Google Play Store, añadir una cuenta de Google, y actualizar Google Play Services desde la Play Store antes de probar, pero a pesar de haber probado estos pasos no se consiguió que funcionase.
+
+### API key en gradle
+<!--TOOD: explciar problema que no sabía como poner la api key de manera que no se subiese al repo remoto por tanto pensé en ponerla en el arichivo de  local.properties pero me costó que build.gradle (module app) lo detectase bien-->
+
+### API key not found
+<!--TODO: explcia que no encontraba la API key en el manifest por que la etiqueta meta-data no estaba correctamente ubicada dentro de application-->
 
 ## Anotaciones
 La aplicación funciona para dispositivos físicos. No se ha logrado que funcionase con el emulador (ver Problema 5).
