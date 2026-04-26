@@ -136,6 +136,7 @@
 
     <!-- MARK: Geofence -->
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="@dimen/editEditItemWidth"
         android:layout_height="@dimen/editEditItemHeight"
         android:layout_gravity="center"
@@ -144,24 +145,21 @@
 
         <Button
             android:id="@+id/btnAddGeofence"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="wrap_content"
             app:layout_constraintHorizontal_bias="0.5"
-            android:text="Add geofence" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:text="@string/anyade_geofence" />
 
         <Button
             android:id="@+id/btnRemoveGeofence"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="wrap_content"
             app:layout_constraintHorizontal_bias="0.5"
-            android:text="Remove geofence" />
+            android:text="@string/elimina_geofence" />
     </LinearLayout>
 
     <!-- MARK: Save/Cancel -->
@@ -201,8 +199,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editandoPeli" />
     </LinearLayout>
-
-
-
 
 </LinearLayout>

@@ -44,5 +44,7 @@
     <string name="borrarPeli">Borrar peli</string>
     <string name="multipleMenuCountSelected">seleccionadas</string>
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="anyade_geofence">Añade geofence</string>
+    <string name="elimina_geofence">Elimina geofence</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

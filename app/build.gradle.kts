@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "es.ua.eps.filmoteca"
-        minSdk = 26
+        minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -97,4 +97,5 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.google.firebase.messaging)
+    testImplementation(kotlin("test"))
 }

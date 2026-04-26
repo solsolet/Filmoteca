@@ -37,4 +37,6 @@
     <string name="borrarPeli">Delete film</string>
     <string name="multipleMenuCountSelected">selected</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="anyade_geofence">Add geofence</string>
+    <string name="elimina_geofence">Remove geofence</string>
 </resources>

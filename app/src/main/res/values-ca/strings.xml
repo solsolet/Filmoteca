@@ -38,4 +38,6 @@
     <string name="borrarPeli">Borrar peli</string>
     <string name="multipleMenuCountSelected">seleccionades</string>
     <string name="hello_blank_fragment">Hola fragmet en blanc</string>
+    <string name="anyade_geofence">Afig geofence</string>
+    <string name="elimina_geofence">Elimina geofence</string>
 </resources>

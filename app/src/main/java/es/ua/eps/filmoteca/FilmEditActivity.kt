@@ -209,6 +209,8 @@ class FilmEditActivity : AppCompatActivity() {
                 guardar(titulo, director, any, imdb, generoIndex, formatoIndex, comentarios)
             }
             cancelar.setOnClickListener { cerrar() }
+
+            updateGeofenceButtons()
         }
     }
 
@@ -239,15 +241,14 @@ class FilmEditActivity : AppCompatActivity() {
      * both dialogs at the same time. So we request fine location first; if it's
      * already granted we request background location as a second step.
      */
-    @RequiresApi(Build.VERSION_CODES.Q)
     private fun requestLocationPermissionsAndAddGeofence() {
         val fineGranted = ContextCompat.checkSelfPermission(
-            this, Manifest.permission.ACCESS_FINE_LOCATION
+            this@FilmEditActivity, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
         val backgroundGranted =
             ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                this@FilmEditActivity, Manifest.permission.ACCESS_BACKGROUND_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
 
         when {
@@ -277,11 +278,11 @@ class FilmEditActivity : AppCompatActivity() {
             context = this@FilmEditActivity,
             film = peli,
             onSuccess = {
-                Toast.makeText(this, "Geofence added!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FilmEditActivity, "Geofence added!", Toast.LENGTH_SHORT).show()
                 updateGeofenceButtons()
             },
             onFailure = { error ->
-                Toast.makeText(this, "Error adding geofence: $error", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@FilmEditActivity, "Error adding geofence: $error", Toast.LENGTH_LONG).show()
             }
         )
     }
