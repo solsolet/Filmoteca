@@ -25,6 +25,7 @@ android {
         val mapsApiKey = rootProject.file("local.properties")
             .takeIf { it.exists() }
             ?.readLines()
+            //noinspection WrongGradleMethod
             ?.firstOrNull { it.startsWith("MAPS_API_KEY=") }
             ?.substringAfter("=")
             ?.trim()
@@ -74,6 +75,7 @@ dependencies {
 
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.fragment)
+    implementation(libs.play.services.location)
 
     // Dependencies de Debug (Ferramentes i Previews)
     debugImplementation(libs.androidx.compose.ui.tooling)
@@ -89,6 +91,7 @@ dependencies {
     implementation(libs.play.services.auth)
     // Per als mapes
     implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
     // Import the Firebase BoM
     implementation(platform(libs.firebase.bom))
