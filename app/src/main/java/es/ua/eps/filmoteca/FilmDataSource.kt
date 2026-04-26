@@ -27,6 +27,8 @@ object FilmDataSource {
         f.genre = Film.Companion.GENRE_COMEDY
         f.imdbUrl = "https://www.imdb.com/title/tt3783958/?ref_=fn_all_ttl_1"
         f.year = 2017
+        f.latitude = 38.345
+        f.longitude = -0.481
         films.add(f)
 
         f = Film()
@@ -38,6 +40,8 @@ object FilmDataSource {
         f.genre = Film.Companion.GENRE_COMEDY
         f.imdbUrl = "https://www.imdb.com/title/tt30017619/"
         f.year = 2025
+        f.latitude = 38.345
+        f.longitude = -0.481
         films.add(f)
 
         f = Film()
@@ -49,6 +53,8 @@ object FilmDataSource {
         f.genre = Film.Companion.GENRE_SCIFI
         f.imdbUrl = "https://www.imdb.com/title/tt12299608/"
         f.year = 2025
+        f.latitude = 38.345
+        f.longitude = -0.481
         films.add(f)
 
         f = Film()
@@ -60,6 +66,8 @@ object FilmDataSource {
         f.genre = Film.Companion.GENRE_ACTION
         f.imdbUrl = "https://www.imdb.com/title/tt14205554/"
         f.year = 2025
+        f.latitude = 38.345
+        f.longitude = -0.481
         films.add(f)
     }
 }
