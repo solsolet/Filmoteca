@@ -3,6 +3,7 @@ package es.ua.eps.filmoteca
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -135,6 +136,17 @@ class FilmDataActivity : AppCompatActivity() {
             verPeliIMDB.setOnClickListener { verPeliIMDB(peli.imdbUrl) }
             editPeli.setOnClickListener { editPeli(peliInt) }
             volverPrincipal.setOnClickListener { volverPrinc() }
+
+            if (peli.hasLocation) {
+                btnShowMap?.visibility = View.VISIBLE
+                btnShowMap?.setOnClickListener {
+                    val intent = Intent(this@FilmDataActivity, MapsActivity::class.java)
+                    intent.putExtra(MapsActivity.EXTRA_FILM_INDEX, peliInt)
+                    startActivity(intent)
+                }
+            } else {
+                btnShowMap?.visibility = View.GONE
+            }
         }
     }
     private fun initCompose() {

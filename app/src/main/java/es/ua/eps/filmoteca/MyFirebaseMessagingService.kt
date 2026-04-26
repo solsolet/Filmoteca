@@ -86,12 +86,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             this.year = data[KEY_YEAR]?.toIntOrNull() ?: 0
             this.comments = data[KEY_COMMENTS] ?: ""
             this.imageResId = R.mipmap.ic_launcher // default image
+            // parse location from the payload if present
+            this.latitude = data["latitude"]?.toDoubleOrNull() ?: 0.0
+            this.longitude = data["longitude"]?.toDoubleOrNull() ?: 0.0
+            this.hasGeofence = false // hasGeofence is always false for FCM-received films, the user registers geofences manually on device
         }
 
         // Check if a film with the same title already exists
         val existingIndex = FilmDataSource.films.indexOfFirst { it.title == title }
 
         if (existingIndex >= 0) {
+            // Preserve the geofence state when updating — don't overwrite what the user set
+            newFilm.hasGeofence = FilmDataSource.films[existingIndex].hasGeofence
             // Film exists → UPDATE it in place
             FilmDataSource.films[existingIndex] = newFilm
             Log.d(TAG, "Updated existing film: $title")

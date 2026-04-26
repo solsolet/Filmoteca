@@ -32,6 +32,7 @@ class FilmDataFragment : Fragment() {
         val btnImdb = view.findViewById<Button>(R.id.verPeliIMDB)
         val btnEditar = view.findViewById<Button>(R.id.editPeli)
         val btnVolver = view.findViewById<Button>(R.id.volverPrincipal)
+        val btnShowMap = view.findViewById<Button>(R.id.btnShowMap)
 
         btnImdb.setOnClickListener {
             if (filmIndex >= 0) {
@@ -49,6 +50,18 @@ class FilmDataFragment : Fragment() {
 
         btnVolver.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
+        }
+
+        val film = FilmDataSource.films[filmIndex]
+        if (film.hasLocation) {
+            btnShowMap.visibility = View.VISIBLE
+            btnShowMap.setOnClickListener {
+                val intent = Intent(requireActivity(), MapsActivity::class.java)
+                intent.putExtra(MapsActivity.EXTRA_FILM_INDEX, filmIndex)
+                startActivity(intent)
+            }
+        } else {
+            btnShowMap.visibility = View.GONE
         }
 
         updateFilmData(view)
