@@ -12,7 +12,6 @@
         android:id="@+id/mtHomeMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -135,6 +134,37 @@
         android:hint="@string/comentarios"
         android:inputType="textMultiLine" />
 
+    <!-- MARK: Geofence -->
+    <LinearLayout
+        android:layout_width="@dimen/editEditItemWidth"
+        android:layout_height="@dimen/editEditItemHeight"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/editMarginTop"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btnAddGeofence"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:text="Add geofence" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnRemoveGeofence"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:text="Remove geofence" />
+    </LinearLayout>
+
+    <!-- MARK: Save/Cancel -->
     <LinearLayout
         android:layout_width="@dimen/editEditItemWidth"
         android:layout_height="@dimen/editEditItemHeight"
@@ -171,6 +201,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editandoPeli" />
     </LinearLayout>
+
+
 
 
 </LinearLayout>

@@ -27,8 +27,8 @@ object FilmDataSource {
         f.genre = Film.Companion.GENRE_COMEDY
         f.imdbUrl = "https://www.imdb.com/title/tt3783958/?ref_=fn_all_ttl_1"
         f.year = 2017
-        f.latitude = 38.345
-        f.longitude = -0.481
+        f.latitude = 38.50754 // la vila
+        f.longitude = -0.23346
         films.add(f)
 
         f = Film()
