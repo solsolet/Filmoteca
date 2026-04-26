@@ -1,5 +1,5 @@
 # Filmoteca
-Aplicación de consulta de pelis de un catálogo virtual donde se puede pulsar para ver el detalle de la película, actualizarla, añadir más o eliminarlas.
+Aplicación de consulta de pelis de un catálogo virtual donde se puede pulsar para ver el detalle de la película, actualizarla, añadir más o eliminarlas. Además se puede visualizar el lugar en el mapa donde fueron grabadas.
 
 ## Demo
 Se puede ver la demo del proyecto en [demo_Filmoteca_CredentialFirebase.mp4](img-readme/demo_Filmoteca_Maps.mp4). Cualquier problema con la versión entregada por Moodle (tanto del proyecto como del README) se puede usar el repositorio donde se encuentra alojada la práctica: [https://github.com/solsolet/Filmoteca.git](https://github.com/solsolet/Filmoteca.git)
@@ -63,55 +63,13 @@ app/src/main/
 ```
 
 ## Implementación
-### Credential Manager
-La autenticación se implementa usando la API moderna **Credential Manager** de AndroidX, que reemplaza el antiguo `GoogleSignIn` de Play Services (ahora obsoleto).
- 
-**Flujo de autenticación:**
- 
-1. `LoginActivity` es el punto de entrada de la app (declarada como `LAUNCHER` en el Manifest).
-2. Al pulsar el botón de *Sign In*, se construye un `GetGoogleIdOption` con el **Web Client ID** registrado en Google Cloud Console y se lanza `CredentialManager.getCredential()` dentro de una coroutine (`lifecycleScope.launch`).
-3. El sistema muestra el selector nativo de cuentas de Google.
-4. Al seleccionar una cuenta, se recibe un `GoogleIdTokenCredential` del que se extrae el nombre, email, foto e ID token del usuario.
-5. Estos datos se almacenan en el singleton `UserData`, que actúa como fuente de verdad de la sesión durante toda la ejecución de la app.
-6. Se redirige a `MainActivity` con `FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK` para eliminar `LoginActivity` del back stack — el usuario no puede volver a la pantalla de login con el botón Atrás.
-**Cierre de sesión:**
- 
-Desde el menú de `FilmListFragment` hay dos opciones:
-- **Close session** (`signOut`): limpia `UserData` y vuelve a `LoginActivity`.
-- **Disconnect account** (`disconnect`): además llama a `CredentialManager.clearCredentialState()`, que revoca el acceso almacenado en el sistema para que la próxima vez se muestre el selector de cuenta en lugar de autenticar silenciosamente.
-**Archivos clave:** `LoginActivity.kt`, `UserData.kt`, `FilmListFragment.kt`, `activity_login.xml`, `AndroidManifest.xml`
 
 ### Firebase Messaging
-Se usa **FCM** para recibir mensajes de datos (*data messages*) que añaden, actualizan o eliminan películas del catálogo en tiempo real.
- 
-**Tipo de mensaje utilizado — Data Message:**
- 
-A diferencia de los *notification messages* (que el sistema muestra automáticamente), los *data messages* siempre despiertan el servicio `onMessageReceived`, tanto si la app está en primer plano como en segundo. Esto es necesario para poder modificar `FilmDataSource` desde el servicio.
- 
-**Formato del payload esperado:**
- 
-| Clave       | Valores posibles        | Descripción                        |
-|-------------|-------------------------|------------------------------------|
-| `operation` | `"add"` / `"delete"`    | Tipo de operación                  |
-| `title`     | Texto                   | Título de la película (obligatorio)|
-| `director`  | Texto                   | Director (opcional en delete)      |
-| `year`      | Número como String      | Año (opcional en delete)           |
-| `comments`  | Texto                   | Comentarios (opcional en delete)   |
- 
-**Lógica de negocio en `MyFirebaseMessagingService`:**
- 
-- `operation = "add"`: busca una película con el mismo título en `FilmDataSource.films`.
-  - Si existe → la **actualiza** en su posición (misma posición en la lista).
-  - Si no existe → la **añade** al final.
-- `operation = "delete"`: busca por título y la elimina. Si no existe, no hace nada.
-- En ambos casos muestra una notificación del sistema con el título de la operación y el nombre de la película.
-**Archivos clave:** `MyFirebaseMessagingService.kt`, `AndroidManifest.xml`, `google-services.json` (no versionado)
+`MyFirebaseMessagingService` se ha adaptado para leer `latitude` y `longitude` del payload de datos y asignarlas a la película recibida.
 
-- `MyFirebaseMessagingService` se ha adaptado para leer `latitude` y `longitude` del payload de datos y asignarlas a la película recibida.
-- Las películas creadas/actualizadas desde FCM comienzan con `hasGeofence = false` para que la geocerca solo se active manualmente desde la pantalla de edición.
+Las películas creadas/actualizadas desde FCM comienzan con `hasGeofence = false` para que la geocerca solo se active manualmente desde la pantalla de edición.
 
 ### Maps
-<!--TODO: explicar qué hace Maps activity, funciones más importantes brevemente, parovechar los conocimientos de los comentarios-->
 Se ha incorporado el servicio de Google Maps para mostrar el lugar de rodaje de una película.
 
 - Se han añadido los campos `latitude`, `longitude` y `hasLocation` al `data class Film`.
@@ -127,8 +85,6 @@ Se ha incorporado el servicio de Google Maps para mostrar el lugar de rodaje de 
 Esta parte permite al usuario ver la ubicación de rodaje en un mapa interactivo, sin tener que salir de la app.
 
 ### Location
-<!--TODO: explicar qué hace GeofenceMAnager y GeofenceBroadcasttReceiver, funciones más importantes brevemente, parovechar los conocimientos de los comentarios-->
-### Location
 Se ha añadido soporte de localización con geocercas para avisar cuando el usuario se acerca al lugar de rodaje.
 
 - `Film.kt` ahora incluye `hasGeofence` para saber si la película tiene una geocerca activa.
@@ -143,7 +99,7 @@ Se ha añadido soporte de localización con geocercas para avisar cuando el usua
 Con esto, la app puede alertar al usuario al aproximarse al lugar de grabación de una película.
 
 ## Problemas encontrados
-### 1. Contenido bajo la cámara/notch (edge-to-edge)
+### Contenido bajo la cámara/notch (edge-to-edge)
 **Problema:** En dispositivos con notch, la lista de películas aparecía por debajo de la cámara sin respetar el padding superior.
  
 **Causa:** A partir de Android 15 (API 35), el modo edge-to-edge es obligatorio aunque no se llame a `enableEdgeToEdge()`. El contenido empieza en y=0, debajo de la barra de estado.
@@ -152,46 +108,29 @@ Con esto, la app puede alertar al usuario al aproximarse al lugar de grabación 
  
 ---
  
-### 2. El menú del fragment no aparecía en MainActivity
-**Problema:** Las opciones del menú de `FilmListFragment` (Añadir, Cerrar sesión, etc.) no se mostraban porque `MainActivity` no tenía `ActionBar`.
- 
-**Causa:** `FilmListFragment` llama a `setHasOptionsMenu(true)` e infla `film_list_menu.xml`, pero esto requiere que la Activity anfitriona tenga un `ActionBar/Toolbar` registrado mediante `setSupportActionBar()`. Las demás activities sí lo tenían; `MainActivity` no.
- 
-**Solución:** Se añadió una `MaterialToolbar` a los layouts `activity_main.xml` (teléfono) y `layout-large/activity_main.xml` (tablet), y se llamó a `setSupportActionBar(findViewById(R.id.mtMainMenu))` en `MainActivity.onCreate()`.
- 
----
- 
-### 3. Conflicto de versiones de Firebase Messaging en Gradle
-**Problema:** Al añadir la dependencia de FCM, el build fallaba con `Could not find com.google.firebase:firebase-messaging-ktx:34.12.0`.
- 
-**Causa:** En `libs.versions.toml` se declaró `firebase-messaging` con `version.ref = "firebaseBom"`, lo que le asignaba el número de versión del BOM (`34.12.0`) como versión propia de la librería — cuando en realidad el BOM es un *catálogo de versiones*, no una versión directamente aplicable a `firebase-messaging-ktx`. Además había una segunda entrada duplicada para la misma librería.
- 
-**Solución:** Se eliminó la versión individual de `firebase-messaging` en TOML y se declaró sin `version.ref`, dejando que el BOM (`platform(libs.firebase.bom)`) resuelva la versión correcta automáticamente. También se eliminó la entrada duplicada `firebase-messaging-ktx`.
- 
----
- 
-### 4. Notificaciones no aparecían en Android 13+
-**Problema:** El servicio FCM procesaba los mensajes correctamente (los films se añadían/eliminaban) pero no se mostraba ninguna notificación en el dispositivo.
- 
-**Causa:** Desde Android 13 (API 33), las apps deben solicitar el permiso `POST_NOTIFICATIONS` en tiempo de ejecución. Sin este permiso, `notificationManager.notify()` se ejecuta silenciosamente sin mostrar nada. Con `targetSdk = 36`, este permiso no se otorga automáticamente.
- 
-**Solución:** Se declaró `<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>` en el Manifest y se implementó la solicitud en tiempo de ejecución en `MainActivity` usando `registerForActivityResult(ActivityResultContracts.RequestPermission())`, que debe registrarse como propiedad de la clase (no dentro de una función) por restricciones del lifecycle de Android.
- 
----
- 
-### 5. Google Sign-In no funcionaba en el emulador
+### Google Sign-In no funcionaba en el emulador
 **Problema:** Al pulsar el botón de Sign In en el emulador (API 36), el selector de cuentas nunca aparecía y el Logcat mostraba `No credentials available`.
  
 **Causa:** Credential Manager requiere simultáneamente: un emulador con Google Play Store (no solo Google APIs), una cuenta de Google añadida en Ajustes → Cuentas, y Google Play Services actualizado. En el emulador de API 36 estas condiciones no se cumplían.
  
 **Solución:** La funcionalidad se verificó en un dispositivo físico, donde el flujo completo funcionó correctamente. Como anotación general, para que Credential Manager funcione en emulador hay que asegurarse de usar una imagen con Google Play Store, añadir una cuenta de Google, y actualizar Google Play Services desde la Play Store antes de probar, pero a pesar de haber probado estos pasos no se consiguió que funcionase.
 
+---
+
 ### API key en gradle
-<!--TOOD: explciar problema que no sabía como poner la api key de manera que no se subiese al repo remoto por tanto pensé en ponerla en el arichivo de  local.properties pero me costó que build.gradle (module app) lo detectase bien-->
+**Problema:** Al _buidear_ la aplicación no me fijé y no puse el valor de la API key en el `AndroidManifest`, dejando el valor por defecto. Como la API key es un dato sensible no sabía donde ponerlo.
+ 
+**Causa:** Para que <meta-data> funcione requiere de un valor válido.
+ 
+**Solución:** Poner una variable en `local.properties` con el valor de la API key y en `build.gradle (:app)` poner en la configuración que cuando vea `"MAPS_API_KEY"` sustituya la variable por el valor correspondiente.
 
 ### API key not found
 <!--TODO: explcia que no encontraba la API key en el manifest por que la etiqueta meta-data no estaba correctamente ubicada dentro de application-->
+**Problema:** No se encuentra la API key a la hora de hacer la _build_.
+ 
+**Causa:** Para que <meta-data> funcione debe estar bien colocada en el `AndroidMAnifest`.
+ 
+**Solución:** Mover la línea de <meta-data> dentro de la etiqueta <application>.
 
 ## Anotaciones
-La aplicación funciona para dispositivos físicos. No se ha logrado que funcionase con el emulador (ver Problema 5).
-Las pausas que se ven en la demo de la aplicación es por que se está lanzando una nueva campaña para mostrar la notificación.
+La aplicación funciona para dispositivos físicos. No se ha logrado que funcionase con el emulador (ver Problema [Google Sign-In](README.md#problemas-encontrados#Google-Sign-In-no-funcionaba-en-el-emulador)).
