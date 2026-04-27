@@ -72,7 +72,7 @@ class FilmDataActivity : AppCompatActivity() {
     val CODIGO_ACTIVIDAD_EDITAR = 1
     private fun editPeli(peli: Int){
         val edit = Intent(this@FilmDataActivity, FilmEditActivity::class.java)
-        edit.putExtra(EXTRA_FILM, peli)
+        edit.putExtra(FilmEditActivity.EXTRA_FILM_INDEX, peli)
         startActivityForResult(edit, CODIGO_ACTIVIDAD_EDITAR)
     }
     // called when secondary activity finishes

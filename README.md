@@ -2,12 +2,11 @@
 Aplicación de consulta de pelis de un catálogo virtual donde se puede pulsar para ver el detalle de la película, actualizarla, añadir más o eliminarlas. Además se puede visualizar el lugar en el mapa donde fueron grabadas.
 
 ## Demo
-Se puede ver la demo del proyecto en [demo_Filmoteca_CredentialFirebase.mp4](img-readme/demo_Filmoteca_Maps.mp4). Cualquier problema con la versión entregada por Moodle (tanto del proyecto como del README) se puede usar el repositorio donde se encuentra alojada la práctica: [https://github.com/solsolet/Filmoteca.git](https://github.com/solsolet/Filmoteca.git)
+Se puede ver la demo del proyecto en [demo_Filmoteca_Maps.mp4](img-readme/demo_Filmoteca_Maps.mp4). Cualquier problema con la versión entregada por Moodle (tanto del proyecto como del README) se puede usar el repositorio donde se encuentra alojada la práctica: [https://github.com/solsolet/Filmoteca.git](https://github.com/solsolet/Filmoteca.git)
 
 Para probar la aplicación directamente en un dispositivo Android (SDK <= 26) se puede instalar la APK: Filmoteca.apk o descargándola de [GitHub](https://github.com/solsolet/Filmoteca/releases/tag/Maps).
 
 ## 📋 Resumen de la arquitectura
-<!--TODO: añadir las clases que faltan y explicar resumidamente qué hacen-->
 ```bash
 app/src/main/
 ├── java/es/ua/eps/filmoteca/
@@ -70,7 +69,7 @@ app/src/main/
 Las películas creadas/actualizadas desde FCM comienzan con `hasGeofence = false` para que la geocerca solo se active manualmente desde la pantalla de edición.
 
 ### Maps
-Se ha incorporado el servicio de Google Maps para mostrar el lugar de rodaje de una película.
+Se ha incorporado el servicio de **Google Maps** para mostrar el lugar de rodaje de una película.
 
 - Se han añadido los campos `latitude`, `longitude` y `hasLocation` al `data class Film`.
 - En `activity_film_data.xml` se añadió un botón `btnShowMap` que solo se hace visible si `film.hasLocation == true`.

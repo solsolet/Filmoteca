@@ -13,8 +13,8 @@ object FilmDataSource {
         f.genre = Film.Companion.GENRE_SCIFI
         f.imdbUrl = "http://www.imdb.com/title/tt0088763"
         f.year = 1985
-        f.latitude = 38.345
-        f.longitude = -0.481
+        f.latitude = 38.50345
+        f.longitude = -0.237535
         films.add(f)
 
         // Añade tantas películas como quieras!
@@ -40,7 +40,7 @@ object FilmDataSource {
         f.genre = Film.Companion.GENRE_COMEDY
         f.imdbUrl = "https://www.imdb.com/title/tt30017619/"
         f.year = 2025
-        f.latitude = 38.50345
+        f.latitude = 38.50345 // la maja
         f.longitude = -0.237535
         films.add(f)
 

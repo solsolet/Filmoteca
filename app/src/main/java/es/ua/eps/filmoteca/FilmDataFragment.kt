@@ -44,7 +44,7 @@ class FilmDataFragment : Fragment() {
 
         btnEditar.setOnClickListener {
             val intent = Intent(requireActivity(), FilmEditActivity::class.java)
-            intent.putExtra(EXTRA_FILM_INDEX, filmIndex)
+            intent.putExtra(FilmEditActivity.EXTRA_FILM_INDEX, filmIndex)
             startActivityForResult(intent, REQUEST_CODE_EDIT)
         }
 

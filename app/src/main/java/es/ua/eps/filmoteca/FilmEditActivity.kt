@@ -52,6 +52,11 @@ import es.ua.eps.filmoteca.databinding.ActivityFilmEditBinding
 class FilmEditActivity : AppCompatActivity() {
     private lateinit var bindings : ActivityFilmEditBinding
 
+    companion object {
+        // Single source of truth for the key — both callers import this
+        const val EXTRA_FILM_INDEX = "EXTRA_FILM_INDEX_EDIT"
+    }
+
     // MARK: LAUNCHERS + PERMISSIONS
     private val fineLocationLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -59,14 +64,9 @@ class FilmEditActivity : AppCompatActivity() {
         val fineGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true
         if (fineGranted) {
             // Fine location granted — now ask for background separately (Android 10+ only)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                backgroundLocationLauncher.launch(
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                )
-            } else {
-                // Android < 10: background location doesn't exist, proceed directly
-                addGeofenceForCurrentFilm()
-            }
+            backgroundLocationLauncher.launch(
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
         } else {
             Toast.makeText(
                 this,
@@ -151,7 +151,7 @@ class FilmEditActivity : AppCompatActivity() {
         formatoIndex: Int?,
         comentarios: String?
     ) {
-        val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
+        val peliInt = intent.getIntExtra(EXTRA_FILM_INDEX, -1) //get ID
         updateFilm(peliInt, titulo, director, any, imdb, generoIndex, formatoIndex, comentarios)
 
         val res = Intent()
@@ -166,7 +166,7 @@ class FilmEditActivity : AppCompatActivity() {
         with(bindings) {
             setContentView(root)
 
-            val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
+            val peliInt = intent.getIntExtra(EXTRA_FILM_INDEX, -1) //get ID
             val peli = FilmDataSource.films[peliInt]
 
             imageViewPosterEditar.setImageResource(peli.imageResId)
@@ -221,7 +221,7 @@ class FilmEditActivity : AppCompatActivity() {
      * This gives the user clear feedback about the current state.
      */
     private fun updateGeofenceButtons() {
-        val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
+        val peliInt = intent.getIntExtra(EXTRA_FILM_INDEX, -1) //get ID
         val peli = FilmDataSource.films[peliInt]
 
         if (peli.hasGeofence) {
@@ -271,7 +271,7 @@ class FilmEditActivity : AppCompatActivity() {
     }
 
     private fun addGeofenceForCurrentFilm() {
-        val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
+        val peliInt = intent.getIntExtra(EXTRA_FILM_INDEX, -1) //get ID
         val peli = FilmDataSource.films[peliInt]
 
         GeofenceManager.addGeofence(
@@ -299,7 +299,7 @@ class FilmEditActivity : AppCompatActivity() {
     @Composable
     private fun ComposableFilmEdit() {
         val context = LocalContext.current
-        val peliInt = intent.getIntExtra(EXTRA_FILM, 0)
+        val peliInt = intent.getIntExtra(EXTRA_FILM_INDEX, -1)
         val peli = FilmDataSource.films[peliInt]
 
         var titulo by remember { mutableStateOf(peli.title ?: "") }
