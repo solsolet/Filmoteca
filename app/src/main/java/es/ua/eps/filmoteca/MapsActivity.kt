@@ -51,45 +51,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * Called by the Maps SDK when the GoogleMap object is ready to use.
      * All map setup MUST happen here or after this call — never before.
      */
-//    override fun onMapReady(map: GoogleMap) {
-//        googleMap = map
-//
-//        val filmLocation = LatLng(film.latitude, film.longitude)
-//
-//        // Add a marker at the filming location.
-//        // .title()   → shown as the bold header in the info window
-//        // .snippet() → shown as the smaller text below the title
-//        googleMap.addMarker(
-//            MarkerOptions()
-//                .position(filmLocation)
-//                .title(film.title ?: "Unknown film")
-//                .snippet("${film.director ?: "Unknown director"} · ${film.year}")
-//        )
-//
-//        // Move the camera to the marker and set a comfortable zoom level.
-//        // moveCamera() is instant; use animateCamera() if you want a smooth animation.
-//        googleMap.moveCamera(
-//            CameraUpdateFactory.newLatLngZoom(filmLocation, DEFAULT_ZOOM)
-//        )
-//
-//        // Automatically open the info window so the user sees the film info
-//        // without needing to tap the marker first.
-//        // We need a reference to the Marker object to call showInfoWindow(),
-//        // so we save the return value of addMarker().
-//        googleMap.addMarker(
-//            MarkerOptions()
-//                .position(filmLocation)
-//                .title(film.title ?: "Unknown film")
-//                .snippet("${film.director ?: "Unknown director"} · ${film.year}")
-//        )?.showInfoWindow()
-//    }
-
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
 
         val filmLocation = LatLng(film.latitude, film.longitude)
 
         // addMarker returns a Marker? — save it so we can call showInfoWindow()
+        // Add a marker at the filming location.
+        // .title()   → shown as the bold header in the info window
+        // .snippet() → shown as the smaller text below the title
         val marker = googleMap.addMarker(
             MarkerOptions()
                 .position(filmLocation)
@@ -97,6 +67,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .snippet("${film.director ?: "Unknown director"} · ${film.year}")
         )
 
+        // Move the camera to the marker and set a comfortable zoom level.
+        // moveCamera() is instant; use animateCamera() if you want a smooth animation.
         googleMap.moveCamera(
             CameraUpdateFactory.newLatLngZoom(filmLocation, DEFAULT_ZOOM)
         )

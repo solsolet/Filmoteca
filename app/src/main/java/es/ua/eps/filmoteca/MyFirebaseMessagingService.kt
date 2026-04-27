@@ -2,7 +2,6 @@ package es.ua.eps.filmoteca
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.core.app.NotificationCompat

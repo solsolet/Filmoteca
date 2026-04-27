@@ -46,6 +46,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NavUtils
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import es.ua.eps.filmoteca.FilmDataActivity.Companion.EXTRA_FILM
 import es.ua.eps.filmoteca.databinding.ActivityFilmEditBinding
 
@@ -85,7 +87,7 @@ class FilmEditActivity : AppCompatActivity() {
             // Background location denied — on Android 11+ the user has to go to Settings
             // to grant "Allow all the time". We show a helpful message.
             Toast.makeText(
-                this,
+                this@FilmEditActivity,
                 "Please allow location 'All the time' in Settings for geofences to work in background",
                 Toast.LENGTH_LONG
             ).show()
@@ -101,6 +103,11 @@ class FilmEditActivity : AppCompatActivity() {
         //App bar
         setSupportActionBar(findViewById(R.id.mtHomeMenu))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mtHomeMenu)) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top, bars.right, 0)
+            insets
+        }
     }
     private fun initUI() {
         when (Filmoteca.GlobalMode) {

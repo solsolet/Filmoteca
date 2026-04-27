@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.NavUtils
 import es.ua.eps.filmoteca.databinding.ActivityAboutBinding
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 class AboutActivity : AppCompatActivity() {
     private lateinit var bindings : ActivityAboutBinding
@@ -38,6 +40,11 @@ class AboutActivity : AppCompatActivity() {
         //App bar
         setSupportActionBar(findViewById(R.id.mtHomeMenu))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mtHomeMenu)) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top, bars.right, 0)
+            insets
+        }
     }
     private fun initUI() {
         when (Filmoteca.GlobalMode) {
