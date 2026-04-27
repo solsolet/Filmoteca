@@ -158,7 +158,7 @@ class FilmDataActivity : AppCompatActivity() {
     }
     @Composable
     private fun ComposeFilmData() {
-        val context = LocalContext.current
+        LocalContext.current
         val peliInt = intent.getIntExtra(EXTRA_FILM, 0) //get ID
         val peli = FilmDataSource.films[peliInt]
 

@@ -39,4 +39,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="anyade_geofence">Add geofence</string>
     <string name="elimina_geofence">Remove geofence</string>
+    <string name="user_name">Name</string>
+    <string name="user_data">User Data</string>
+    <string name="user_foto">User photo</string>
+    <string name="mostrar_en_mapa">Show in map</string>
+    <string name="close_session">Close session</string>
+    <string name="disconnect_account">Disconnect account</string>
 </resources>

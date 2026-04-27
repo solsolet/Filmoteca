@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    android:layout_height="match_parent">
 
     <!--
         Background decorative image (a large faded person silhouette, as in the practice PDF).
@@ -18,6 +17,7 @@
         android:alpha="0.15"
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher"
+        android:contentDescription="@string/user_foto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

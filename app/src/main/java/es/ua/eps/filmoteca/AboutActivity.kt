@@ -99,7 +99,7 @@ class AboutActivity : AppCompatActivity() {
     }
     @Composable
     private fun AboutFilmoteca() {
-        val context = LocalContext.current
+        LocalContext.current
 
         Column( //equivalent a LinearLayout(vertical)
             modifier = Modifier

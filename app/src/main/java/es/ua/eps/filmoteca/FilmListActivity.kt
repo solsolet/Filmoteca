@@ -142,9 +142,9 @@ class FilmListActivity : AppCompatActivity() {
                 this@FilmListActivity,
                 R.layout.item_peli, filmList
             )
-            pelisList.setOnItemClickListener({ parent: AdapterView<*>, view: View, position: Int, id: Long ->
+            pelisList.setOnItemClickListener { parent: AdapterView<*>, view: View, position: Int, id: Long ->
                 verPeli(position) //Intent
-            })
+            }
             pelisList.adapter = adaptador
 
             selectMultipleFilm()
@@ -168,7 +168,7 @@ class FilmListActivity : AppCompatActivity() {
     }
     @Composable
     private fun ComposableFilmList() {
-        val context = LocalContext.current
+        LocalContext.current
 
         LazyColumn (
             modifier = Modifier

@@ -40,4 +40,10 @@
     <string name="hello_blank_fragment">Hola fragmet en blanc</string>
     <string name="anyade_geofence">Afig geofence</string>
     <string name="elimina_geofence">Elimina geofence</string>
+    <string name="user_name">Nom</string>
+    <string name="user_data">Dades de l\'usuari</string>
+    <string name="user_foto">Foto d\'usuari</string>
+    <string name="mostrar_en_mapa">Mostrar en mapa</string>
+    <string name="close_session">Tancar sessió</string>
+    <string name="disconnect_account">Desconectar compte</string>
 </resources>
