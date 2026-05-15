@@ -10,14 +10,14 @@ Para probar la aplicación directamente en un dispositivo Android (SDK <= 29) se
 ```bash
 app/src/main/
 ├── java/es/ua/eps/filmoteca/
-│   ├── Filmoteca.kt                  # Clase Aplicación. Contiene el contexto global y el GlobalMode (Bindings/Compose)
+│   ├── Filmoteca.kt                  # Clase Aplicación. Contiene el contexto global y el GlobalMode (Bindings/Compose) e inicializa los MobileAds
 │   ├── Mode.kt                       # Enum: Bindings | Compose — controla qué sistema de IU está activo
 │   ├── UserData.kt                   # Singleton. Almacena la sesión del usuario que ha iniciado (name, email, token)
 │   │
 │   ├── Film.kt                       # Data class que representa a una película (title, director, year, genre... latitude, longitude, hasGeofence and hasLocation)
 │   ├── FilmDataSource.kt             # Lista en memoria de películas compartidas por toda la aplicación
 │   │
-│   ├── LoginActivity.kt              # Entry point. Controla Google Sign-In via Credential Manager
+│   ├── LoginActivity.kt              # Entry point. Controla Google Sign-In via Credential Manager y carga los anuncios intersticiales
 │   ├── MainActivity.kt               # Muestra la actividad por fragmentos (móvil: 1, tablet: 2)
 │   ├── FilmListFragment.kt           # Fragmento que muestra la lista de películas. Contiene el toolbar menu (add, about, sign out)
 │   ├── FilmDataFragment.kt           # Fragmento que muestra el detalle de la película seleccionada
@@ -110,17 +110,18 @@ Con esto, la app puede alertar al usuario al aproximarse al lugar de grabación 
 
 **Archivos clave:** `GeofenceManager.kt`, `GeofenceBroadcastReceiver.kt`, `FilmEditActivity.kt`
 
+### Ads
+Se ha incorporado un anuncio intersticial entre el login y la aplicación.
+
+- `Filmoteca.kt` ahora inicializa `MobileAds`.
+- En `LoginActivity.kt` incorpora el anuncio al darle al botón de _login_.
+  1. Primero lo inicializamos en una variable a _null_ `interstitialAd` y en `onCreate` llamamos a la función que lo manejará, `loadInterstitialAd`
+  2. `loadInterstitialAd` carga el anuncio con el ID correspondiente
+  3. Antes del intent que pasa a la página principal de `goToMainActivity`, se llama a `showAdThenNavigate` que muestra el anuncio y controla cualquier posibilidad.
+
 ## Problemas encontrados
-### Contenido bajo la cámara/notch (edge-to-edge)
-**Problema:** En dispositivos con notch, la lista de películas aparecía por debajo de la cámara sin respetar el padding superior.
- 
-**Causa:** A partir de Android 15 (API 35), el modo edge-to-edge es obligatorio aunque no se llame a `enableEdgeToEdge()`. El contenido empieza en y=0, debajo de la barra de estado.
- 
-**Solución:** Se añadió un `ViewCompat.setOnApplyWindowInsetsListener` sobre la `MaterialToolbar` de `MainActivity`, aplicando `bars.top` como padding superior. De esta forma la toolbar se desplaza automáticamente para dejar espacio a la barra de estado y el fragment container queda naturalmente por debajo.
- 
----
- 
-### Google Sign-In no funcionaba en el emulador
+
+### Google Sign-In no funciona en el emulador
 **Problema:** Al pulsar el botón de Sign In en el emulador (API 36), el selector de cuentas nunca aparecía y el Logcat mostraba `No credentials available`.
  
 **Causa:** Credential Manager requiere simultáneamente: un emulador con Google Play Store (no solo Google APIs), una cuenta de Google añadida en Ajustes → Cuentas, y Google Play Services actualizado. En el emulador de API 36 estas condiciones no se cumplían.
@@ -129,31 +130,13 @@ Con esto, la app puede alertar al usuario al aproximarse al lugar de grabación 
 
 ---
 
-### API key de Maps no encontrada en tiempo de ejecución
-**Problema:** Al abrir `MapsActivity`, la app crasheaba con `IllegalStateException: API key not found`.
+### AdMob no funciona con cuentas gcloud
+**Problema:** No se puede crear una cuenta en AdMob con la cuenta de alumno de *gcloud* que se ha usado para el resto de páginas como Firebase.
  
-**Causa:** El tag `<meta-data>` con la API key estaba colocado fuera del bloque `<application>` en el `AndroidManifest.xml`. El SDK de Maps solo busca la clave dentro de `<application>`.
+**Causa:** Las cuentas de _Gcloud_ no tienen el parámetro de fecha de nacimiento del usuario por tanto AdMob no puede verificar la edad del usuario. Se preguntó en una solicitud en _UACloud_ a quien llea los Servicios Externos a ver si me podían ayudar con este tema, pero al ser una cuenta educativa no permite añadir ese campo.
  
-**Solución:** Se movió el tag `<meta-data android:name="com.google.android.geo.API_KEY" .../>` al interior del bloque `<application>`. Para no exponer la clave en el código fuente, se almacena en `local.properties` (fichero no versionado) y se inyecta en el manifest mediante `manifestPlaceholders` en `build.gradle.kts`.
- 
----
- 
-### El diálogo de permisos de ubicación nunca aparecía
-**Problema:** Al pulsar "Añadir geocerca" en `FilmEditActivity`, se mostraba el Toast de error de permisos pero el diálogo del sistema nunca aparecía.
- 
-**Causa:** A partir de Android 11 (API 30), el sistema **no permite** solicitar `ACCESS_FINE_LOCATION` y `ACCESS_BACKGROUND_LOCATION` en el mismo `launch()`. Cuando se incluyen juntos, la solicitud de background location es ignorada silenciosamente, lo que hace que el resultado llegue como denegado antes de que el usuario vea nada.
- 
-**Solución:** Se implementó un flujo de **dos launchers separados y secuenciales**:
-1. El primero solicita `ACCESS_FINE_LOCATION` + `ACCESS_COARSE_LOCATION`.
-2. Solo si el primero es concedido, el segundo solicita `ACCESS_BACKGROUND_LOCATION` en un diálogo independiente.
----
- 
-### FilmEditActivity siempre editaba la primera película
-**Problema:** Al editar cualquier película, los cambios siempre se aplicaban sobre la primera película de la lista ("Regreso al futuro") en lugar de la seleccionada.
- 
-**Causa:** Había un desajuste de claves entre los emisores y el receptor. `FilmDataActivity` enviaba el índice con la clave `EXTRA_FILM`, mientras que `FilmDataFragment` lo enviaba con `EXTRA_FILM_INDEX`. `FilmEditActivity` solo leía `EXTRA_FILM` con valor por defecto `0`, por lo que cuando llegaba desde el fragmento no encontraba la clave y usaba siempre el índice 0.
- 
-**Solución:** Se definió una constante propia en `FilmEditActivity.companion object` y se actualizaron todos los puntos de emisión (`FilmDataActivity` y `FilmDataFragment`) para usar esa misma clave.
+**Solución:** Los ID proporcionados en el enunciado son de Google públicos y no hace falta tener una cuenta en AdMob para mostrar esos anuncios, así que al final no ha hecho falta.
+
 
 ## Anotaciones
 La aplicación funciona para dispositivos físicos. No se ha logrado que funcionase con el emulador (ver Problema [Google Sign-In](README.md#problemas-encontrados#Google-Sign-In-no-funcionaba-en-el-emulador)).
