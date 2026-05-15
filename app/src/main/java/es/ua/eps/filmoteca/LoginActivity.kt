@@ -9,6 +9,12 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import es.ua.eps.filmoteca.databinding.ActivityLoginBinding
@@ -18,6 +24,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private var interstitialAd: InterstitialAd? = null
 
     companion object {
         private const val WEB_CLIENT_ID = "201223289832-7vic2uss7h3aj38rivn8qek1vujh9rhu.apps.googleusercontent.com"
@@ -35,6 +42,8 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
+        loadInterstitialAd()
+
         // Set up the sign-in button click listener
         binding.btnSignIn.setOnClickListener {
             launchGoogleSignIn()
@@ -43,6 +52,28 @@ class LoginActivity : AppCompatActivity() {
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
             Log.d("FCM_TOKEN", token)
         }
+    }
+
+    private fun loadInterstitialAd() {
+        val adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3940256099942544/1033173712", // Ad Unit ID
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    // L'anunci s'ha carregat — el guardem per usar-lo després
+                    interstitialAd = ad
+                    Log.d("AdMob", "Anunci intersticial carregat")
+                }
+                override fun onAdFailedToLoad(error: LoadAdError) {
+                    // Si no s'ha pogut carregar, continuem sense anunci
+                    interstitialAd = null
+                    Log.e("AdMob", "Error carregant anunci: ${error.message}")
+                }
+            }
+        )
     }
 
     /**
@@ -116,7 +147,8 @@ class LoginActivity : AppCompatActivity() {
             Log.d(TAG, "Signed in as: ${UserData.displayName} (${UserData.email})")
 
             // Navigate to the main app
-            goToMainActivity()
+            //goToMainActivity()
+            showAdThenNavigate()
 
         } else {
             // Got an unexpected credential type
@@ -133,5 +165,33 @@ class LoginActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+
+    private fun showAdThenNavigate() {
+        if (interstitialAd != null) {
+            interstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
+
+                // L'usuari ha tancat l'anunci → naveguem ara
+                override fun onAdDismissedFullScreenContent() {
+                    interstitialAd = null
+                    goToMainActivity()
+                }
+
+                // Error mostrant l'anunci → naveguem igualment
+                override fun onAdFailedToShowFullScreenContent(error: AdError) {
+                    interstitialAd = null
+                    goToMainActivity()
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    Log.d("AdMob", "Anunci mostrat")
+                }
+            }
+            interstitialAd!!.show(this)
+        } else {
+            // L'anunci no estava carregat (xarxa lenta, etc.) → naveguem directament
+            Log.d("AdMob", "Anunci no disponible, navegant directament")
+            goToMainActivity()
+        }
     }
 }
