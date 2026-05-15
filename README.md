@@ -119,6 +119,8 @@ Se ha incorporado un anuncio intersticial entre el login y la aplicación.
   2. `loadInterstitialAd` carga el anuncio con el ID correspondiente
   3. Antes del intent que pasa a la página principal de `goToMainActivity`, se llama a `showAdThenNavigate` que muestra el anuncio y controla cualquier posibilidad.
 
+**Archivos clave:** `Filmoteca.kt`, `LoginActivity.kt`
+
 ## Problemas encontrados
 
 ### Google Sign-In no funciona en el emulador
