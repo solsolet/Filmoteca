@@ -2,9 +2,9 @@
 Aplicación de consulta de pelis de un catálogo virtual donde se puede pulsar para ver el detalle de la película, actualizarla, añadir más o eliminarlas. Además se puede visualizar el lugar en el mapa donde fueron grabadas y recibir una alerta cuando el usuario se aproxima al lugar de rodaje.
 
 ## Demo
-Se puede ver la demo del proyecto en [demo_Filmoteca_Maps.mp4](img-readme/demo_Filmoteca_Maps.mp4). Cualquier problema con la versión entregada por Moodle (tanto del proyecto como del README) se puede usar el repositorio donde se encuentra alojada la práctica: [https://github.com/solsolet/Filmoteca.git](https://github.com/solsolet/Filmoteca.git)
+Se puede ver la demo del proyecto en [demo_Filmoteca_Ads.mp4](img-readme/demo_Filmoteca_Ads.mp4). Cualquier problema con la versión entregada por Moodle (tanto del proyecto como del README) se puede usar el repositorio donde se encuentra alojada la práctica: [https://github.com/solsolet/Filmoteca.git](https://github.com/solsolet/Filmoteca.git)
 
-Para probar la aplicación directamente en un dispositivo Android (SDK <= 29) se puede instalar la APK: Filmoteca.apk o descargándola de [GitHub](https://github.com/solsolet/Filmoteca/releases/tag/Maps).
+Para probar la aplicación directamente en un dispositivo Android (SDK <= 29) se puede instalar la APK: Filmoteca.apk o descargándola de [GitHub](https://github.com/solsolet/Filmoteca/releases/tag/Ads).
 
 ## 📋 Resumen de la arquitectura
 ```bash
