@@ -89,6 +89,8 @@ dependencies {
     // Per als mapes
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+    // Per als Ads
+    implementation(libs.play.services.ads)
 
     // Import the Firebase BoM
     implementation(platform(libs.firebase.bom))
